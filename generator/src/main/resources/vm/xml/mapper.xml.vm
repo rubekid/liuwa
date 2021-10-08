@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${packageName}.dao.${ClassName}Dao">
+    
+    <resultMap type="${ClassName}" id="${ClassName}Result">
+#foreach ($column in $columns)
+        <result column="${column.columnName}" property="${column.javaField}" />
+#end
+    </resultMap>
+#if($table.sub)
+
+    <resultMap id="${ClassName}${subClassName}Result" type="${ClassName}" extends="${ClassName}Result">
+        <collection property="${subclassName}List" notNullColumn="sub_${subTable.pkColumn.columnName}" javaType="java.util.List" resultMap="${subClassName}Result" />
+    </resultMap>
+
+    <resultMap type="${subClassName}" id="${subClassName}Result">
+#foreach ($column in $subTable.columns)
+        <result property="${column.javaField}" column="sub_${column.columnName}"    />
+#end
+    </resultMap>
+#end
+
+    <sql id="${className}Columns">
+#foreach($column in $columns)
+        a.$column.columnName#if($velocityCount != $columns.size()),#end
+
+#end
+    </sql>
+
+    <select id="findList" parameterType="${ClassName}" resultMap="${ClassName}Result">
+        SELECT
+            <include refid="${className}Columns"/>
+        FROM
+            ${tableName} a
+        <where>
+#foreach($column in $columns)
+#if($column.javaField == "delFlag")
+                a.$column.columnName = #{DEL_FLAG_NORMAL}
+#break
+#end
+#end
+
+#foreach($column in $columns)
+#set($queryType=$column.queryType)
+#set($javaField=$column.javaField)
+#set($javaType=$column.javaType)
+#set($columnName=$column.columnName)
+#set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+#if($column.query)
+#if($column.queryType == "EQ")
+            <if test="$javaField != null #if($javaType == 'String' ) and $javaField.trim() != ''#end">
+                AND a.$columnName = #{$javaField}
+            </if>
+#elseif($queryType == "NE")
+            <if test="$javaField != null #if($javaType == 'String' ) and $javaField.trim() != ''#end">
+                AND a.$columnName != #{$javaField}
+            </if>
+#elseif($queryType == "GT")
+            <if test="$javaField != null #if($javaType == 'String' ) and $javaField.trim() != ''#end">
+                AND a.$columnName &gt; #{$javaField}
+            </if>
+#elseif($queryType == "GTE")
+            <if test="$javaField != null #if($javaType == 'String' ) and $javaField.trim() != ''#end">
+                AND a.$columnName &gt;= #{$javaField}
+            </if>
+#elseif($queryType == "LT")
+            <if test="$javaField != null #if($javaType == 'String' ) and $javaField.trim() != ''#end">
+                AND a.$columnName &lt; #{$javaField}
+            </if>
+#elseif($queryType == "LTE")
+            <if test="$javaField != null #if($javaType == 'String' ) and $javaField.trim() != ''#end">
+                AND a.$columnName &lt;= #{$javaField}
+            </if>
+#elseif($queryType == "LIKE")
+            <if test="$javaField != null #if($javaType == 'String' ) and $javaField.trim() != ''#end">
+                AND a.$columnName like concat('%', #{$javaField}, '%')
+            </if>
+#elseif($queryType == "BETWEEN")
+            <if test="params.begin$AttrName != null #if($javaType == 'String' ) and params.begin$AttrName != ''#end">
+                AND a.$columnName &gt;= #{params.begin$AttrName}
+            </if>
+            <if test="params.end$AttrName != null  #if($javaType == 'String' )  and params.end$AttrName != ''#end">
+                AND a.$columnName $lt; #{params.end$AttrName}
+            </if>
+#end
+#end
+#end
+        </where>
+    </select>
+    
+    <select id="get" parameterType="${pkColumn.javaType}" resultMap="#if($table.sub)${ClassName}${subClassName}Result#else${ClassName}Result#end">
+#if($table.crud || $table.tree)
+        SELECT
+            <include refid="${className}Columns"/>
+        FROM
+            ${tableName} a
+        WHERE
+            ${pkColumn.columnName} = #{${pkColumn.javaField}}
+#elseif($table.sub)
+        SELECT#foreach($column in $columns) a.$column.columnName#if($velocityCount != $columns.size()),#end#end,
+           #foreach($column in $subTable.columns) b.$column.columnName as sub_$column.columnName#if($velocityCount != $subTable.columns.size()),#end#end
+
+        FROM ${tableName} a
+        LEFT JOIN ${subTableName} b ON b.${subTableFkName} = a.${pkColumn.columnName}
+        WHERE a.${pkColumn.columnName} = #{${pkColumn.javaField}}
+#end
+    </select>
+        
+    <insert id="insert" parameterType="${ClassName}"#if($pkColumn.increment) useGeneratedKeys="true" keyProperty="$pkColumn.javaField"#end>
+        <selectKey resultType="${pkColumn.javaType}" order="AFTER" keyProperty="id">
+            select last_insert_id() as id
+        </selectKey>
+        INSERT INTO ${tableName}(
+#foreach($column in $columns)
+#if($column.columnName != $pkColumn.columnName || !$pkColumn.increment)
+            $column.columnName#if($foreach.hasNext),#end
+
+#end
+#end
+        ) VALUES (
+#foreach($column in $columns)
+#if($column.columnName != $pkColumn.columnName || !$pkColumn.increment)
+            #{$column.javaField}#if($foreach.hasNext),#end
+
+#end
+#end
+        )
+    </insert>
+
+    <update id="update" parameterType="${ClassName}">
+        UPDATE ${tableName} SET
+#foreach($column in $columns)
+#if($column.columnName != $pkColumn.columnName)
+            $column.columnName = #{$column.javaField}#if($foreach.hasNext),#end
+
+#end
+#end
+        WHERE
+            ${pkColumn.columnName} = #{${pkColumn.javaField}}
+    </update>
+
+    <update id="updateSelective" parameterType="${ClassName}">
+        UPDATE ${tableName}
+        <trim prefix="SET" suffixOverrides=",">
+#foreach($column in $columns)
+#if($column.columnName != $pkColumn.columnName and $column.javaField != "delFlag" and $column.javaField != "createBy" and $column.javaField != "createTime")
+            <if test="$column.javaField != null#if($column.javaType == 'String' && $column.required) and $column.javaField != ''#end">
+                $column.columnName = #{$column.javaField},
+            </if>
+#end
+#end
+        </trim>
+        WHERE ${pkColumn.columnName} = #{${pkColumn.javaField}}
+    </update>
+
+    <delete id="delete" parameterType="${pkColumn.javaType}">
+        DELETE FROM ${tableName} WHERE ${pkColumn.columnName} = #{${pkColumn.javaField}}
+    </delete>
+
+    <delete id="batchDelete">
+        DELETE FROM ${tableName} WHERE ${pkColumn.columnName} IN
+        <foreach item="${pkColumn.javaField}" collection="array" open="(" separator="," close=")">
+            #{${pkColumn.javaField}}
+        </foreach>
+    </delete>
+
+    <!--逻辑删除-->
+    <update id="deleteByLogic">
+        UPDATE ${tableName} SET
+#if($delFlagColumn)
+            $delFlagColumn.columnName = #{DEL_FLAG_DELETE}
+#else
+            del_flag = #{DEL_FLAG_DELETE}
+#end
+        WHERE ${pkColumn.columnName} = #{${pkColumn.javaField}}
+    </update>
+
+#if($table.sub)
+    
+    <delete id="delete${subClassName}By${subTableFkClassName}s" parameterType="String">
+        delete from ${subTableName} where ${subTableFkName} in 
+        <foreach item="${subTableFkclassName}" collection="array" open="(" separator="," close=")">
+            #{${subTableFkclassName}}
+        </foreach>
+    </delete>
+
+    <delete id="delete${subClassName}By${subTableFkClassName}" parameterType="${pkColumn.javaType}">
+        delete from ${subTableName} where ${subTableFkName} = #{${subTableFkclassName}}
+    </delete>
+
+    <insert id="batch${subClassName}">
+        insert into ${subTableName}(#foreach($column in $subTable.columns) $column.columnName#if($velocityCount != $subTable.columns.size()),#end#end) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            (#foreach($column in $subTable.columns) #{item.$column.javaField}#if($velocityCount != $subTable.columns.size()),#end#end)
+        </foreach>
+    </insert>
+#end
+</mapper>

@@ -1,0 +1,24 @@
+package ${packageName}.service.impl;
+
+import org.springframework.stereotype.Service;
+import com.liuwa.common.core.service.impl.CurdServiceImpl;
+#if($table.sub)
+import java.util.ArrayList;
+import com.liuwa.common.utils.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
+import ${packageName}.domain.${subClassName};
+#end
+import ${packageName}.dao.${ClassName}Dao;
+import ${packageName}.domain.${ClassName};
+import ${packageName}.service.${ClassName}Service;
+
+/**
+ * ${functionName}Service业务层处理
+ * 
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Service
+public class ${ClassName}ServiceImpl extends CurdServiceImpl<${pkColumn.javaType}, ${ClassName}Dao, ${ClassName}> implements ${ClassName}Service{
+
+}
