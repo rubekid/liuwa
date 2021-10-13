@@ -3,6 +3,7 @@ package com.liuwa.common.utils;
 import java.lang.management.ManagementFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
@@ -151,5 +152,77 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
         // 计算差多少秒//输出结果
         // long sec = diff % nd % nh % nm / ns;
         return day + "天" + hour + "小时" + min + "分钟";
+    }
+
+    /**
+     * 获取当前当前月份开始时间
+     * @return
+     */
+    public static Date getMonthBegin() {
+        return getMonthBegin(new Date());
+    }
+
+    /**
+     * 获取指定日期月份第一天
+     * @param refDate
+     * @return
+     */
+    public static Date getMonthBegin(Date refDate){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(refDate);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        return calendar.getTime();
+    }
+
+    /**
+     * 获取指定日期月份第一天
+     * @param refDate
+     * @return
+     */
+    public static Date getMonthEnd(Date refDate){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(refDate);
+        calendar.add(Calendar.MONTH, 1);
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+
+        return calendar.getTime();
+    }
+
+    /**
+     * 获取指定日期开始时间
+     * @param refDate
+     * @return
+     */
+    public static Date getDateBegin(Date refDate){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(refDate);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
+    }
+
+    /**
+     * 获取制定日期结束时间
+     * @param refDate
+     * @return
+     */
+    public static Date getDateEnd(Date refDate){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(refDate);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        return calendar.getTime();
     }
 }
