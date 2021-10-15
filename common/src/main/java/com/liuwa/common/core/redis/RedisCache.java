@@ -1,16 +1,15 @@
 package com.liuwa.common.core.redis;
 
-import java.util.*;
-import java.util.concurrent.TimeUnit;
-
 import com.alibaba.fastjson.JSONObject;
-import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.RedisZSetCommands;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
+
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * spring redis 工具类

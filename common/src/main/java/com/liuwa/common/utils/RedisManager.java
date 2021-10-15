@@ -1,20 +1,14 @@
 package com.liuwa.common.utils;
 
-import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liuwa.common.config.JacksonObjectMapper;
 import com.liuwa.common.core.redis.RedisCache;
 import com.liuwa.common.utils.spring.SpringUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.redis.connection.RedisZSetCommands;
-import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.SetOperations;
 
-import java.io.*;
-import java.sql.Array;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
