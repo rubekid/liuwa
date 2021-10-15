@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import com.liuwa.common.config.JacksonObjectMapper;
 import com.liuwa.framework.serializer.PrefixRedisSerializer;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -140,7 +141,7 @@ public class RedisConfig extends CachingConfigurerSupport {
      */
     private Jackson2JsonRedisSerializer getJsonRedisSerializer(){
         Jackson2JsonRedisSerializer serializer = new Jackson2JsonRedisSerializer(Object.class);
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new JacksonObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);

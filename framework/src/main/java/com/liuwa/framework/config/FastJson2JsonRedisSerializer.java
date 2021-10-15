@@ -5,6 +5,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.liuwa.common.config.JacksonObjectMapper;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 import com.alibaba.fastjson.parser.ParserConfig;
@@ -19,7 +20,7 @@ import java.nio.charset.Charset;
 public class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T>
 {
     @SuppressWarnings("unused")
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new JacksonObjectMapper();
 
     public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 
