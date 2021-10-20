@@ -229,6 +229,7 @@
         <module>quartz</module>
         <module>generator</module>
         <module>common</module>
+        <module>qiniu</module>
     </modules>
     <packaging>pom</packaging>
 
