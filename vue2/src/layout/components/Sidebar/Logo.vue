@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      title: 'PayPal管理系统',
+      title: '遛娃管理系统',
       logo: logoImg
     }
   }
