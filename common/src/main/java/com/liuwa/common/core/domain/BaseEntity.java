@@ -1,15 +1,16 @@
 package com.liuwa.common.core.domain;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.liuwa.common.core.domain.entity.SysUser;
 import com.liuwa.common.utils.UserUtils;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Entity基类
@@ -196,11 +197,14 @@ public class BaseEntity<Pk> implements Serializable
      * 新增前置处理
      */
     public void preInsert(){
-        SysUser user = UserUtils.getSysUser();
-        if (user != null && user.getUserId() != null){
-            this.updateBy = user.getUserId();
-            this.createBy = user.getUserId();
+        if(this.createBy != null && this.updateBy != null){
+            SysUser user = UserUtils.getSysUser(true);
+            if (user != null && user.getUserId() != null){
+                this.updateBy = user.getUserId();
+                this.createBy = user.getUserId();
+            }
         }
+
         if(this.remark == null){
             this.remark = "";
         }
@@ -213,7 +217,7 @@ public class BaseEntity<Pk> implements Serializable
      * 更新前置处理
      */
     public void preUpdate(){
-        SysUser user = UserUtils.getSysUser();
+        SysUser user = UserUtils.getSysUser(true);
         if (user != null && user.getUserId() != null){
             this.updateBy = user.getUserId();
         }
