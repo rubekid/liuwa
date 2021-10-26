@@ -61,9 +61,9 @@ public class SysUser extends BaseEntity
     /** 盐加密 */
     private String salt;
 
-    /** 帐号状态（0正常 1停用） */
-    @Excel(name = "帐号状态", readConverterExp = "0=正常,1=停用")
-    private String status;
+    /** 帐号状态（1=正常,0=停用） */
+    @Excel(name = "帐号状态", readConverterExp = "1=正常,0=停用")
+    private Integer status;
 
     /** 最后登录IP */
     @Excel(name = "最后登录IP", type = Type.EXPORT)
@@ -233,12 +233,12 @@ public class SysUser extends BaseEntity
         this.salt = salt;
     }
 
-    public String getStatus()
+    public Integer getStatus()
     {
         return status;
     }
 
-    public void setStatus(String status)
+    public void setStatus(Integer status)
     {
         this.status = status;
     }

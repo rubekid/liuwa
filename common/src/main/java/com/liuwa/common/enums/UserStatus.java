@@ -2,23 +2,23 @@ package com.liuwa.common.enums;
 
 /**
  * 用户状态
- * 
+ *
  * @author liuwa
  */
 public enum UserStatus
 {
-    OK("0", "正常"), DISABLE("1", "停用");
+    ENABLE(1, "正常"), DISABLE(0, "停用");
 
-    private final String code;
+    private final int code;
     private final String info;
 
-    UserStatus(String code, String info)
+    UserStatus(int code, String info)
     {
         this.code = code;
         this.info = info;
     }
 
-    public String getCode()
+    public int getCode()
     {
         return code;
     }

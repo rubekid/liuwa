@@ -66,7 +66,7 @@ create table sys_user (
 -- 初始化-用户信息表数据
 -- ----------------------------
 insert into sys_user values(-1, 0, 'developer', '系统开发员', '00', 'developer@liuwa.com', '88888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', 1, 0, '127.0.0.1', sysdate(), 1, sysdate(), 1, null, '系统开发员');
-insert into sys_user values(1,  103, 1, '遛娃', '00', 'liuwa@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', 1, 0, '127.0.0.1', sysdate(), 1, sysdate(), 1, null, '管理员');
+insert into sys_user values(1,  0, 'admin', '遛娃', '00', 'liuwa@163.com', '18888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', 1, 0, '127.0.0.1', sysdate(), 1, sysdate(), 1, null, '管理员');
 insert into sys_user values(2,  105, 'liuwa', '遛娃测试', '00', 'liuwa@qq.com',  '15666666666', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', 1, 0, '127.0.0.1', sysdate(), 1, sysdate(), 1, null, '测试员');
 
 

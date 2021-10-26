@@ -44,7 +44,7 @@ public class UserDetailsServiceImpl implements UserDetailsService
             log.info("登录用户：{} 已被删除.", username);
             throw new ServiceException("对不起，您的账号：" + username + " 已被删除");
         }
-        else if (UserStatus.DISABLE.getCode().equals(user.getStatus()))
+        else if (user.getStatus() == UserStatus.DISABLE.getCode())
         {
             log.info("登录用户：{} 已被停用.", username);
             throw new ServiceException("对不起，您的账号：" + username + " 已停用");
