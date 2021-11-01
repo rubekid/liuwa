@@ -4,10 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.liuwa.common.annotation.DefaultValue;
 import com.liuwa.common.core.domain.entity.SysUser;
+import com.liuwa.common.exception.SimpleException;
 import com.liuwa.common.utils.UserUtils;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -178,7 +182,6 @@ public class BaseEntity<Pk> implements Serializable
         this.delFlag = delFlag;
     }
 
-    @JsonIgnore
     public Map<String, Object> getParams()
     {
         if (params == null)
@@ -197,11 +200,15 @@ public class BaseEntity<Pk> implements Serializable
      * 新增前置处理
      */
     public void preInsert(){
-        if(this.createBy != null && this.updateBy != null){
+        if(this.createBy == null || this.updateBy == null){
             SysUser user = UserUtils.getSysUser(true);
             if (user != null && user.getUserId() != null){
-                this.updateBy = user.getUserId();
-                this.createBy = user.getUserId();
+                if(this.createBy == null){
+                    this.createBy = user.getUserId();
+                }
+                if(this.updateBy == null){
+                    this.updateBy = user.getUserId();
+                }
             }
         }
 
@@ -211,6 +218,7 @@ public class BaseEntity<Pk> implements Serializable
         this.delFlag = DEL_FLAG_NORMAL;
         this.updateTime = new Date();
         this.createTime = this.updateTime;
+        this.preSave();
     }
 
     /**
@@ -226,6 +234,49 @@ public class BaseEntity<Pk> implements Serializable
         }
 
         this.updateTime = new Date();
+        this.preSave();
+    }
+
+    /**
+     * 保存钱处理 对非null字段进行处理
+     */
+    public void preSave(){
+        Field[] fields = this.getClass().getDeclaredFields();
+        for(Field field : fields){
+            DefaultValue defaultValue = field.getAnnotation(DefaultValue.class);
+            if(defaultValue != null){
+                try{
+                    field.setAccessible(true);
+                    Object value = field.get(this);
+                    if(value == null){
+
+                        String dv = defaultValue.value();
+                        Class clazz = field.getType();
+                        if(clazz.isAssignableFrom(Integer.class)){
+                            field.set(this, Integer.valueOf(dv));
+                        }
+                        else if(clazz.isAssignableFrom(Long.class)){
+                            field.set(this, Long.valueOf(dv));
+                        }
+                        else if(clazz.isAssignableFrom(Float.class)){
+                            field.set(this, Float.valueOf(dv));
+                        }
+                        else if(clazz.isAssignableFrom(Double.class)){
+                            field.set(this, Double.valueOf(dv));
+                        }
+                        else if(clazz.isAssignableFrom(BigDecimal.class)){
+                            field.set(this, new BigDecimal(dv));
+                        }
+                        else if(clazz.isAssignableFrom(String.class)){
+                            field.set(this, dv);
+                        }
+                    }
+                }
+                catch (IllegalArgumentException | IllegalAccessException ex){
+                    throw new SimpleException(ex);
+                }
+            }
+        }
     }
 
     /**

@@ -408,6 +408,8 @@ export default {
               this.msgSuccess("修改成功");
               this.open = false;
               this.$emit('success', this.from);
+            }).catch(err => {
+              loadingInstance.close();
             });
           } else {
             add${BusinessName}(this.form).then(response => {
@@ -415,6 +417,8 @@ export default {
               this.msgSuccess("新增成功");
               this.open = false;
               this.$emit('success', this.from);
+            }).catch(err => {
+              loadingInstance.close();
             });
           }
         }

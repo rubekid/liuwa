@@ -320,7 +320,6 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-
       const ${pkColumn.javaField} = row.${pkColumn.javaField} || this.ids
       this.form = {${pkColumn.javaField}: ${pkColumn.javaField}}
 
