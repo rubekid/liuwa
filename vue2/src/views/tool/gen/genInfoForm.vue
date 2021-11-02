@@ -60,7 +60,7 @@
         </el-form-item>
       </el-col>
 
-      <el-col :span="12">
+      <el-col :span="8">
         <el-form-item>
           <span slot="label">
             上级菜单
@@ -77,7 +77,35 @@
             placeholder="请选择系统菜单"
           />
         </el-form-item>
+
+
+
       </el-col>
+     <el-col :span="4">
+
+
+      <el-form-item label="菜单图标" label-width="100px">
+       <el-popover
+        placement="bottom-start"
+        width="460"
+        trigger="click"
+        @show="$refs['iconSelect'].reset()"
+       >
+        <IconSelect ref="iconSelect" @selected="selectedMenuIcon" />
+        <el-input slot="reference" v-model="info.menuIcon" placeholder="点击选择图标" readonly>
+         <svg-icon
+          v-if="info.menuIcon"
+          slot="prefix"
+          :icon-class="info.menuIcon"
+          class="el-input__icon"
+          style="height: 32px;width: 16px;"
+         />
+         <i v-else slot="prefix" class="el-icon-search el-input__icon" />
+        </el-input>
+       </el-popover>
+      </el-form-item>
+
+     </el-col>
 
       <el-col :span="12">
         <el-form-item prop="genType">
@@ -215,11 +243,12 @@
 </template>
 <script>
 import Treeselect from "@riophae/vue-treeselect";
+import IconSelect from "@/components/IconSelect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   name: "BasicInfoForm",
-  components: { Treeselect },
+  components: { Treeselect, IconSelect },
   props: {
     info: {
       type: Object,
@@ -237,6 +266,7 @@ export default {
   data() {
     return {
       subColumns: [],
+
       rules: {
         tplCategory: [
           { required: true, message: "请选择生成模板", trigger: "blur" }
@@ -294,7 +324,12 @@ export default {
           break;
         }
       }
-    }
+    },
+   // 选择图标
+   selectedMenuIcon(name) {
+     this.info.menuIcon = name;
+
+   }
   }
 };
 </script>

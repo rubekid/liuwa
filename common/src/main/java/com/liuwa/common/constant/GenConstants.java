@@ -31,6 +31,9 @@ public class GenConstants
     /** 上级菜单名称字段 */
     public static final String PARENT_MENU_NAME = "parentMenuName";
 
+    /** 菜单图标 */
+    public static final String MENU_ICON = "menuIcon";
+
     /** 数据库字符串类型 */
     public static final String[] COLUMNTYPE_STR = { "char", "varchar", "nvarchar", "varchar2" };
 

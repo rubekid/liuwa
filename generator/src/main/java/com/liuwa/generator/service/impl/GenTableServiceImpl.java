@@ -44,8 +44,8 @@ import com.liuwa.generator.util.VelocityUtils;
  * @author liuwa
  */
 @Service
-public class GenTableServiceImpl implements GenTableService
-{
+public class GenTableServiceImpl implements GenTableService {
+
     private static final Logger log = LoggerFactory.getLogger(GenTableServiceImpl.class);
 
     @Autowired
@@ -474,12 +474,14 @@ public class GenTableServiceImpl implements GenTableService
             String treeName = paramsObj.getString(GenConstants.TREE_NAME);
             String parentMenuId = paramsObj.getString(GenConstants.PARENT_MENU_ID);
             String parentMenuName = paramsObj.getString(GenConstants.PARENT_MENU_NAME);
-            
+            String menuIcon = paramsObj.getString(GenConstants.MENU_ICON);
+
             genTable.setTreeCode(treeCode);
             genTable.setTreeParentCode(treeParentCode);
             genTable.setTreeName(treeName);
             genTable.setParentMenuId(parentMenuId);
             genTable.setParentMenuName(parentMenuName);
+            genTable.setMenuIcon(menuIcon);
         }
     }
 

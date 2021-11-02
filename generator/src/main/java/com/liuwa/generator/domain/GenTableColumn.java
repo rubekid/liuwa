@@ -62,6 +62,11 @@ public class GenTableColumn extends BaseEntity
     /** 显示类型（input文本框、textarea文本域、select下拉框、checkbox复选框、radio单选框、datetime日期控件、image图片上传控件、upload文件上传控件、editor富文本控件） */
     private String htmlType;
 
+    /**
+     * 组别（分组编码）
+     */
+    private String groupType;
+
     /** 字典类型 */
     private String dictType;
 
@@ -301,6 +306,14 @@ public class GenTableColumn extends BaseEntity
     public void setHtmlType(String htmlType)
     {
         this.htmlType = htmlType;
+    }
+
+    public String getGroupType() {
+        return groupType;
+    }
+
+    public void setGroupType(String groupType) {
+        this.groupType = groupType;
     }
 
     public void setDictType(String dictType)

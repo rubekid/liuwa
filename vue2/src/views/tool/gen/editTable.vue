@@ -19,7 +19,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="物理类型"
+            label="数据库字段类型"
             prop="columnType"
             min-width="10%"
             :show-overflow-tooltip="true"
@@ -101,11 +101,21 @@
                 <el-option label="日期控件" value="datetime" />
                 <el-option label="单图上传" value="singleImage" />
                 <el-option label="多图上传" value="multiImage" />
+                <el-option label="省份" value="province" />
+                <el-option label="城市" value="city" />
+                <el-option label="区县" value="district" />
                 <el-option label="文件上传" value="fileUpload" />
                 <el-option label="富文本控件" value="editor" />
               </el-select>
             </template>
           </el-table-column>
+
+         <el-table-column label="字段分组" min-width="10%">
+           <template slot-scope="scope">
+            <el-input v-model="scope.row.groupType"></el-input>
+           </template>
+          </el-table-column>
+
           <el-table-column label="字典类型" min-width="12%">
             <template slot-scope="scope">
               <el-select v-model="scope.row.dictType" clearable filterable placeholder="请选择">
@@ -172,6 +182,9 @@ export default {
       // 获取表详细信息
       getGenTable(tableId).then(res => {
         this.cloumns = res.data.rows;
+        if(!res.data.info.menuIcon){
+         res.data.info.menuIcon = ''
+        }
         this.info = res.data.info;
         this.tables = res.data.tables;
       });
@@ -199,7 +212,8 @@ export default {
             treeCode: genTable.treeCode,
             treeName: genTable.treeName,
             treeParentCode: genTable.treeParentCode,
-            parentMenuId: genTable.parentMenuId
+            parentMenuId: genTable.parentMenuId,
+            menuIcon: genTable.menuIcon
           };
           updateGenTable(genTable).then(res => {
             this.msgSuccess(res.msg);

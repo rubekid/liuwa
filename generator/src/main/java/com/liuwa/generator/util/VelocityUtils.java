@@ -25,7 +25,7 @@ public class VelocityUtils
     private static final String MYBATIS_PATH = "main/resources/mapper";
 
     /** 默认上级菜单，系统工具 */
-    private static final String DEFAULT_PARENT_MENU_ID = "0";
+    private static final String DEFAULT_PARENT_MENU_ID = "3";
 
     /**
      * 设置模板变量信息
@@ -87,6 +87,7 @@ public class VelocityUtils
         JSONObject paramsObj = JSONObject.parseObject(options);
         String parentMenuId = getParentMenuId(paramsObj);
         context.put("parentMenuId", parentMenuId);
+        context.put("menuIcon", getMenuIcon(paramsObj));
     }
 
     public static void setTreeVelocityContext(VelocityContext context, GenTable genTable)
@@ -304,6 +305,22 @@ public class VelocityUtils
             return paramsObj.getString(GenConstants.PARENT_MENU_ID);
         }
         return DEFAULT_PARENT_MENU_ID;
+    }
+
+    /**
+     * 获取菜单Icon
+     *
+     * @param paramsObj 生成其他选项
+     * @return 菜单Icon
+     */
+    public static String getMenuIcon(JSONObject paramsObj)
+    {
+        if (StringUtils.isNotEmpty(paramsObj) && paramsObj.containsKey(GenConstants.MENU_ICON)
+                && StringUtils.isNotEmpty(paramsObj.getString(GenConstants.MENU_ICON)))
+        {
+            return paramsObj.getString(GenConstants.MENU_ICON);
+        }
+        return "#";
     }
 
     /**

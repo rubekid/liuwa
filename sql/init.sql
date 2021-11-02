@@ -679,6 +679,7 @@ create table gen_table_column (
   is_query          tinyint(1)                                 comment '是否查询字段（1是）',
   query_type        varchar(200)    default 'EQ'               comment '查询方式（等于、不等于、大于、小于、范围）',
   html_type         varchar(200)                               comment '显示类型（文本框、文本域、下拉框、复选框、单选框、日期控件等等）',
+  group_type	 	varchar(30) 	default '' 				   comment '组别（让某些字段归在同一组）',
   dict_type         varchar(200)    default ''                 comment '字典类型',
   sort              int                                        comment '排序',
   create_by         bigint(20)     	default 0				   comment '创建者',

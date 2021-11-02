@@ -92,6 +92,9 @@ public class GenTable extends BaseEntity
     /** 上级菜单ID字段 */
     private String parentMenuId;
 
+    /** 菜单图标 */
+    private String menuIcon;
+
     /** 上级菜单名称字段 */
     private String parentMenuName;
 
@@ -323,6 +326,14 @@ public class GenTable extends BaseEntity
     public void setParentMenuName(String parentMenuName)
     {
         this.parentMenuName = parentMenuName;
+    }
+
+    public String getMenuIcon() {
+        return menuIcon;
+    }
+
+    public void setMenuIcon(String menuIcon) {
+        this.menuIcon = menuIcon;
     }
 
     public boolean isSub()
