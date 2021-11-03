@@ -444,6 +444,7 @@ create table sys_dict_type
   dict_name        varchar(100)    default ''                 comment '字典名称',
   dict_type        varchar(100)    default ''                 comment '字典类型',
   status           tinyint(1)      default 1                  comment '状态（1正常 0停用）',
+  java_type 	   enum('Number','String','Boolean','BigDecimal') null default 'String' comment 'Java 类型',
   create_by        varchar(64)     default ''                 comment '创建者',
   create_time      datetime                                   comment '创建时间',
   update_by        varchar(64)     default ''                 comment '更新者',
@@ -455,7 +456,7 @@ create table sys_dict_type
 
 insert into sys_dict_type values(1,  '用户性别', 'sys_user_sex',        1, 1, sysdate(), 1, null, '用户性别列表');
 insert into sys_dict_type values(2,  '菜单状态', 'sys_show_hide',       1, 1, sysdate(), 1, null, '菜单状态列表');
-insert into sys_dict_type values(3,  '系统开关', 'sys_on_off',  1, 1, sysdate(), 1, null, '系统开关列表');
+insert into sys_dict_type values(3,  '系统开关', 'sys_on_off',  		1, 1, sysdate(), 1, null, '系统开关列表');
 insert into sys_dict_type values(4,  '任务状态', 'sys_job_status',      1, 1, sysdate(), 1, null, '任务状态列表');
 insert into sys_dict_type values(5,  '任务分组', 'sys_job_group',       1, 1, sysdate(), 1, null, '任务分组列表');
 insert into sys_dict_type values(6,  '系统是否', 'sys_yes_no',          1, 1, sysdate(), 1, null, '系统是否列表');

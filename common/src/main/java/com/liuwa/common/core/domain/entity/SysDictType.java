@@ -17,6 +17,13 @@ public class SysDictType extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 字典值 数据类型
+     */
+    public static final String JAVA_TYPE_NUMBER = "Number";
+    public static final String JAVA_TYPE_STRING = "String";
+    public static final String JAVA_TYPE_BOOLEAN = "Boolean";
+
     /** 字典主键 */
     @Excel(name = "字典主键", cellType = ColumnType.NUMERIC)
     private Long dictId;
@@ -32,6 +39,9 @@ public class SysDictType extends BaseEntity
     /** 状态（1正常 0停用） */
     @Excel(name = "状态", readConverterExp = "1=正常,0=停用")
     private String status;
+
+    /**  java 类型  'Number','String','Boolean','BigDecimal' */
+    private String javaType;
 
     public Long getDictId()
     {
@@ -76,7 +86,15 @@ public class SysDictType extends BaseEntity
     {
         this.status = status;
     }
-    
+
+    public String getJavaType() {
+        return javaType;
+    }
+
+    public void setJavaType(String javaType) {
+        this.javaType = javaType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

@@ -1,7 +1,11 @@
 package com.liuwa.web.controller.system;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.liuwa.common.core.domain.entity.SysDictType;
+import com.liuwa.common.core.domain.model.SysDictDataOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -72,14 +76,37 @@ public class SysDictDataController extends BaseController
      * 根据字典类型查询字典数据信息
      */
     @GetMapping(value = "/type/{dictType}")
-    public AjaxResult dictType(@PathVariable String dictType)
-    {
-        List<SysDictData> data = dictTypeService.selectDictDataByType(dictType);
-        if (StringUtils.isNull(data))
-        {
-            data = new ArrayList<SysDictData>();
+    public AjaxResult dictType(@PathVariable String dictType) {
+        List<SysDictDataOption> items = new ArrayList<SysDictDataOption>();
+        List<SysDictData> list = dictTypeService.selectDictDataByType(dictType);
+        if (!StringUtils.isNull(list)) {
+            SysDictType sysDictType = dictTypeService.selectDictTypeByType(dictType);
+            for(SysDictData dataItem : list){
+                String label = dataItem.getDictLabel();
+                String value = dataItem.getDictValue();
+                if(SysDictType.JAVA_TYPE_NUMBER.equals(sysDictType.getJavaType())){
+                    SysDictDataOption<Double> option = new SysDictDataOption<Double>();
+                    option.setDictValue(Double.valueOf(value));
+                    option.setDictLabel(label);
+                    items.add(option);
+                }
+                else if(SysDictType.JAVA_TYPE_BOOLEAN.equals(sysDictType.getJavaType())){
+                    SysDictDataOption<Boolean> option = new SysDictDataOption<Boolean>();
+                    option.setDictValue(Boolean.valueOf(value));
+                    option.setDictLabel(label);
+                    items.add(option);
+                }
+                else{
+                    SysDictDataOption<String> option = new SysDictDataOption<String>();
+                    option.setDictValue(value);
+                    option.setDictLabel(label);
+                    items.add(option);
+                }
+            }
+
         }
-        return AjaxResult.success(data);
+
+        return AjaxResult.success(items);
     }
 
     /**
