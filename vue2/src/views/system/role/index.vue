@@ -123,12 +123,12 @@
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      
+
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-       
+
         <template slot-scope="scope">
-           <template v-if="scope.row.roleId !== 1 || user_id == -1"> 
-            
+           <template v-if="scope.row.roleId !== 1 || user_id == -1">
+
             <el-button
               size="mini"
               type="text"
@@ -137,7 +137,7 @@
               v-hasPermi="['system:role:edit']"
             >修改</el-button>
            </template>
-           
+
           <template v-if="scope.row.roleId !== 1">
             <el-button
               size="mini"
@@ -159,7 +159,7 @@
             </el-dropdown>
           </template>
         </template>
-       
+
       </el-table-column>
     </el-table>
 
@@ -364,7 +364,7 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_normal_disable").then(response => {
+    this.getDicts("sys_on_off").then(response => {
       this.statusOptions = response.data;
     });
   },

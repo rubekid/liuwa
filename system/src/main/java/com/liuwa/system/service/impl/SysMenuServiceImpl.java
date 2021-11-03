@@ -147,12 +147,12 @@ public class SysMenuServiceImpl implements SysMenuService
         for (SysMenu menu : menus)
         {
             RouterVo router = new RouterVo();
-            router.setHidden("1".equals(menu.getVisible()));
+            router.setHidden(menu.getVisible() == SysConstants.NO);
             router.setName(getRouteName(menu));
             router.setPath(getRouterPath(menu));
             router.setComponent(getComponent(menu));
             router.setQuery(menu.getQuery());
-            router.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), StringUtils.equals("1", menu.getIsCache()), menu.getPath()));
+            router.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), menu.getIsCache() == SysConstants.NO, menu.getPath()));
             List<SysMenu> cMenus = menu.getChildren();
             if (!cMenus.isEmpty() && cMenus.size() > 0 && SysConstants.TYPE_DIR.equals(menu.getMenuType()))
             {
@@ -168,7 +168,7 @@ public class SysMenuServiceImpl implements SysMenuService
                 children.setPath(menu.getPath());
                 children.setComponent(menu.getComponent());
                 children.setName(StringUtils.capitalize(menu.getPath()));
-                children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), StringUtils.equals("1", menu.getIsCache()), menu.getPath()));
+                children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), menu.getIsCache() == SysConstants.NO, menu.getPath()));
                 childrenList.add(children);
                 router.setChildren(childrenList);
             }
@@ -317,15 +317,15 @@ public class SysMenuServiceImpl implements SysMenuService
      * @return 结果
      */
     @Override
-    public String checkMenuNameUnique(SysMenu menu)
+    public boolean checkMenuNameUnique(SysMenu menu)
     {
         Long menuId = StringUtils.isNull(menu.getMenuId()) ? -1L : menu.getMenuId();
         SysMenu info = menuMapper.checkMenuNameUnique(menu.getMenuName(), menu.getParentId());
         if (StringUtils.isNotNull(info) && info.getMenuId().longValue() != menuId.longValue())
         {
-            return SysConstants.NOT_UNIQUE;
+            return false;
         }
-        return SysConstants.UNIQUE;
+        return true;
     }
 
     /**
@@ -361,7 +361,7 @@ public class SysMenuServiceImpl implements SysMenuService
         }
         // 非外链并且是一级目录（类型为目录）
         if (0 == menu.getParentId().intValue() && SysConstants.TYPE_DIR.equals(menu.getMenuType())
-                && SysConstants.NO_FRAME.equals(menu.getIsFrame()))
+                && menu.getIsFrame() == SysConstants.NO_FRAME)
         {
             routerPath = "/" + menu.getPath();
         }

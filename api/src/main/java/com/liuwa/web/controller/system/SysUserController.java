@@ -118,17 +118,17 @@ public class SysUserController extends BaseController
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysUser user)
     {
-        if (SysConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(user.getUserName())))
+        if (userService.checkUserNameUnique(user.getUserName()))
         {
             return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，登录账号已存在");
         }
         else if (StringUtils.isNotEmpty(user.getPhonenumber())
-                && SysConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
+                && userService.checkPhoneUnique(user))
         {
             return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，手机号码已存在");
         }
         else if (StringUtils.isNotEmpty(user.getEmail())
-                && SysConstants.NOT_UNIQUE.equals(userService.checkEmailUnique(user)))
+                && userService.checkEmailUnique(user))
         {
             return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }
@@ -147,12 +147,12 @@ public class SysUserController extends BaseController
     {
         userService.checkUserAllowed(user);
         if (StringUtils.isNotEmpty(user.getPhonenumber())
-                && SysConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
+                && userService.checkPhoneUnique(user))
         {
             return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
         }
         else if (StringUtils.isNotEmpty(user.getEmail())
-                && SysConstants.NOT_UNIQUE.equals(userService.checkEmailUnique(user)))
+                && userService.checkEmailUnique(user))
         {
             return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }

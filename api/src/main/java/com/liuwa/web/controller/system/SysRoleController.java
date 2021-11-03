@@ -88,11 +88,11 @@ public class SysRoleController extends BaseController
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysRole role)
     {
-        if (SysConstants.NOT_UNIQUE.equals(roleService.checkRoleNameUnique(role)))
+        if (roleService.checkRoleNameUnique(role))
         {
             return AjaxResult.error("新增角色'" + role.getRoleName() + "'失败，角色名称已存在");
         }
-        else if (SysConstants.NOT_UNIQUE.equals(roleService.checkRoleKeyUnique(role)))
+        else if (roleService.checkRoleKeyUnique(role))
         {
             return AjaxResult.error("新增角色'" + role.getRoleName() + "'失败，角色权限已存在");
         }
@@ -110,11 +110,11 @@ public class SysRoleController extends BaseController
     public AjaxResult edit(@Validated @RequestBody SysRole role)
     {
         roleService.checkRoleAllowed(role);
-        if (SysConstants.NOT_UNIQUE.equals(roleService.checkRoleNameUnique(role)))
+        if (roleService.checkRoleNameUnique(role))
         {
             return AjaxResult.error("修改角色'" + role.getRoleName() + "'失败，角色名称已存在");
         }
-        else if (SysConstants.NOT_UNIQUE.equals(roleService.checkRoleKeyUnique(role)))
+        else if (roleService.checkRoleKeyUnique(role))
         {
             return AjaxResult.error("修改角色'" + role.getRoleName() + "'失败，角色权限已存在");
         }

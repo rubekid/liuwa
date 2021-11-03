@@ -163,15 +163,15 @@ public class SysDeptServiceImpl implements SysDeptService
      * @return 结果
      */
     @Override
-    public String checkDeptNameUnique(SysDept dept)
+    public boolean checkDeptNameUnique(SysDept dept)
     {
         Long deptId = StringUtils.isNull(dept.getDeptId()) ? -1L : dept.getDeptId();
         SysDept info = deptMapper.checkDeptNameUnique(dept.getDeptName(), dept.getParentId());
         if (StringUtils.isNotNull(info) && info.getDeptId().longValue() != deptId.longValue())
         {
-            return SysConstants.NOT_UNIQUE;
+            return false;
         }
-        return SysConstants.UNIQUE;
+        return true;
     }
 
     /**
@@ -205,7 +205,7 @@ public class SysDeptServiceImpl implements SysDeptService
     {
         SysDept info = deptMapper.selectDeptById(dept.getParentId());
         // 如果父节点不为正常状态,则不允许新增子节点
-        if (!SysConstants.DEPT_NORMAL.equals(info.getStatus()))
+        if (info.getStatus() != SysConstants.DEPT_NORMAL)
         {
             throw new ServiceException("部门停用，不允许新增");
         }
@@ -232,7 +232,7 @@ public class SysDeptServiceImpl implements SysDeptService
             updateDeptChildren(dept.getDeptId(), newAncestors, oldAncestors);
         }
         int result = deptMapper.updateDept(dept);
-        if (SysConstants.DEPT_NORMAL.equals(dept.getStatus()) && StringUtils.isNotEmpty(dept.getAncestors())
+        if (dept.getStatus() == SysConstants.DEPT_NORMAL && StringUtils.isNotEmpty(dept.getAncestors())
                 && !StringUtils.equals("0", dept.getAncestors()))
         {
             // 如果该部门是启用状态，则启用该部门的所有上级部门

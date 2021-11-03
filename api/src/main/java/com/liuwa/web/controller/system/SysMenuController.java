@@ -85,11 +85,11 @@ public class SysMenuController extends BaseController
     @PostMapping
     public AjaxResult add(@Validated @RequestBody SysMenu menu)
     {
-        if (SysConstants.NOT_UNIQUE.equals(menuService.checkMenuNameUnique(menu)))
+        if (menuService.checkMenuNameUnique(menu))
         {
             return AjaxResult.error("新增菜单'" + menu.getMenuName() + "'失败，菜单名称已存在");
         }
-        else if (SysConstants.YES_FRAME.equals(menu.getIsFrame()) && !StringUtils.ishttp(menu.getPath()))
+        else if (menu.getIsFrame() == SysConstants.YES_FRAME && !StringUtils.ishttp(menu.getPath()))
         {
             return AjaxResult.error("新增菜单'" + menu.getMenuName() + "'失败，地址必须以http(s)://开头");
         }
@@ -105,11 +105,11 @@ public class SysMenuController extends BaseController
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysMenu menu)
     {
-        if (SysConstants.NOT_UNIQUE.equals(menuService.checkMenuNameUnique(menu)))
+        if (menuService.checkMenuNameUnique(menu))
         {
             return AjaxResult.error("修改菜单'" + menu.getMenuName() + "'失败，菜单名称已存在");
         }
-        else if (SysConstants.YES_FRAME.equals(menu.getIsFrame()) && !StringUtils.ishttp(menu.getPath()))
+        else if (menu.getIsFrame() == SysConstants.YES_FRAME && !StringUtils.ishttp(menu.getPath()))
         {
             return AjaxResult.error("修改菜单'" + menu.getMenuName() + "'失败，地址必须以http(s)://开头");
         }

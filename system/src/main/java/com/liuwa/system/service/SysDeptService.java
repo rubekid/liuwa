@@ -81,7 +81,7 @@ public interface SysDeptService
      * @param dept 部门信息
      * @return 结果
      */
-    public String checkDeptNameUnique(SysDept dept);
+    public boolean checkDeptNameUnique(SysDept dept);
 
     /**
      * 校验部门是否有数据权限

@@ -41,20 +41,20 @@ public class SysMenu extends BaseEntity
     /** 路由参数 */
     private String query;
 
-    /** 是否为外链（0是 1否） */
-    private String isFrame;
+    /** 是否为外链（1是 0否） */
+    private Integer isFrame;
 
-    /** 是否缓存（0缓存 1不缓存） */
-    private String isCache;
+    /** 是否缓存（1缓存 0不缓存） */
+    private Integer isCache;
 
     /** 类型（M目录 C菜单 F按钮） */
     private String menuType;
 
-    /** 显示状态（0显示 1隐藏） */
-    private String visible;
+    /** 显示状态（1显示 0隐藏） */
+    private Integer visible;
     
-    /** 菜单状态（0显示 1隐藏） */
-    private String status;
+    /** 菜单状态（1显示 0隐藏） */
+    private Integer status;
 
     /** 权限字符串 */
     private String perms;
@@ -150,22 +150,22 @@ public class SysMenu extends BaseEntity
         this.query = query;
     }
 
-    public String getIsFrame()
+    public Integer getIsFrame()
     {
         return isFrame;
     }
 
-    public void setIsFrame(String isFrame)
+    public void setIsFrame(Integer isFrame)
     {
         this.isFrame = isFrame;
     }
 
-    public String getIsCache()
+    public Integer getIsCache()
     {
         return isCache;
     }
 
-    public void setIsCache(String isCache)
+    public void setIsCache(Integer isCache)
     {
         this.isCache = isCache;
     }
@@ -181,22 +181,22 @@ public class SysMenu extends BaseEntity
         this.menuType = menuType;
     }
 
-    public String getVisible()
+    public Integer getVisible()
     {
         return visible;
     }
 
-    public void setVisible(String visible)
+    public void setVisible(Integer visible)
     {
         this.visible = visible;
     }
 
-    public String getStatus()
+    public Integer getStatus()
     {
         return status;
     }
 
-    public void setStatus(String status)
+    public void setStatus(Integer status)
     {
         this.status = status;
     }

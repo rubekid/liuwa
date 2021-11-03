@@ -170,14 +170,14 @@ public class SysUserServiceImpl implements SysUserService
      * @return 结果
      */
     @Override
-    public String checkUserNameUnique(String userName)
+    public boolean checkUserNameUnique(String userName)
     {
         int count = userMapper.checkUserNameUnique(userName);
         if (count > 0)
         {
-            return SysConstants.NOT_UNIQUE;
+            return false;
         }
-        return SysConstants.UNIQUE;
+        return true;
     }
 
     /**
@@ -187,15 +187,15 @@ public class SysUserServiceImpl implements SysUserService
      * @return
      */
     @Override
-    public String checkPhoneUnique(SysUser user)
+    public boolean checkPhoneUnique(SysUser user)
     {
         Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
         SysUser info = userMapper.checkPhoneUnique(user.getPhonenumber());
         if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
         {
-            return SysConstants.NOT_UNIQUE;
+            return false;
         }
-        return SysConstants.UNIQUE;
+        return true;
     }
 
     /**
@@ -205,15 +205,15 @@ public class SysUserServiceImpl implements SysUserService
      * @return
      */
     @Override
-    public String checkEmailUnique(SysUser user)
+    public boolean checkEmailUnique(SysUser user)
     {
         Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
         SysUser info = userMapper.checkEmailUnique(user.getEmail());
         if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
         {
-            return SysConstants.NOT_UNIQUE;
+            return false;
         }
-        return SysConstants.UNIQUE;
+        return true;
     }
 
     /**

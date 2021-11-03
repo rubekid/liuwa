@@ -455,7 +455,7 @@ create table sys_dict_type
 
 insert into sys_dict_type values(1,  '用户性别', 'sys_user_sex',        1, 1, sysdate(), 1, null, '用户性别列表');
 insert into sys_dict_type values(2,  '菜单状态', 'sys_show_hide',       1, 1, sysdate(), 1, null, '菜单状态列表');
-insert into sys_dict_type values(3,  '系统开关', 'sys_normal_disable',  1, 1, sysdate(), 1, null, '系统开关列表');
+insert into sys_dict_type values(3,  '系统开关', 'sys_on_off',  1, 1, sysdate(), 1, null, '系统开关列表');
 insert into sys_dict_type values(4,  '任务状态', 'sys_job_status',      1, 1, sysdate(), 1, null, '任务状态列表');
 insert into sys_dict_type values(5,  '任务分组', 'sys_job_group',       1, 1, sysdate(), 1, null, '任务分组列表');
 insert into sys_dict_type values(6,  '系统是否', 'sys_yes_no',          1, 1, sysdate(), 1, null, '系统是否列表');
@@ -488,23 +488,23 @@ create table sys_dict_data
   primary key (dict_code)
 ) engine=innodb auto_increment=100 comment = '字典数据表';
 
-insert into sys_dict_data values(1,  1,  '男',       '0',       'sys_user_sex',        '',   '',        1, 1, 1, sysdate(), 1, null, '性别男');
-insert into sys_dict_data values(2,  2,  '女',       '1',       'sys_user_sex',        '',   '',        0, 1, 1, sysdate(), 1, null, '性别女');
-insert into sys_dict_data values(3,  3,  '未知',     '2',       'sys_user_sex',        '',   '',        0, 1, 1, sysdate(), 1, null, '性别未知');
-insert into sys_dict_data values(4,  1,  '显示',     '0',       'sys_show_hide',       '',   'primary', 0, 1, 1, sysdate(), 1, null, '显示菜单');
-insert into sys_dict_data values(5,  2,  '隐藏',     '1',       'sys_show_hide',       '',   'danger',  0, 1, 1, sysdate(), 1, null, '隐藏菜单');
-insert into sys_dict_data values(6,  1,  '正常',     '0',       'sys_normal_disable',  '',   'primary', 1, 1, 1, sysdate(), 1, null, '正常状态');
-insert into sys_dict_data values(7,  2,  '停用',     '1',       'sys_normal_disable',  '',   'danger',  0, 1, 1, sysdate(), 1, null, '停用状态');
-insert into sys_dict_data values(8,  1,  '正常',     '0',       'sys_job_status',      '',   'primary', 1, 1, 1, sysdate(), 1, null, '正常状态');
-insert into sys_dict_data values(9,  2,  '暂停',     '1',       'sys_job_status',      '',   'danger',  0, 1, 1, sysdate(), 1, null, '停用状态');
+insert into sys_dict_data values(1,  1,  '男',       '1',       'sys_user_sex',        '',   '',        1, 1, 1, sysdate(), 1, null, '性别男');
+insert into sys_dict_data values(2,  2,  '女',       '2',       'sys_user_sex',        '',   '',        0, 1, 1, sysdate(), 1, null, '性别女');
+insert into sys_dict_data values(3,  3,  '未知',     '0',       'sys_user_sex',        '',   '',        0, 1, 1, sysdate(), 1, null, '性别未知');
+insert into sys_dict_data values(4,  1,  '显示',     '1',       'sys_show_hide',       '',   'primary', 0, 1, 1, sysdate(), 1, null, '显示菜单');
+insert into sys_dict_data values(5,  2,  '隐藏',     '0',       'sys_show_hide',       '',   'danger',  0, 1, 1, sysdate(), 1, null, '隐藏菜单');
+insert into sys_dict_data values(6,  1,  '正常',     '1',       'sys_on_off',  '',   'primary', 1, 1, 1, sysdate(), 1, null, '正常状态');
+insert into sys_dict_data values(7,  2,  '停用',     '0',       'sys_on_off',  '',   'danger',  0, 1, 1, sysdate(), 1, null, '停用状态');
+insert into sys_dict_data values(8,  1,  '正常',     '1',       'sys_job_status',      '',   'primary', 1, 1, 1, sysdate(), 1, null, '正常状态');
+insert into sys_dict_data values(9,  2,  '暂停',     '0',       'sys_job_status',      '',   'danger',  0, 1, 1, sysdate(), 1, null, '停用状态');
 insert into sys_dict_data values(10, 1,  '默认',     'DEFAULT', 'sys_job_group',       '',   '',        1, 1, 1, sysdate(), 1, null, '默认分组');
 insert into sys_dict_data values(11, 2,  '系统',     'SYSTEM',  'sys_job_group',       '',   '',        0, 1, 1, sysdate(), 1, null, '系统分组');
-insert into sys_dict_data values(12, 1,  '是',       'Y',       'sys_yes_no',          '',   'primary', 1, 1, 1, sysdate(), 1, null, '系统默认是');
-insert into sys_dict_data values(13, 2,  '否',       'N',       'sys_yes_no',          '',   'danger',  0, 1, 1, sysdate(), 1, null, '系统默认否');
+insert into sys_dict_data values(12, 1,  '是',       1,         'sys_yes_no',          '',   'primary', 1, 1, 1, sysdate(), 1, null, '系统默认是');
+insert into sys_dict_data values(13, 2,  '否',       0,         'sys_yes_no',          '',   'danger',  0, 1, 1, sysdate(), 1, null, '系统默认否');
 insert into sys_dict_data values(14, 1,  '通知',     '1',       'sys_notice_type',     '',   'warning', 1, 1, 1, sysdate(), 1, null, '通知');
 insert into sys_dict_data values(15, 2,  '公告',     '2',       'sys_notice_type',     '',   'success', 0, 1, 1, sysdate(), 1, null, '公告');
-insert into sys_dict_data values(16, 1,  '正常',     '0',       'sys_notice_status',   '',   'primary', 1, 1, 1, sysdate(), 1, null, '正常状态');
-insert into sys_dict_data values(17, 2,  '关闭',     '1',       'sys_notice_status',   '',   'danger',  0, 1, 1, sysdate(), 1, null, '关闭状态');
+insert into sys_dict_data values(16, 1,  '正常',     '1',       'sys_notice_status',   '',   'primary', 1, 1, 1, sysdate(), 1, null, '正常状态');
+insert into sys_dict_data values(17, 2,  '关闭',     '0',       'sys_notice_status',   '',   'danger',  0, 1, 1, sysdate(), 1, null, '关闭状态');
 insert into sys_dict_data values(18, 1,  '新增',     '1',       'sys_oper_type',       '',   'info',    0, 1, 1, sysdate(), 1, null, '新增操作');
 insert into sys_dict_data values(19, 2,  '修改',     '2',       'sys_oper_type',       '',   'info',    0, 1, 1, sysdate(), 1, null, '修改操作');
 insert into sys_dict_data values(20, 3,  '删除',     '3',       'sys_oper_type',       '',   'danger',  0, 1, 1, sysdate(), 1, null, '删除操作');
@@ -514,8 +514,8 @@ insert into sys_dict_data values(23, 6,  '导入',     '6',       'sys_oper_type
 insert into sys_dict_data values(24, 7,  '强退',     '7',       'sys_oper_type',       '',   'danger',  0, 1, 1, sysdate(), 1, null, '强退操作');
 insert into sys_dict_data values(25, 8,  '生成代码', '8',       'sys_oper_type',       '',   'warning', 0, 1, 1, sysdate(), 1, null, '生成操作');
 insert into sys_dict_data values(26, 9,  '清空数据', '9',       'sys_oper_type',       '',   'danger',  0, 1, 1, sysdate(), 1, null, '清空操作');
-insert into sys_dict_data values(27, 1,  '成功',     '0',       'sys_common_status',   '',   'primary', 0, 1, 1, sysdate(), 1, null, '正常状态');
-insert into sys_dict_data values(28, 2,  '失败',     '1',       'sys_common_status',   '',   'danger',  0, 1, 1, sysdate(), 1, null, '停用状态');
+insert into sys_dict_data values(27, 1,  '成功',     '1',       'sys_common_status',   '',   'primary', 0, 1, 1, sysdate(), 1, null, '正常状态');
+insert into sys_dict_data values(28, 2,  '失败',     '0',       'sys_common_status',   '',   'danger',  0, 1, 1, sysdate(), 1, null, '停用状态');
 
 
 -- ----------------------------

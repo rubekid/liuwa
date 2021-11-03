@@ -72,7 +72,7 @@ public interface SysUserService
      * @param userName 用户名称
      * @return 结果
      */
-    public String checkUserNameUnique(String userName);
+    public boolean checkUserNameUnique(String userName);
 
     /**
      * 校验手机号码是否唯一
@@ -80,7 +80,7 @@ public interface SysUserService
      * @param user 用户信息
      * @return 结果
      */
-    public String checkPhoneUnique(SysUser user);
+    public boolean checkPhoneUnique(SysUser user);
 
     /**
      * 校验email是否唯一
@@ -88,7 +88,7 @@ public interface SysUserService
      * @param user 用户信息
      * @return 结果
      */
-    public String checkEmailUnique(SysUser user);
+    public boolean checkEmailUnique(SysUser user);
 
     /**
      * 校验用户是否允许操作

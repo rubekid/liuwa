@@ -42,8 +42,8 @@ public class SysDept extends BaseEntity
     /** 邮箱 */
     private String email;
 
-    /** 部门状态:0正常,1停用 */
-    private String status;
+    /** 部门状态:1正常,0停用 */
+    private Integer status;
 
     /** 父部门名称 */
     private String parentName;
@@ -137,12 +137,12 @@ public class SysDept extends BaseEntity
         this.email = email;
     }
 
-    public String getStatus()
+    public Integer getStatus()
     {
         return status;
     }
 
-    public void setStatus(String status)
+    public void setStatus(Integer status)
     {
         this.status = status;
     }

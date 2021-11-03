@@ -13,25 +13,25 @@ public class SysConstants
     public static final String SYS_USER = "SYS_USER";
 
     /** 正常状态 */
-    public static final String NORMAL = "0";
+    public static final int NORMAL = 1;
 
     /** 异常状态 */
-    public static final String EXCEPTION = "1";
+    public static final int EXCEPTION = 0;
 
     /** 用户封禁状态 */
-    public static final String USER_DISABLE = "1";
+    public static final int USER_DISABLE = 0;
 
     /** 角色封禁状态 */
-    public static final String ROLE_DISABLE = "1";
+    public static final int ROLE_DISABLE = 0;
 
     /** 部门正常状态 */
-    public static final String DEPT_NORMAL = "0";
+    public static final int DEPT_NORMAL = 1;
 
     /** 部门停用状态 */
-    public static final String DEPT_DISABLE = "1";
+    public static final int DEPT_DISABLE = 0;
 
     /** 字典正常状态 */
-    public static final String DICT_NORMAL = "0";
+    public static final int DICT_NORMAL = 1;
 
     /** 是否（是） */
     public static final int YES = 1;
@@ -47,10 +47,10 @@ public class SysConstants
 
 
     /** 是否菜单外链（是） */
-    public static final String YES_FRAME = "0";
+    public static final int YES_FRAME = 1;
 
     /** 是否菜单外链（否） */
-    public static final String NO_FRAME = "1";
+    public static final int NO_FRAME = 0;
 
     /** 菜单类型（目录） */
     public static final String TYPE_DIR = "M";
@@ -71,8 +71,8 @@ public class SysConstants
     public final static String INNER_LINK = "InnerLink";
 
     /** 校验返回结果码 */
-    public final static String UNIQUE = "0";
-    public final static String NOT_UNIQUE = "1";
+    public final static int UNIQUE = 1;
+    public final static int NOT_UNIQUE = 0;
 
     /**
      * 用户名长度限制
