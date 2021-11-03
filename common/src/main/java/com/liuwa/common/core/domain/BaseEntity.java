@@ -200,24 +200,24 @@ public class BaseEntity<Pk> implements Serializable
      * 新增前置处理
      */
     public void preInsert(){
-        if(this.createBy == null || this.updateBy == null){
+        if(this.getCreateBy() == null || this.getUpdateBy() == null){
             SysUser user = UserUtils.getSysUser(true);
             if (user != null && user.getUserId() != null){
-                if(this.createBy == null){
-                    this.createBy = user.getUserId();
+                if(this.getCreateBy() == null){
+                    this.setCreateBy(user.getUserId());
                 }
-                if(this.updateBy == null){
-                    this.updateBy = user.getUserId();
+                if(this.getUpdateBy() == null){
+                    this.setUpdateBy(user.getUserId());
                 }
             }
         }
 
-        if(this.remark == null){
-            this.remark = "";
+        if(this.getRemark() == null){
+            this.setRemark("");
         }
-        this.delFlag = DEL_FLAG_NORMAL;
-        this.updateTime = new Date();
-        this.createTime = this.updateTime;
+        this.setDelFlag(DEL_FLAG_NORMAL);
+        this.setUpdateTime(new Date());
+        this.setCreateTime(new Date());
         this.preSave();
     }
 
@@ -227,13 +227,13 @@ public class BaseEntity<Pk> implements Serializable
     public void preUpdate(){
         SysUser user = UserUtils.getSysUser(true);
         if (user != null && user.getUserId() != null){
-            this.updateBy = user.getUserId();
+            this.setUpdateBy(user.getUserId());
         }
-        if(this.remark == null){
-            this.remark = "";
+        if(this.getRemark() == null){
+            this.setRemark("");
         }
 
-        this.updateTime = new Date();
+        this.setUpdateTime(new Date());
         this.preSave();
     }
 

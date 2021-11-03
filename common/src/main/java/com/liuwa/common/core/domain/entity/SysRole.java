@@ -45,7 +45,7 @@ public class SysRole extends BaseEntity
 
     /** 角色状态（0正常 1停用） */
     @Excel(name = "角色状态", readConverterExp = "0=正常,1=停用")
-    private String status;
+    private Integer status;
 
     /** 用户是否存在此角色标识 默认不存在 */
     private boolean flag = false;
@@ -151,12 +151,12 @@ public class SysRole extends BaseEntity
         this.deptCheckStrictly = deptCheckStrictly;
     }
 
-    public String getStatus()
+    public Integer getStatus()
     {
         return status;
     }
 
-    public void setStatus(String status)
+    public void setStatus(Integer status)
     {
         this.status = status;
     }
