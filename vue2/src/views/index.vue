@@ -1,8 +1,8 @@
 <template>
   <div class="app-container home">
-    <el-alert type="success" :center="true"><i class="el-icon-success"></i> 欢迎使用PayPal管理系统，您本次登录时间为2021年09月06日16点00分，登录IP：123.232.42.22</el-alert>
-    
-    
+    <el-alert type="success" :center="true"><i class="el-icon-success"></i> 欢迎使用遛娃管理系统，您本次登录时间为2021年09月06日16点00分，登录IP：123.232.42.22</el-alert>
+
+
     <!-- 实时统计 -->
     <el-card class="box-card stats-card">
       <div slot="header" class="card-head">
@@ -12,7 +12,7 @@
         </div>
       </div>
       <el-row class="card-body">
-    
+
         <el-col class="stats-col" :span="24" :md="8">
             <div class="stats-item">
               <p class="stats-value">
@@ -25,22 +25,7 @@
                 300
               </p>
               <h5>昨日订单总数</h5>
-            </div>  
-        </el-col>
-        
-        <el-col class="stats-col" :span="24" :md="8">
-            <div class="stats-item">
-              <p class="stats-value">
-                780000
-              </p>
-              <h5>昨日销售总额（元）</h5>
             </div>
-            <div class="stats-item">
-              <p class="stats-value">
-                300
-              </p>
-              <h5>昨日订单总数</h5>
-            </div>  
         </el-col>
 
         <el-col class="stats-col" :span="24" :md="8">
@@ -55,7 +40,22 @@
                 300
               </p>
               <h5>昨日订单总数</h5>
-            </div>  
+            </div>
+        </el-col>
+
+        <el-col class="stats-col" :span="24" :md="8">
+            <div class="stats-item">
+              <p class="stats-value">
+                780000
+              </p>
+              <h5>昨日销售总额（元）</h5>
+            </div>
+            <div class="stats-item">
+              <p class="stats-value">
+                300
+              </p>
+              <h5>昨日订单总数</h5>
+            </div>
         </el-col>
       </el-row>
     </el-card>
@@ -67,17 +67,17 @@
 
       </div>
       <el-row class="card-body">
-    
+
         <el-col class="todolist-col" :span="12" :md="{span: '24-5'}">
-          
+
             <p class="todolist-value">
               780000
             </p>
             <h5 class="todolist-name">待审核订单</h5>
-            <el-button size="mini" type="text" icon="el-icon-edit" >处理</el-button> 
+            <el-button size="mini" type="text" icon="el-icon-edit" >处理</el-button>
         </el-col>
         <el-col class="todolist-col"  :span="12" :md="{span: '24-5'}">
-          
+
             <p class="todolist-value">
               780000
             </p>
@@ -85,7 +85,7 @@
              <el-button size="mini" type="text" icon="el-icon-edit" >处理</el-button>
         </el-col>
         <el-col class="todolist-col" :span="12" :md="{span: '24-5'}">
-          
+
             <p class="todolist-value">
               780000
             </p>
@@ -93,7 +93,7 @@
              <el-button size="mini" type="text" icon="el-icon-edit" >处理</el-button>
         </el-col>
         <el-col class="todolist-col" :span="12" :md="{span: '24-5'}">
-          
+
             <p class="todolist-value">
               780000
             </p>
@@ -101,15 +101,15 @@
              <el-button size="mini" type="text" icon="el-icon-edit" >处理</el-button>
         </el-col>
         <el-col class="todolist-col" :span="12" :md="{span: '24-5'}">
-          
+
             <p class="todolist-value">
               780000
             </p>
             <h5 class="todolist-name">待审核订单</h5>
              <el-button size="mini" type="text" icon="el-icon-edit" >处理</el-button>
         </el-col>
-        
-        
+
+
       </el-row>
     </el-card>
 
@@ -121,7 +121,7 @@
           </div>
 
            <div ref="monthstats" class="echart-box" />
-          
+
         </el-card>
       </el-col>
       <el-col :span="2" :md="2" class="middle-space"></el-col>
@@ -133,8 +133,8 @@
           </div>
 
            <div ref="yesterdaystats" class="echart-box" />
-          
-        </el-card>  
+
+        </el-card>
       </el-col>
     </el-row>
 
@@ -247,7 +247,7 @@ export default {
         font-size:14px;
       }
     }
-    
+
     @media ( min-width : 992px) {
 
       .stats-item{
@@ -273,10 +273,10 @@ export default {
     height:420px;
   }
 
-   
+
 }
 @media ( min-width : 992px) {
-    
+
   .middle-space{
     height:1px;
   }

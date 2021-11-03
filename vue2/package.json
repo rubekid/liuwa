@@ -1,7 +1,7 @@
 {
-    "name": "paypal-router",
+    "name": "liuwa",
     "version": "3.6.0",
-    "description": "PayPal管理系统",
+    "description": "后台管理系统",
     "author": "溜娃",
     "license": "MIT",
     "scripts": {
