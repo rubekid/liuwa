@@ -216,8 +216,8 @@
           <el-col :span="12">
             <el-form-item label="是否并发" prop="concurrent">
               <el-radio-group v-model="form.concurrent" size="small">
-                <el-radio-button label="0">允许</el-radio-button>
-                <el-radio-button label="1">禁止</el-radio-button>
+                <el-radio-button label="1">允许</el-radio-button>
+                <el-radio-button label="0">禁止</el-radio-button>
               </el-radio-group>
             </el-form-item>
           </el-col>

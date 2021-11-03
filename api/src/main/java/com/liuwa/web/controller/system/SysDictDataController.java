@@ -84,13 +84,13 @@ public class SysDictDataController extends BaseController
             for(SysDictData dataItem : list){
                 String label = dataItem.getDictLabel();
                 String value = dataItem.getDictValue();
-                if(SysDictType.JAVA_TYPE_NUMBER.equals(sysDictType.getJavaType())){
+                if(SysDictType.DATA_TYPE_NUMBER.equals(sysDictType.getDataType())){
                     SysDictDataOption<Double> option = new SysDictDataOption<Double>();
                     option.setDictValue(Double.valueOf(value));
                     option.setDictLabel(label);
                     items.add(option);
                 }
-                else if(SysDictType.JAVA_TYPE_BOOLEAN.equals(sysDictType.getJavaType())){
+                else if(SysDictType.DATA_TYPE_BOOLEAN.equals(sysDictType.getDataType())){
                     SysDictDataOption<Boolean> option = new SysDictDataOption<Boolean>();
                     option.setDictValue(Boolean.valueOf(value));
                     option.setDictLabel(label);

@@ -158,10 +158,10 @@ create table sys_menu (
 -- 初始化-菜单信息表数据
 -- ----------------------------
 -- 一级菜单
-insert into sys_menu values('1', '系统管理', '0', '1', 'system', null, '', 0, 1, 'M', 1, 1, '', 'system',   1, sysdate(), 1, null, '系统管理目录');
-insert into sys_menu values('2', '系统监控', '0', '2', 'monitor', null, '', 0, 1, 'M', 1, 1, '', 'monitor',  1, sysdate(), 1, null, '系统监控目录');
-insert into sys_menu values('3', '系统工具', '0', '3', 'tool',null, '', 0, 1, 'M', 1, 1, '', 'tool',     1, sysdate(), 1, null, '系统工具目录');
-insert into sys_menu values('4', '遛娃官网', '0', '4', 'https://github.com/rubekid', null, '', 1, 1, 'M', 1, 1, '', 'guide',    1, sysdate(), 1, null, '遛娃官网地址');
+insert into sys_menu values('1', '系统管理', '0', '100', 'system', null, '', 0, 1, 'M', 1, 1, '', 'system',   1, sysdate(), 1, null, '系统管理目录');
+insert into sys_menu values('2', '系统监控', '0', '200', 'monitor', null, '', 0, 1, 'M', 1, 1, '', 'monitor',  1, sysdate(), 1, null, '系统监控目录');
+insert into sys_menu values('3', '系统工具', '0', '300', 'tool',null, '', 0, 1, 'M', 1, 1, '', 'tool',     1, sysdate(), 1, null, '系统工具目录');
+insert into sys_menu values('4', '遛娃官网', '0', '400', 'https://github.com/rubekid', null, '', 1, 1, 'M', 1, 1, '', 'guide',    1, sysdate(), 1, null, '遛娃官网地址');
 -- 二级菜单
 insert into sys_menu values('100',  '用户管理', '1',   '1', 'user',       'system/user/index',        '', 0, 1, 'C', 1, 1, 'system:user:list',        'user',          1, sysdate(), 1, null, '用户管理菜单');
 insert into sys_menu values('101',  '角色管理', '1',   '2', 'role',       'system/role/index',        '', 0, 1, 'C', 1, 1, 'system:role:list',        'peoples',       1, sysdate(), 1, null, '角色管理菜单');
@@ -444,7 +444,7 @@ create table sys_dict_type
   dict_name        varchar(100)    default ''                 comment '字典名称',
   dict_type        varchar(100)    default ''                 comment '字典类型',
   status           tinyint(1)      default 1                  comment '状态（1正常 0停用）',
-  java_type 	   enum('Number','String','Boolean','BigDecimal') null default 'String' comment 'Java 类型',
+  data_type 	   enum('Number','String','Boolean','BigDecimal') null default 'String' comment '字段数据类型',
   create_by        varchar(64)     default ''                 comment '创建者',
   create_time      datetime                                   comment '创建时间',
   update_by        varchar(64)     default ''                 comment '更新者',
@@ -454,16 +454,16 @@ create table sys_dict_type
   unique (dict_type)
 ) engine=innodb auto_increment=100 comment = '字典类型表';
 
-insert into sys_dict_type values(1,  '用户性别', 'sys_user_sex',        1, 1, sysdate(), 1, null, '用户性别列表');
-insert into sys_dict_type values(2,  '菜单状态', 'sys_show_hide',       1, 1, sysdate(), 1, null, '菜单状态列表');
-insert into sys_dict_type values(3,  '系统开关', 'sys_on_off',  		1, 1, sysdate(), 1, null, '系统开关列表');
-insert into sys_dict_type values(4,  '任务状态', 'sys_job_status',      1, 1, sysdate(), 1, null, '任务状态列表');
-insert into sys_dict_type values(5,  '任务分组', 'sys_job_group',       1, 1, sysdate(), 1, null, '任务分组列表');
-insert into sys_dict_type values(6,  '系统是否', 'sys_yes_no',          1, 1, sysdate(), 1, null, '系统是否列表');
-insert into sys_dict_type values(7,  '通知类型', 'sys_notice_type',     1, 1, sysdate(), 1, null, '通知类型列表');
-insert into sys_dict_type values(8,  '通知状态', 'sys_notice_status',   1, 1, sysdate(), 1, null, '通知状态列表');
-insert into sys_dict_type values(9,  '操作类型', 'sys_oper_type',       1, 1, sysdate(), 1, null, '操作类型列表');
-insert into sys_dict_type values(10, '系统状态', 'sys_common_status',   1, 1, sysdate(), 1, null, '登录状态列表');
+insert into sys_dict_type values(1,  '用户性别', 'sys_user_sex',        1, 'Number', 1, sysdate(), 1, null, '用户性别列表');
+insert into sys_dict_type values(2,  '菜单状态', 'sys_show_hide',       1, 'Number', 1, sysdate(), 1, null, '菜单状态列表');
+insert into sys_dict_type values(3,  '系统开关', 'sys_on_off',  		1, 'Number', 1, sysdate(), 1, null, '系统开关列表');
+insert into sys_dict_type values(4,  '任务状态', 'sys_job_status',      1, 'Number', 1, sysdate(), 1, null, '任务状态列表');
+insert into sys_dict_type values(5,  '任务分组', 'sys_job_group',       1, 'String', 1, sysdate(), 1, null, '任务分组列表');
+insert into sys_dict_type values(6,  '系统是否', 'sys_yes_no',          1, 'Number', 1, sysdate(), 1, null, '系统是否列表');
+insert into sys_dict_type values(7,  '通知类型', 'sys_notice_type',     1, 'Number', 1, sysdate(), 1, null, '通知类型列表');
+insert into sys_dict_type values(8,  '通知状态', 'sys_notice_status',   1, 'Number', 1, sysdate(), 1, null, '通知状态列表');
+insert into sys_dict_type values(9,  '操作类型', 'sys_oper_type',       1, 'Number', 1, sysdate(), 1, null, '操作类型列表');
+insert into sys_dict_type values(10, '系统状态', 'sys_common_status',   1, 'Number', 1, sysdate(), 1, null, '登录状态列表');
 
 
 -- ----------------------------
