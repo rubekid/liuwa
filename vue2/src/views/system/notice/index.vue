@@ -252,7 +252,7 @@ export default {
         noticeTitle: undefined,
         noticeType: undefined,
         noticeContent: undefined,
-        status: "0"
+        status: 1
       };
       this.resetForm("form");
     },

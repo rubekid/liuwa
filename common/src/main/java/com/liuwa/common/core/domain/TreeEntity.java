@@ -8,7 +8,7 @@ import java.util.List;
  * 
  * @author liuwa
  */
-public class TreeEntity extends BaseEntity
+public class TreeEntity<Pk> extends BaseEntity<Pk>
 {
     private static final long serialVersionUID = 1L;
 

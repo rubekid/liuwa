@@ -205,10 +205,7 @@ export default {
       exportLoading: false,
       // 选中数组
       ids: [],
-#if($table.sub)
-      // 子表选中数据
-      checked${subClassName}: [],
-#end
+
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -219,10 +216,6 @@ export default {
       total: 0,
       // ${functionName}表格数据
       ${businessName}List: [],
-#if($table.sub)
-      // ${subTable.functionName}表格数据
-      ${subclassName}List: [],
-#end
 
 #foreach ($column in $columns)
 #set($parentheseIndex=$column.columnComment.indexOf("（"))
@@ -342,39 +335,6 @@ export default {
           this.msgSuccess("删除成功");
         }).catch(() => {});
     },
-#if($table.sub)
-	/** ${subTable.functionName}序号 */
-    row${subClassName}Index({ row, rowIndex }) {
-      row.index = rowIndex + 1;
-    },
-    /** ${subTable.functionName}添加按钮操作 */
-    handleAdd${subClassName}() {
-      let obj = {};
-#foreach($column in $subTable.columns)
-#if($column.pk || $column.javaField == ${subTableFkclassName})
-#elseif($column.list && "" != $javaField)
-      obj.$column.javaField = "";
-#end
-#end
-      this.${subclassName}List.push(obj);
-    },
-    /** ${subTable.functionName}删除按钮操作 */
-    handleDelete${subClassName}() {
-      if (this.checked${subClassName}.length == 0) {
-        this.msgError("请先选择要删除的${subTable.functionName}数据");
-      } else {
-        const ${subclassName}List = this.${subclassName}List;
-        const checked${subClassName} = this.checked${subClassName};
-        this.${subclassName}List = ${subclassName}List.filter(function(item) {
-          return checked${subClassName}.indexOf(item.index) == -1
-        });
-      }
-    },
-    /** 复选框选中数据 */
-    handle${subClassName}SelectionChange(selection) {
-      this.checked${subClassName} = selection.map(item => item.index)
-    },
-#end
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;

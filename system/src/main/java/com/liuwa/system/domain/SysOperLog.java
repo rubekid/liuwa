@@ -70,8 +70,8 @@ public class SysOperLog extends BaseEntity
     @Excel(name = "返回参数")
     private String jsonResult;
 
-    /** 操作状态（0正常 1异常） */
-    @Excel(name = "状态", readConverterExp = "0=正常,1=异常")
+    /** 操作状态（1正常 0异常） */
+    @Excel(name = "状态", readConverterExp = "1=正常,0=异常")
     private Integer status;
 
     /** 错误消息 */

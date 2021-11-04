@@ -68,8 +68,8 @@ export default {
       codeUrl: "",
       cookiePassword: "",
       loginForm: {
-        username: "admin",
-        password: "admin123",
+        username: "",
+        password: "",
         rememberMe: false,
         code: "",
         uuid: ""
@@ -109,7 +109,7 @@ export default {
         this.captchaOnOff = res.captchaOnOff === undefined ? true : res.captchaOnOff;
         if (this.captchaOnOff) {
           if(res.img.indexOf('data:image') != 0){
-             res.img = "data:image/gif;base64," + res.img; 
+             res.img = "data:image/gif;base64," + res.img;
           }
           this.codeUrl = res.img;
           this.loginForm.uuid = res.uuid;

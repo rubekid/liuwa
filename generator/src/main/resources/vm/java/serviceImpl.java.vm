@@ -3,8 +3,10 @@ package ${packageName}.service.impl;
 import org.springframework.stereotype.Service;
 import com.liuwa.common.core.service.impl.CurdServiceImpl;
 #if($table.sub)
+import java.util.List;
 import java.util.ArrayList;
 import com.liuwa.common.utils.StringUtils;
+import javax.annotation.Resource;
 import org.springframework.transaction.annotation.Transactional;
 import ${packageName}.domain.${subClassName};
 #end
@@ -21,4 +23,96 @@ import ${packageName}.service.${ClassName}Service;
 @Service
 public class ${ClassName}ServiceImpl extends CurdServiceImpl<${pkColumn.javaType}, ${ClassName}Dao, ${ClassName}> implements ${ClassName}Service{
 
+#if($table.sub)
+
+    @Resource
+    private ${ClassName}Dao ${className}Dao;
+
+    /**
+     * 新增${functionName}
+     *
+     * @param ${className} ${functionName}
+     * @return 结果
+     */
+
+    @Transactional
+    @Override
+    public ${ClassName} insert(${ClassName} ${className})
+    {
+        super.insert(${className});
+        insert${subClassName}(${className});
+        return ${className};
+    }
+
+    /**
+     * 修改${functionName}
+     *
+     * @param ${className} ${functionName}
+     * @return 结果
+     */
+
+    @Transactional
+    @Override
+    public ${ClassName} update(${ClassName} ${className})
+    {
+
+        ${className}Dao.delete${subClassName}By${subTableFkClassName}(${className}.get${pkColumn.capJavaField}());
+        insert${subClassName}(${className});
+        return super.update(${className});
+    }
+
+    /**
+     * 批量删除${functionName}
+     *
+     * @param ${pkColumn.javaField}s 需要删除的${functionName}主键
+     * @return 结果
+     */
+
+    @Transactional
+    @Override
+    public void batchDelete(${pkColumn.javaType}[] ${pkColumn.javaField}s)
+    {
+        ${className}Dao.delete${subClassName}By${subTableFkClassName}s(${pkColumn.javaField}s);
+        ${className}Dao.batchDelete(${pkColumn.javaField}s);
+    }
+
+    /**
+     * 删除${functionName}信息
+     *
+     * @param ${pkColumn.javaField} ${functionName}主键
+     * @return 结果
+     */
+    @Override
+    public void delete(${pkColumn.javaType} ${pkColumn.javaField})
+    {
+        ${className}Dao.delete${subClassName}By${subTableFkClassName}(${pkColumn.javaField});
+        ${className}Dao.delete(${pkColumn.javaField});
+    }
+
+
+    /**
+     * 新增${subTable.functionName}信息
+     *
+     * @param ${className} ${functionName}对象
+     */
+    public void insert${subClassName}(${ClassName} ${className})
+    {
+        List<${subClassName}> ${subclassName}List = ${className}.get${subClassName}List();
+        ${pkColumn.javaType} ${pkColumn.javaField} = ${className}.get${pkColumn.capJavaField}();
+        if (StringUtils.isNotNull(${subclassName}List))
+        {
+            List<${subClassName}> list = new ArrayList<${subClassName}>();
+            for (${subClassName} ${subclassName} : ${subclassName}List)
+            {
+                ${subclassName}.set${subTableFkClassName}(${pkColumn.javaField});
+                list.add(${subclassName});
+            }
+            if (list.size() > 0)
+            {
+                ${className}Dao.batch${subClassName}(list);
+            }
+        }
+    }
+
+#end
 }

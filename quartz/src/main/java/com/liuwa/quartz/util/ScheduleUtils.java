@@ -1,5 +1,6 @@
 package com.liuwa.quartz.util;
 
+import com.liuwa.common.constant.SysConstants;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.Job;
@@ -31,7 +32,7 @@ public class ScheduleUtils
      */
     private static Class<? extends Job> getQuartzJobClass(SysJob sysJob)
     {
-        boolean isConcurrent = "0".equals(sysJob.getConcurrent());
+        boolean isConcurrent = sysJob.getConcurrent() == SysConstants.YES;
         return isConcurrent ? QuartzJobExecution.class : QuartzDisallowConcurrentExecution.class;
     }
 

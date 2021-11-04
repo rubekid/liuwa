@@ -1,6 +1,6 @@
 <template>
   <div class="app-container home">
-    <el-alert type="success" :center="true"><i class="el-icon-success"></i> 欢迎使用遛娃管理系统，您本次登录时间为2021年09月06日16点00分，登录IP：123.232.42.22</el-alert>
+    <el-alert type="success" :center="true"><i class="el-icon-success"></i> 欢迎使用遛娃管理系统，您本次登录时间为{{parseTime(sysUser.loginDate, '{y}年{m}月{d}日{h}点{i}分')}}，登录IP：{{sysUser.loginIp}}</el-alert>
 
 
     <!-- 实时统计 -->
@@ -142,13 +142,16 @@
 </template>
 
 <script>
+import { index } from "@/api/system/sysIndex";
 import echarts from "echarts";
 export default {
   name: "Index",
   data() {
     return {
-      // 版本号
-      version: "3.6.0",
+      // 系统配置信息
+      sysConfig:{},
+      // 登录用户信息
+      sysUser:{}
     };
   },
   computed:{
@@ -161,6 +164,14 @@ export default {
     }
   },
   mounted(){
+    index().then(res => {
+      this.sysConfig = res.sysConfig;
+      this.sysUser = res.sysUser;
+
+
+    });
+
+
     this.monthstats = echarts.init(this.$refs.monthstats, "macarons");
     this.monthstats.setOption({
       tooltip: {

@@ -23,9 +23,9 @@ public class SysLogininfor extends BaseEntity
     @Excel(name = "用户账号")
     private String userName;
 
-    /** 登录状态 0成功 1失败 */
-    @Excel(name = "登录状态", readConverterExp = "0=成功,1=失败")
-    private String status;
+    /** 登录状态 1成功 0失败 */
+    @Excel(name = "登录状态", readConverterExp = "1=成功,0=失败")
+    private Integer status;
 
     /** 登录IP地址 */
     @Excel(name = "登录地址")
@@ -72,12 +72,12 @@ public class SysLogininfor extends BaseEntity
         this.userName = userName;
     }
 
-    public String getStatus()
+    public Integer getStatus()
     {
         return status;
     }
 
-    public void setStatus(String status)
+    public void setStatus(Integer status)
     {
         this.status = status;
     }

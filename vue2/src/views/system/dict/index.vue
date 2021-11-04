@@ -297,7 +297,7 @@ export default {
     dictId: undefined,
     dictName: undefined,
     dictType: undefined,
-    status: "0",
+    status: 1,
     remark: undefined,
     dataType: 'String'
    };

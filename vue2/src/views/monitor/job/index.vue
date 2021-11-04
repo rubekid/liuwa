@@ -216,8 +216,8 @@
      <el-col :span="12">
       <el-form-item label="是否并发" prop="concurrent">
        <el-radio-group v-model="form.concurrent" size="small">
-        <el-radio-button label="1">允许</el-radio-button>
-        <el-radio-button label="0">禁止</el-radio-button>
+        <el-radio-button :label="1">允许</el-radio-button>
+        <el-radio-button :label="0">禁止</el-radio-button>
        </el-radio-group>
       </el-form-item>
      </el-col>
@@ -267,14 +267,14 @@
      </el-col>
      <el-col :span="12">
       <el-form-item label="任务状态：">
-       <div v-if="form.status == 0">正常</div>
-       <div v-else-if="form.status == 1">失败</div>
+       <div v-if="form.status == 1">正常</div>
+       <div v-else-if="form.status == 0">失败</div>
       </el-form-item>
      </el-col>
      <el-col :span="12">
       <el-form-item label="是否并发：">
-       <div v-if="form.concurrent == 0">允许</div>
-       <div v-else-if="form.concurrent == 1">禁止</div>
+       <div v-if="form.concurrent == 1">允许</div>
+       <div v-else-if="form.concurrent == 0">禁止</div>
       </el-form-item>
      </el-col>
      <el-col :span="12">
@@ -395,7 +395,7 @@ export default {
     cronExpression: undefined,
     misfirePolicy: 1,
     concurrent: 1,
-    status: "0"
+    status: 1
    };
    this.resetForm("form");
   },
@@ -433,7 +433,7 @@ export default {
   },
   // 任务状态修改
   handleStatusChange(row) {
-   let text = row.status === "0" ? "启用" : "停用";
+   let text = row.status === 1 ? "启用" : "停用";
    this.$confirm('确认要"' + text + '""' + row.jobName + '"任务吗?', "警告", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
@@ -443,7 +443,7 @@ export default {
    }).then(() => {
     this.msgSuccess(text + "成功");
    }).catch(function() {
-    row.status = row.status === "0" ? "1" : "0";
+    row.status = row.status === 0 ? 1 : 0;
    });
   },
   /* 立即执行一次 */

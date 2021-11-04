@@ -68,6 +68,9 @@ spring:
     password: ALYBvth4a43GIB
     # 连接超时时间
     timeout: 10s
+    # 前缀
+    prefix: liuwa
+    # 驱动
     lettuce:
       pool:
         # 连接池中的最小空闲连接

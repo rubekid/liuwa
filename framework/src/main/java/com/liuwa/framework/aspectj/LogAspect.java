@@ -88,7 +88,7 @@ public class LogAspect
 
             // *========数据库日志=========*//
             SysOperLog operLog = new SysOperLog();
-            operLog.setStatus(BusinessStatus.SUCCESS.ordinal());
+            operLog.setStatus(BusinessStatus.SUCCESS.getValue());
             // 请求的地址
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             operLog.setOperIp(ip);
@@ -103,7 +103,7 @@ public class LogAspect
 
             if (e != null)
             {
-                operLog.setStatus(BusinessStatus.FAIL.ordinal());
+                operLog.setStatus(BusinessStatus.FAIL.getValue());
                 operLog.setErrorMsg(StringUtils.substring(e.getMessage(), 0, 2000));
             }
             // 设置方法名称

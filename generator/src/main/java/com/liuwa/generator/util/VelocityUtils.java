@@ -24,8 +24,8 @@ public class VelocityUtils
     /** mybatis空间路径 */
     private static final String MYBATIS_PATH = "main/resources/mapper";
 
-    /** 默认上级菜单，系统工具 */
-    private static final String DEFAULT_PARENT_MENU_ID = "3";
+    /** 默认上级菜单 顶级菜单 */
+    private static final long DEFAULT_PARENT_MENU_ID = 0;
 
     /**
      * 设置模板变量信息
@@ -85,7 +85,7 @@ public class VelocityUtils
     {
         String options = genTable.getOptions();
         JSONObject paramsObj = JSONObject.parseObject(options);
-        String parentMenuId = getParentMenuId(paramsObj);
+        long parentMenuId = getParentMenuId(paramsObj);
         context.put("parentMenuId", parentMenuId);
         context.put("menuIcon", getMenuIcon(paramsObj));
     }
@@ -154,7 +154,7 @@ public class VelocityUtils
         else if (GenConstants.TPL_TREE.equals(tplCategory))
         {
             templates.add("vm/vue/index-tree.vue.vm");
-            templates.add("vm/vue/form.vue.vm");
+            templates.add("vm/vue/form-tree.vue.vm");
         }
         else if (GenConstants.TPL_SUB.equals(tplCategory))
         {
@@ -233,6 +233,10 @@ public class VelocityUtils
         {
             fileName = StringUtils.format("{}/views/{}/{}/index.vue", vuePath, moduleName, businessName);
         }
+        else if (template.contains("form-tree.vue.vm"))
+        {
+            fileName = StringUtils.format("{}/views/{}/{}/form.vue", vuePath, moduleName, businessName);
+        }
         return fileName;
     }
 
@@ -297,12 +301,13 @@ public class VelocityUtils
      * @param paramsObj 生成其他选项
      * @return 上级菜单ID字段
      */
-    public static String getParentMenuId(JSONObject paramsObj)
+    public static long getParentMenuId(JSONObject paramsObj)
     {
-        if (StringUtils.isNotEmpty(paramsObj) && paramsObj.containsKey(GenConstants.PARENT_MENU_ID)
-                && StringUtils.isNotEmpty(paramsObj.getString(GenConstants.PARENT_MENU_ID)))
-        {
-            return paramsObj.getString(GenConstants.PARENT_MENU_ID);
+        if (StringUtils.isNotEmpty(paramsObj) && paramsObj.containsKey(GenConstants.PARENT_MENU_ID)){
+            Long parentMenuId =  paramsObj.getLong(GenConstants.PARENT_MENU_ID);
+            if(parentMenuId != null){
+                return parentMenuId;
+            }
         }
         return DEFAULT_PARENT_MENU_ID;
     }

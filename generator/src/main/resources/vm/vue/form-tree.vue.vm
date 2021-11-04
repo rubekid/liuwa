@@ -16,7 +16,11 @@
 #set($comment=$column.columnComment)
 #end
 #set($dictType=$column.dictType)
-#if($column.htmlType == "input")
+#if("" != $treeParentCode && $column.javaField == $treeParentCode)
+        <el-form-item label="${comment}" prop="${treeParentCode}">
+          <treeselect v-model="form.${treeParentCode}" :options="${businessName}Options" :normalizer="normalizer" placeholder="请选择${comment}" />
+        </el-form-item>
+#elseif($column.htmlType == "input")
         <el-form-item label="${comment}" prop="${field}">
           <el-input v-model="form.${field}" placeholder="请输入${comment}" />
         </el-form-item>
@@ -140,38 +144,6 @@
 #end
 #end
 #end
-#if($table.sub)
-        <el-divider content-position="center">${subTable.functionName}信息</el-divider>
-        <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
-            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd${subClassName}">添加</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDelete${subClassName}">删除</el-button>
-          </el-col>
-        </el-row>
-        <el-table :data="${subclassName}List" :row-class-name="row${subClassName}Index" @selection-change="handle${subClassName}SelectionChange" ref="${subclassName}">
-          <el-table-column type="selection" width="50" align="center" />
-          <el-table-column label="序号" align="center" prop="index" width="50"/>
-#foreach($column in $subTable.columns)
-#set($javaField=$column.javaField)
-#set($parentheseIndex=$column.columnComment.indexOf("（"))
-#if($parentheseIndex != -1)
-#set($comment=$column.columnComment.substring(0, $parentheseIndex))
-#else
-#set($comment=$column.columnComment)
-#end
-#if($column.pk || $javaField == ${subTableFkclassName})
-#elseif($column.list && "" != $javaField)
-          <el-table-column label="$comment" prop="${javaField}">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.$javaField" placeholder="请输入$comment" />
-            </template>
-          </el-table-column>
-#end
-#end
-        </el-table>
-#end
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -182,8 +154,10 @@
 </template>
 
 <script>
-import { get${BusinessName}, add${BusinessName}, update${BusinessName} } from "@/api/${moduleName}/${businessName}";
+import { list${BusinessName}, get${BusinessName}, add${BusinessName}, update${BusinessName} } from "@/api/${moduleName}/${businessName}";
 import { Loading } from 'element-ui';
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   name: "${BusinessName}Form",
@@ -191,6 +165,9 @@ export default {
     item:{
         type: Object
     }
+  },
+  components: {
+    Treeselect
   },
   data() {
     return {
@@ -214,15 +191,10 @@ export default {
 #end
       // 是否显示弹出层
       open: false,
+      // ${functionName}树选项
+      ${businessName}Options: [],
       // 表单参数
       form: {},
-#if($table.sub)
-      // 子表选中数据
-      checked${subClassName}: [],
-
-      // ${subTable.functionName}表格数据
-      ${subclassName}List: [],
-#end
       // 表单校验
       rules: {
 #foreach ($column in $columns)
@@ -282,16 +254,19 @@ export default {
         }
       }
     })
-
-    if(this.item.${pkColumn.javaField}){
-      this.title = "修改${functionName}";
-      this.handleUpdate(this.item.${pkColumn.javaField});
-    }
-    else{
-      this.title = "添加${functionName}";
-      this.handleAdd();
+    this.title = this.item.${pkColumn.javaField} ? "修改${functionName}" : "添加${functionName}";
+    this.getTreeselect().then(res => {
+      if(this.item.${pkColumn.javaField}){
+        this.handleUpdate(this.item.${pkColumn.javaField});
+      }
+      else{
+        this.handleAdd(this.item.${treeParentCode});
+        this.formInited = true;
+      }
+    }).catch(err => {
       this.formInited = true;
-    }
+    })
+
   },
   computed:{
     dataInited(){
@@ -333,14 +308,12 @@ export default {
 #end
 #end
       };
-#if($table.sub)
-      this.${subclassName}List = [];
-#end
       this.resetForm("form");
     },
     /** 新增按钮操作 */
-    handleAdd() {
+    handleAdd(treeParentCode) {
       this.reset();
+      this.form.${treeParentCode} = treeParentCode;
     },
     /** 修改按钮操作 */
     handleUpdate(${pkColumn.javaField}) {
@@ -352,46 +325,37 @@ export default {
         this.form.$column.javaField = this.form.${column.javaField}.split(",");
 #end
 #end
-#if($table.sub)
-        this.${subclassName}List = response.data.${subclassName}List;
-#end
+
       }).finally(()=>{
         this.formInited = true;
-      });;
+      });
     },
-#if($table.sub)
-	/** ${subTable.functionName}序号 */
-    row${subClassName}Index({ row, rowIndex }) {
-      row.index = rowIndex + 1;
-    },
-    /** ${subTable.functionName}添加按钮操作 */
-    handleAdd${subClassName}() {
-      let obj = {};
-#foreach($column in $subTable.columns)
-#if($column.pk || $column.javaField == ${subTableFkclassName})
-#elseif($column.list && "" != $javaField)
-      obj.$column.javaField = "";
-#end
-#end
-      this.${subclassName}List.push(obj);
-    },
-    /** ${subTable.functionName}删除按钮操作 */
-    handleDelete${subClassName}() {
-      if (this.checked${subClassName}.length == 0) {
-        this.msgError("请先选择要删除的${subTable.functionName}数据");
-      } else {
-        const ${subclassName}List = this.${subclassName}List;
-        const checked${subClassName} = this.checked${subClassName};
-        this.${subclassName}List = ${subclassName}List.filter(function(item) {
-          return checked${subClassName}.indexOf(item.index) == -1
-        });
+    /** 转换${functionName}数据结构 */
+    normalizer(node) {
+      if (node.children && !node.children.length) {
+        delete node.children;
       }
+      return {
+        id: node.${treeCode},
+        label: node.${treeName},
+        children: node.children
+      };
     },
-    /** 复选框选中数据 */
-    handle${subClassName}SelectionChange(selection) {
-      this.checked${subClassName} = selection.map(item => item.index)
+    /** 查询${functionName}下拉树结构 */
+    getTreeselect() {
+        return new Promise((resolve, reject) => {
+          list${BusinessName}().then(response => {
+            this.${businessName}Options = [];
+            const data = { ${treeCode}: 0, ${treeName}: '顶级节点', children: [] };
+            data.children = this.handleTree(response.data, "${treeCode}", "${treeParentCode}", null, this.item.${pkColumn.javaField});
+            this.${businessName}Options.push(data);
+            resolve();
+          }).catch(err=>{
+             reject(err);
+          });
+        });
+
     },
-#end
     /** 提交按钮 */
     submitForm() {
       this.#[[$]]#refs["form"].validate(valid => {
@@ -400,9 +364,6 @@ export default {
 #if($column.htmlType == "checkbox")
           this.form.$column.javaField = this.form.${column.javaField}.join(",");
 #end
-#end
-#if($table.sub)
-          this.form.${subclassName}List = this.${subclassName}List;
 #end
 
           let loadingInstance = Loading.service({

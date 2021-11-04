@@ -240,7 +240,7 @@ export default {
         postCode: undefined,
         postName: undefined,
         postSort: 0,
-        status: "0",
+        status: 1,
         remark: undefined
       };
       this.resetForm("form");

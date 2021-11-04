@@ -1,10 +1,13 @@
 package com.liuwa.web.controller.system;
 
+import com.liuwa.common.config.SysConfig;
+import com.liuwa.common.core.domain.entity.SysUser;
+import com.liuwa.common.utils.StringUtils;
+import com.liuwa.common.utils.UserUtils;
+import com.liuwa.web.vo.IndexVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.liuwa.common.config.SysConfig;
-import com.liuwa.common.utils.StringUtils;
 
 /**
  * 首页
@@ -19,11 +22,15 @@ public class SysIndexController
     private SysConfig sysConfig;
 
     /**
-     * 访问首页，提示语
+     * 首页数据
      */
     @RequestMapping("/")
-    public String index()
+    public IndexVo index()
     {
-        return StringUtils.format("欢迎使用{}后台管理框架，当前版本：v{}，请通过前端地址访问。", sysConfig.getName(), sysConfig.getVersion());
+        SysUser sysUser = UserUtils.getSysUser();
+        IndexVo indexVo = new IndexVo();
+        indexVo.setSysConfig(sysConfig);
+        indexVo.setSysUser(sysUser);
+        return indexVo;
     }
 }

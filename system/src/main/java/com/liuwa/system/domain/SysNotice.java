@@ -27,8 +27,8 @@ public class SysNotice extends BaseEntity
     /** 公告内容 */
     private String noticeContent;
 
-    /** 公告状态（0正常 1关闭） */
-    private String status;
+    /** 公告状态（1正常 0关闭） */
+    private Integer status;
 
     public Long getNoticeId()
     {
@@ -72,12 +72,12 @@ public class SysNotice extends BaseEntity
         return noticeContent;
     }
 
-    public void setStatus(String status)
+    public void setStatus(Integer status)
     {
         this.status = status;
     }
 
-    public String getStatus()
+    public Integer getStatus()
     {
         return status;
     }

@@ -156,12 +156,10 @@ public class SysJobServiceImpl implements SysJobService
     {
         int rows = 0;
         int status = job.getStatus();
-        if (ScheduleConstants.Status.NORMAL.getValue() == status)
-        {
+        if (ScheduleConstants.Status.NORMAL.getValue() == status) {
             rows = resumeJob(job);
         }
-        else if (ScheduleConstants.Status.PAUSE.getValue() == status)
-        {
+        else if (ScheduleConstants.Status.PAUSE.getValue() == status) {
             rows = pauseJob(job);
         }
         return rows;

@@ -431,7 +431,7 @@ export default {
     },
     // 角色状态修改
     handleStatusChange(row) {
-      let text = row.status === "0" ? "启用" : "停用";
+      let text = row.status === 1 ? "启用" : "停用";
       this.$confirm('确认要"' + text + '""' + row.roleName + '"角色吗?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -441,7 +441,7 @@ export default {
         }).then(() => {
           this.msgSuccess(text + "成功");
         }).catch(function() {
-          row.status = row.status === "0" ? "1" : "0";
+          row.status = row.status === 0 ? 1 : 0;
         });
     },
     // 取消按钮
@@ -468,7 +468,7 @@ export default {
         roleName: undefined,
         roleKey: undefined,
         roleSort: 0,
-        status: "0",
+        status: 1,
         menuIds: [],
         deptIds: [],
         menuCheckStrictly: true,

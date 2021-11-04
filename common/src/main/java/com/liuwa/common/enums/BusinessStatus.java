@@ -11,10 +11,24 @@ public enum BusinessStatus
     /**
      * 成功
      */
-    SUCCESS,
+    SUCCESS(1),
 
     /**
      * 失败
      */
-    FAIL,
+    FAIL(0);
+
+    private int value;
+
+    BusinessStatus(int  value){
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
 }

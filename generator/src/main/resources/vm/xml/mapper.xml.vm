@@ -109,9 +109,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
         
     <insert id="insert" parameterType="${ClassName}"#if($pkColumn.increment) useGeneratedKeys="true" keyProperty="$pkColumn.javaField"#end>
-        <selectKey resultType="${pkColumn.javaType}" order="AFTER" keyProperty="id">
-            select last_insert_id() as id
-        </selectKey>
         INSERT INTO ${tableName}(
 #foreach($column in $columns)
 #if($column.columnName != $pkColumn.columnName || !$pkColumn.increment)

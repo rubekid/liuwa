@@ -33,9 +33,9 @@ public class SysPost extends BaseEntity
     @Excel(name = "岗位排序")
     private String postSort;
 
-    /** 状态（0正常 1停用） */
-    @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
-    private String status;
+    /** 状态（1正常 0停用） */
+    @Excel(name = "状态", readConverterExp = "1=正常,0=停用")
+    private Integer status;
 
     /** 用户是否存在此岗位标识 默认不存在 */
     private boolean flag = false;
@@ -85,12 +85,12 @@ public class SysPost extends BaseEntity
         this.postSort = postSort;
     }
 
-    public String getStatus()
+    public Integer getStatus()
     {
         return status;
     }
 
-    public void setStatus(String status)
+    public void setStatus(Integer status)
     {
         this.status = status;
     }
