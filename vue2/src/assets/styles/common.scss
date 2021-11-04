@@ -167,6 +167,10 @@
      padding-right: 0;
      width: inherit;
  }
+	/** 表格中日期选择器 100% */
+	.el-table td .el-date-editor.el-input{
+		width:100%;
+	}
  /** 表格更多操作下拉样式 */
 
  .el-table .el-dropdown-link {

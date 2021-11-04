@@ -3,7 +3,7 @@
     <el-dialog :title="title"
                :close-on-click-modal="false"
                :close-on-press-escape="false"
-               :visible.sync="open" custom-class="form-dialog" append-to-body>
+               :visible.sync="open" custom-class="form-dialog #if($table.sub) form-dialog-large #end" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
 #foreach($column in $columns)
 #set($field=$column.javaField)
@@ -163,9 +163,85 @@
 #end
 #if($column.pk || $javaField == ${subTableFkclassName})
 #elseif($column.list && "" != $javaField)
+#set($dictType=$column.dictType)
           <el-table-column label="$comment" prop="${javaField}">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.$javaField" placeholder="请输入$comment" />
+#if($column.htmlType == "input")
+              <el-input v-model="scope.row.$javaField" placeholder="请输入${comment}" />
+#elseif($column.htmlType == "money")
+              <number type="money" v-model="scope.row.$javaField" placeholder="请输入${comment}" />
+#elseif($column.htmlType == "integer")
+              <number type="integer" v-model="scope.row.$javaField" placeholder="请输入${comment}" />
+#elseif($column.htmlType == "decimal")
+              <number type="decimal" v-model="scope.row.$javaField" placeholder="请输入${comment}" />
+#elseif($column.htmlType == "percent")
+              <number type="percent" v-model="scope.row.$javaField" placeholder="请输入${comment}" />
+#elseif($column.htmlType == "ratio")
+              <number type="ratio" v-model="scope.row.$javaField" placeholder="请输入${comment}" />
+#elseif($column.htmlType == "rate")
+              <el-rate v-model="scope.row.$javaField"></el-rate>
+#elseif($column.htmlType == "color")
+              <el-color-picker v-model="scope.row.$javaField"></el-color-picker>
+#elseif($column.htmlType == "switch")
+              <el-switch v-model="scope.row.$javaField"></el-switch>
+#elseif($column.htmlType == "singleImage")
+              <single-image-upload v-model="scope.row.$javaField"/>
+#elseif($column.htmlType == "multiImage")
+              <multi-image-upload v-model="scope.row.$javaField"/>
+#elseif($column.htmlType == "fileUpload")
+              <fileUpload v-model="scope.row.$javaField"/>
+#elseif($column.htmlType == "editor")
+              <editor v-model="scope.row.$javaField" :min-height="192"/>
+#elseif($column.htmlType == "select" && "" != $dictType)
+              <el-select v-model="scope.row.$javaField" placeholder="请选择${comment}">
+                  <el-option
+                      v-for="dict in ${subclassName}${javaField}Options"
+                      :key="dict.dictValue"
+                      :label="dict.dictLabel"
+                      #if($column.javaType == "Integer" || $column.javaType == "Long"):value="parseInt(dict.dictValue)"#else:value="dict.dictValue"#end
+
+                  ></el-option>
+              </el-select>
+#elseif($column.htmlType == "select" && $dictType)
+              <el-select v-model="scope.row.$javaField" placeholder="请选择${comment}">
+                  <el-option label="请选择字典生成" value="" />
+              </el-select>
+#elseif($column.htmlType == "checkbox" && "" != $dictType)
+              <el-checkbox-group v-model="scope.row.$javaField">
+                  <el-checkbox
+                      v-for="dict in ${subclassName}${javaField}Options"
+                      :key="dict.dictValue"
+                      :label="dict.dictValue">
+                    {{dict.dictLabel}}
+                  </el-checkbox>
+              </el-checkbox-group>
+#elseif($column.htmlType == "checkbox" && $dictType)
+              <el-checkbox-group v-model="scope.row.$javaField">
+                <el-checkbox>请选择字典生成</el-checkbox>
+              </el-checkbox-group>
+#elseif($column.htmlType == "radio" && "" != $dictType)
+              <el-radio-group v-model="scope.row.$javaField">
+                  <el-radio
+                      v-for="dict in ${subclassName}${javaField}Options"
+                      :key="dict.dictValue"
+                      #if($column.javaType == "Integer" || $column.javaType == "Long"):label="parseInt(dict.dictValue)"#else:label="dict.dictValue"#end
+
+                  >{{dict.dictLabel}}</el-radio>
+              </el-radio-group>
+#elseif($column.htmlType == "radio" && $dictType)
+              <el-radio-group v-model="scope.row.$javaField">
+                     <el-radio label="1">请选择字典生成</el-radio>
+              </el-radio-group>
+#elseif($column.htmlType == "datetime")
+              <el-date-picker clearable size="large"
+                    v-model="scope.row.$javaField"
+                    type="date"
+                    value-format="yyyy-MM-dd"
+                    placeholder="选择${comment}">
+              </el-date-picker>
+#elseif($column.htmlType == "textarea")
+              <el-input v-model="scope.row.$javaField" type="textarea" placeholder="请输入内容" />
+#end
             </template>
           </el-table-column>
 #end
@@ -209,6 +285,22 @@ export default {
 #if(${column.dictType} != '')
       // $comment字典
       ${column.javaField}Options: [],
+#end
+#end
+#end
+#if($table.sub)
+#foreach($column in $subTable.columns)
+#if($column.insert && !$column.pk)
+#set($parentheseIndex=$column.columnComment.indexOf("（"))
+#if($parentheseIndex != -1)
+#set($comment=$column.columnComment.substring(0, $parentheseIndex))
+#else
+#set($comment=$column.columnComment)
+#end
+#if(${column.dictType} != '')
+      //子表 - $comment字典
+        ${subclassName}${column.javaField}Options: [],
+#end
 #end
 #end
 #end
@@ -258,6 +350,17 @@ export default {
     appendDictHandler("${column.dictType}", response => {
       this.${column.javaField}Options = response.data;
     });
+#end
+#end
+
+
+#if($table.sub)
+#foreach($column in $subTable.columns)
+#if(${column.dictType} != '')
+    appendDictHandler("${column.dictType}", response => {
+      this.${subclassName}${column.javaField}Options = response.data;
+    });
+#end
 #end
 #end
 
