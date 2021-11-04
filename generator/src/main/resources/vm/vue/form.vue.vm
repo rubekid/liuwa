@@ -353,7 +353,7 @@ export default {
 #end
 #end
 #if($table.sub)
-        this.${subclassName}List = response.data.${subclassName}List;
+        this.${subclassName}List = response.data.${subclassName}List || [];
 #end
       }).finally(()=>{
         this.formInited = true;
