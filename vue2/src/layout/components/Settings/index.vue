@@ -41,7 +41,7 @@
       <el-divider/>
 
       <h3 class="drawer-title">系统布局配置</h3>
-      
+
       <div class="drawer-item">
         <span>开启 TopNav</span>
         <el-switch v-model="topNav" class="drawer-switch" />
@@ -165,7 +165,7 @@ export default {
       const loading = this.$loading({
         lock: true,
         fullscreen: false,
-        text: "正在保存到本地，请稍后...",
+        text: "正在保存到本地，请稍候...",
         spinner: "el-icon-loading",
         background: "rgba(0, 0, 0, 0.7)"
       });
@@ -187,7 +187,7 @@ export default {
       this.$loading({
         lock: true,
         fullscreen: false,
-        text: "正在清除设置缓存并刷新，请稍后...",
+        text: "正在清除设置缓存并刷新，请稍候...",
         spinner: "el-icon-loading",
         background: "rgba(0, 0, 0, 0.7)"
       });

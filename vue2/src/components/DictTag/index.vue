@@ -1,6 +1,6 @@
 <template>
   <div>
-    
+
     <template v-for="(item, index) in options">
       <template v-if="values.includes(item[dictValue] + '')">
         <span
@@ -12,6 +12,7 @@
         >
         <el-tag
           v-else
+										:disable-transitions="true"
           :key="item[dictValue] + ''"
           :index="index"
           :type="item.listClass == 'primary' ? '' : item.listClass"

@@ -43,21 +43,15 @@ public class LogAspect
 {
     private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
 
-    // 配置织入点
-    @Pointcut("@annotation(com.liuwa.common.annotation.Log)")
-    public void logPointCut()
-    {
-    }
-
     /**
      * 处理完请求后执行
      *
      * @param joinPoint 切点
      */
-    @AfterReturning(pointcut = "logPointCut()", returning = "jsonResult")
-    public void doAfterReturning(JoinPoint joinPoint, Object jsonResult)
+    @AfterReturning(pointcut = "@annotation(controllerLog)", returning = "jsonResult")
+    public void doAfterReturning(JoinPoint joinPoint, Log controllerLog, Object jsonResult)
     {
-        handleLog(joinPoint, null, jsonResult);
+        handleLog(joinPoint, controllerLog, null, jsonResult);
     }
 
     /**
@@ -66,22 +60,16 @@ public class LogAspect
      * @param joinPoint 切点
      * @param e 异常
      */
-    @AfterThrowing(value = "logPointCut()", throwing = "e")
-    public void doAfterThrowing(JoinPoint joinPoint, Exception e)
+    @AfterThrowing(value = "@annotation(controllerLog)", throwing = "e")
+    public void doAfterThrowing(JoinPoint joinPoint, Log controllerLog, Exception e)
     {
-        handleLog(joinPoint, e, null);
+        handleLog(joinPoint, controllerLog, e, null);
     }
 
-    protected void handleLog(final JoinPoint joinPoint, final Exception e, Object jsonResult)
+    protected void handleLog(final JoinPoint joinPoint, Log controllerLog, final Exception e, Object jsonResult)
     {
         try
         {
-            // 获得注解
-            Log controllerLog = getAnnotationLog(joinPoint);
-            if (controllerLog == null)
-            {
-                return;
-            }
 
             // 获取当前的用户
             LoginUser loginUser = SecurityUtils.getLoginUser();
@@ -92,8 +80,6 @@ public class LogAspect
             // 请求的地址
             String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
             operLog.setOperIp(ip);
-            // 返回参数
-            operLog.setJsonResult(JSON.toJSONString(jsonResult));
 
             operLog.setOperUrl(ServletUtils.getRequest().getRequestURI());
             if (loginUser != null)
@@ -113,7 +99,7 @@ public class LogAspect
             // 设置请求方式
             operLog.setRequestMethod(ServletUtils.getRequest().getMethod());
             // 处理设置注解上的参数
-            getControllerMethodDescription(joinPoint, controllerLog, operLog);
+            getControllerMethodDescription(joinPoint, controllerLog, operLog, jsonResult);
             // 保存数据库
             AsyncManager.me().execute(AsyncFactory.recordOper(operLog));
         }
@@ -131,9 +117,10 @@ public class LogAspect
      * 
      * @param log 日志
      * @param operLog 操作日志
+     * @param result 响应结果
      * @throws Exception
      */
-    public void getControllerMethodDescription(JoinPoint joinPoint, Log log, SysOperLog operLog) throws Exception
+    public void getControllerMethodDescription(JoinPoint joinPoint, Log log, SysOperLog operLog, Object result) throws Exception
     {
         // 设置action动作
         operLog.setBusinessType(log.businessType().ordinal());
@@ -146,6 +133,12 @@ public class LogAspect
         {
             // 获取参数的信息，传入到数据库中。
             setRequestValue(joinPoint, operLog);
+        }
+
+        // 是否需要保存response，参数和值
+        if (log.isSaveResponseData() && StringUtils.isNotNull(result))
+        {
+            operLog.setJsonResult(StringUtils.substring(JSON.toJSONString(result), 0, 2000));
         }
     }
 
@@ -170,21 +163,6 @@ public class LogAspect
         }
     }
 
-    /**
-     * 是否存在注解，如果存在就获取
-     */
-    private Log getAnnotationLog(JoinPoint joinPoint) throws Exception
-    {
-        Signature signature = joinPoint.getSignature();
-        MethodSignature methodSignature = (MethodSignature) signature;
-        Method method = methodSignature.getMethod();
-
-        if (method != null)
-        {
-            return method.getAnnotation(Log.class);
-        }
-        return null;
-    }
 
     /**
      * 参数拼装
@@ -194,12 +172,19 @@ public class LogAspect
         String params = "";
         if (paramsArray != null && paramsArray.length > 0)
         {
-            for (int i = 0; i < paramsArray.length; i++)
+            for (Object o : paramsArray)
             {
-                if (StringUtils.isNotNull(paramsArray[i]) && !isFilterObject(paramsArray[i]))
+                if (StringUtils.isNotNull(o) && !isFilterObject(o))
                 {
-                    Object jsonObj = JSON.toJSON(paramsArray[i]);
-                    params += jsonObj.toString() + " ";
+                    try
+                    {
+                        Object jsonObj = JSON.toJSON(o);
+                        params += jsonObj.toString() + " ";
+                    }
+                    catch (Exception e)
+                    {
+                        log.error(e.getMessage(), e);
+                    }
                 }
             }
         }
@@ -223,17 +208,17 @@ public class LogAspect
         else if (Collection.class.isAssignableFrom(clazz))
         {
             Collection collection = (Collection) o;
-            for (Iterator iter = collection.iterator(); iter.hasNext();)
+            for (Object value : collection)
             {
-                return iter.next() instanceof MultipartFile;
+                return value instanceof MultipartFile;
             }
         }
         else if (Map.class.isAssignableFrom(clazz))
         {
             Map map = (Map) o;
-            for (Iterator iter = map.entrySet().iterator(); iter.hasNext();)
+            for (Object value : map.entrySet())
             {
-                Map.Entry entry = (Map.Entry) iter.next();
+                Map.Entry entry = (Map.Entry) value;
                 return entry.getValue() instanceof MultipartFile;
             }
         }

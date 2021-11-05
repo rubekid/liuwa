@@ -1,6 +1,7 @@
 package com.liuwa.framework.aspectj;
 
-import java.util.Objects;
+import com.liuwa.common.annotation.DataSource;
+import com.liuwa.framework.datasource.DynamicDataSourceContextHolder;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -11,14 +12,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import com.liuwa.common.annotation.DataSource;
-import com.liuwa.common.utils.StringUtils;
-import com.liuwa.framework.datasource.DynamicDataSourceContextHolder;
+
+import java.util.Objects;
 
 /**
  * 多数据源处理
- * 
- * @author liuwa
+ *
+ * @author Liuwa
  */
 @Aspect
 @Order(1)
@@ -26,6 +26,7 @@ import com.liuwa.framework.datasource.DynamicDataSourceContextHolder;
 public class DataSourceAspect
 {
     protected Logger logger = LoggerFactory.getLogger(getClass());
+
 
     @Pointcut("@annotation(com.liuwa.common.annotation.DataSource)"
             + "|| @within(com.liuwa.common.annotation.DataSource)")
@@ -38,11 +39,7 @@ public class DataSourceAspect
     public Object around(ProceedingJoinPoint point) throws Throwable
     {
         DataSource dataSource = getDataSource(point);
-
-        if (StringUtils.isNotNull(dataSource))
-        {
-            DynamicDataSourceContextHolder.setDataSourceType(dataSource.value().name());
-        }
+        DynamicDataSourceContextHolder.setDataSourceType(dataSource.value().name());
 
         try
         {
@@ -69,4 +66,5 @@ public class DataSourceAspect
 
         return AnnotationUtils.findAnnotation(signature.getDeclaringType(), DataSource.class);
     }
+
 }
