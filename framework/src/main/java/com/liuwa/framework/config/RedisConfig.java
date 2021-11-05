@@ -25,6 +25,7 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.*;
 import org.springframework.stereotype.Component;
 
@@ -60,6 +61,12 @@ public class RedisConfig extends CachingConfigurerSupport {
      */
     @Value("${spring.redis.prefix:}")
     private String keyPrefix;
+
+    /**
+     * 数据库索引 dbindex
+     */
+    @Value("${spring.redis.database:0}")
+    private int database;
 
     @Bean
     @SuppressWarnings(value = { "unchecked", "rawtypes" })
@@ -115,6 +122,15 @@ public class RedisConfig extends CachingConfigurerSupport {
         redisScript.setResultType(Long.class);
         return redisScript;
     }
+
+
+    @Bean
+    public RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory){
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        return container;
+    }
+
 
     /**
      * 限流脚本

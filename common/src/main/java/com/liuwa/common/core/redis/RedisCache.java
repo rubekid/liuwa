@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.connection.RedisZSetCommands;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
@@ -32,9 +33,27 @@ public class RedisCache {
      */
     private static int LOCK_EXPIRE_MSECS = 60000;
 
+    /**
+     * 键名前缀
+     */
+    @Value("${spring.redis.prefix:}")
+    private String keyPrefix;
+
 
     @Autowired
     public RedisTemplate redisTemplate;
+
+    /**
+     * 去掉前缀
+     * @param key
+     * @return
+     */
+    public String clearKeyPrefix(String key){
+        if(key.startsWith(keyPrefix + ":")){
+            return key.substring(keyPrefix.length() + 1);
+        }
+        return key;
+    }
 
     /**
      * 缓存基本的对象，Integer、String、实体类等

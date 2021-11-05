@@ -2,10 +2,22 @@ package com.liuwa.framework.web.service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
+
+import com.google.common.cache.Cache;
+import com.liuwa.framework.listener.RedisKeyDeletionListener;
+import com.liuwa.framework.listener.RedisKeyExpirationListener;
+import com.liuwa.framework.observable.RedisKeyDeletionObservable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.event.EventListener;
+import org.springframework.data.redis.core.RedisKeyDeletedEvent;
+import org.springframework.data.redis.core.RedisKeyExpiredEvent;
 import org.springframework.stereotype.Component;
 import com.liuwa.common.constant.Constants;
 import com.liuwa.common.core.domain.model.LoginUser;
@@ -26,8 +38,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
  * @author liuwa
  */
 @Component
-public class TokenService
-{
+public class TokenService implements Observer {
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
     // 令牌自定义标识
     @Value("${token.header}")
     private String header;
@@ -40,6 +54,11 @@ public class TokenService
     @Value("${token.expireTime}")
     private int expireTime;
 
+
+    // 令牌本机缓存 减少远程 redis访问
+    @Value("${token.localCache:false}")
+    private boolean localCache;
+
     protected static final long MILLIS_SECOND = 1000;
 
     protected static final long MILLIS_MINUTE = 60 * MILLIS_SECOND;
@@ -48,6 +67,56 @@ public class TokenService
 
     @Autowired
     private RedisCache redisCache;
+
+    @Autowired
+    private Cache<String, LoginUser> guavaCache;
+
+    @Autowired
+    private RedisKeyExpirationListener expirationListener;
+
+    @Autowired
+    private RedisKeyDeletionListener deletionListener;
+
+
+
+    @Autowired
+    private void initObserver(){
+        expirationListener.attach(this);
+        deletionListener.attach(this);
+    }
+
+    @Override
+    public void update(Observable observable, Object arg) {
+        if(observable instanceof RedisKeyDeletionObservable){
+           String key = (String)arg;
+           key = redisCache.clearKeyPrefix(key);
+           if(key.startsWith(Constants.LOGIN_TOKEN_KEY)){
+               // LoginUser user = guavaCache.getIfPresent(key);
+               guavaCache.invalidate(key);
+               logger.info("清理登录 key {}", key);
+           }
+        }
+    }
+
+    /**
+     * 删除事件处理
+     * @see TokenService#update(Observable, Object)
+     * @param event
+     */
+    @EventListener
+    public void handleKeyDeleted(RedisKeyDeletedEvent event){
+        logger.info("{}", new String(event.getId()));
+    }
+
+    /**
+     * 过期事件处理
+     * @see TokenService#update(Observable, Object)
+     * @param event
+     */
+    @EventListener
+    public void handleKeyExpired(RedisKeyExpiredEvent event){
+        logger.info("{}", new String(event.getId()));
+    }
 
     /**
      * 获取用户身份信息
@@ -66,11 +135,24 @@ public class TokenService
                 // 解析对应的权限以及用户信息
                 String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
                 String userKey = getTokenKey(uuid);
-                LoginUser user = redisCache.getCacheObject(userKey);
+                LoginUser user = null;
+
+                // 读取本机二级缓存
+                if(localCache){
+                    user = guavaCache.getIfPresent(userKey);
+                }
+
+                if(user == null){
+                    user = redisCache.getCacheObject(userKey);
+                    // 通过guava cache 进行本机二级缓存
+                    if(localCache && user != null){
+                        guavaCache.put(userKey, user);
+                    }
+                }
                 return user;
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
+                logger.error(e.getMessage(), e);
             }
         }
         return null;
@@ -96,6 +178,7 @@ public class TokenService
         {
             String userKey = getTokenKey(token);
             redisCache.deleteObject(userKey);
+
         }
     }
 
@@ -222,4 +305,5 @@ public class TokenService
     {
         return Constants.LOGIN_TOKEN_KEY + uuid;
     }
+
 }
