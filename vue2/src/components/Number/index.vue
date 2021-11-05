@@ -47,7 +47,7 @@ export default {
     };
   },
   created(){
-    
+
   },
   computed: {
 
@@ -55,8 +55,10 @@ export default {
   watch: {
     value:{
       handler(val){
+							 console.log(val, this.value);
         this.text = (val || '') + '';
-      }
+      },
+					 immediate: true
     },
     text: {
       handler(val) {
