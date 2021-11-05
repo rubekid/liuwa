@@ -12,8 +12,11 @@
 
 ## 若依版本同步进度
 已同步到 
-SHA-1: 25f50d74c5b71876f62bd7374eae6cb4d44df2f2
-* 升级sass-loader到最新版本10.1.1
+Revision: cc4c52c998f5ffd6adc63d62d870ce76ffa9ae61
+Author: RuoYi <yzz_ivy@163.com>
+Date: 2021/11/1 15:03:06
+Message:
+任务屏蔽违规字符
 
 
 ## 未同步功能
@@ -23,6 +26,10 @@ SHA-1: 258335cc6599dacd6130e1da988a403efe67219d
 * 新增通用方法简化模态/缓存使用
 SHA-1: ded99502ae2d7824d9584b5c69f4dfcf7bdb6759
 * 新增通用方法简化下载使用
+SHA-1: c2a179e9dd0bcc0b7f0607b0220d1264dae46461
+* 新增认证对象简化权限验证
+
+
 
 
 

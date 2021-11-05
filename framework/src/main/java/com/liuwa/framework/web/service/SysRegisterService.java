@@ -1,8 +1,8 @@
 package com.liuwa.framework.web.service;
 
+import com.liuwa.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import com.liuwa.common.constant.Constants;
 import com.liuwa.common.constant.SysConstants;
 import com.liuwa.common.core.domain.entity.SysUser;

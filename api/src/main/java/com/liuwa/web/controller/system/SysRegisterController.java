@@ -1,15 +1,15 @@
 package com.liuwa.web.controller.system;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 import com.liuwa.common.core.controller.BaseController;
 import com.liuwa.common.core.domain.AjaxResult;
 import com.liuwa.common.core.domain.model.RegisterBody;
+import com.liuwa.common.utils.StringUtils;
 import com.liuwa.framework.web.service.SysRegisterService;
 import com.liuwa.system.service.SysConfigService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 注册验证

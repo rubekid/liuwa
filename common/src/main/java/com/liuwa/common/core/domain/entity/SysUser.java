@@ -49,7 +49,7 @@ public class SysUser extends BaseEntity
     private String phonenumber;
 
     /** 用户性别 */
-    @Excel(name = "用户性别", readConverterExp = "0=男,1=女,2=未知")
+    @Excel(name = "用户性别", readConverterExp = "1=男,2=女,0=未知")
     private String sex;
 
     /** 用户头像 */

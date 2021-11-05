@@ -169,6 +169,7 @@ public class SysMenuServiceImpl implements SysMenuService
                 children.setComponent(menu.getComponent());
                 children.setName(StringUtils.capitalize(menu.getPath()));
                 children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), menu.getIsCache() == SysConstants.NO, menu.getPath()));
+                children.setQuery(menu.getQuery());
                 childrenList.add(children);
                 router.setChildren(childrenList);
             }
