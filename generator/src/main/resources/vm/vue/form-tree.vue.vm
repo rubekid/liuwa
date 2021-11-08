@@ -79,10 +79,10 @@
         <el-form-item label="${comment}" prop="${field}">
           <el-select v-model="form.${field}" placeholder="请选择${comment}">
             <el-option
-              v-for="dict in ${field}Options"
+              v-for="dict in sysDictMap.${dictType}"
               :key="dict.dictValue"
               :label="dict.dictLabel"
-              #if($column.javaType == "Integer" || $column.javaType == "Long"):value="parseInt(dict.dictValue)"#else:value="dict.dictValue"#end
+              :value="dict.dictValue"
 
             ></el-option>
           </el-select>
@@ -97,7 +97,7 @@
         <el-form-item label="${comment}">
           <el-checkbox-group v-model="form.${field}">
             <el-checkbox
-              v-for="dict in ${field}Options"
+              v-for="dict in sysDictMap.${dictType}"
               :key="dict.dictValue"
               :label="dict.dictValue">
               {{dict.dictLabel}}
@@ -114,9 +114,9 @@
         <el-form-item label="${comment}">
           <el-radio-group v-model="form.${field}">
             <el-radio
-              v-for="dict in ${field}Options"
+              v-for="dict in sysDictMap.${dictType}"
               :key="dict.dictValue"
-              #if($column.javaType == "Integer" || $column.javaType == "Long"):label="parseInt(dict.dictValue)"#else:label="dict.dictValue"#end
+              :label="dict.dictValue"
 
             >{{dict.dictLabel}}</el-radio>
           </el-radio-group>
@@ -181,6 +181,9 @@ export default {
   components: {
     Treeselect
   },
+#if(${dicts} != '')
+  dicts: [${dicts}],
+#end
   data() {
     return {
       // 表单初始化完成
@@ -194,10 +197,6 @@ export default {
 #set($comment=$column.columnComment.substring(0, $parentheseIndex))
 #else
 #set($comment=$column.columnComment)
-#end
-#if(${column.dictType} != '')
-      // $comment字典
-      ${column.javaField}Options: [],
 #end
 #end
 #end
@@ -228,31 +227,6 @@ export default {
   },
   created() {
     this.open = true;
-
-    // 数据字典处理
-    let dictReadyHandlers = {};
-    let appendDictHandler = (key, handler) => {
-      let handlers = dictReadyHandlers[key] || [];
-      handlers.push(handler);
-      dictReadyHandlers[key] = handlers;
-    }
-
-#foreach ($column in $columns)
-#if(${column.dictType} != '')
-    appendDictHandler("${column.dictType}", response => {
-      this.${column.javaField}Options = response.data;
-    });
-#end
-#end
-
-    for(let key in dictReadyHandlers){
-       this.getDicts(key).then(res => {
-          let callbacks = dictReadyHandlers[key] || [];
-          callbacks.forEach( callback => {
-            callback(JSON.parse(JSON.stringify(res)));
-          })
-       });
-    }
   },
   mounted(){
     // 获取 from并加入loading，避免网络差造成假死现象

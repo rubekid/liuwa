@@ -55,8 +55,7 @@ export default {
   watch: {
     value:{
       handler(val){
-							 console.log(val, this.value);
-        this.text = (val || '') + '';
+							 this.text = (val || '') + '';
       },
 					 immediate: true
     },

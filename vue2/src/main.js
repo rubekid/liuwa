@@ -12,6 +12,8 @@ import store from './store'
 import router from './router'
 import directive from './directive' //directive
 import plugins from './plugins' // plugins
+import DictMixin from "@/mixins/DictMixin";
+
 
 import './assets/icons' // icon
 import './permission' // permission control
@@ -48,6 +50,7 @@ Vue.prototype.selectDictLabel = selectDictLabel
 Vue.prototype.selectDictLabels = selectDictLabels
 Vue.prototype.handleTree = handleTree
 
+
 Vue.prototype.msgSuccess = function(msg) {
     this.$message({ showClose: true, message: msg, type: "success" });
 }
@@ -74,6 +77,7 @@ Vue.component('ImageView', ImageView)
 Vue.use(directive)
 Vue.use(plugins)
 Vue.use(VueMeta)
+Vue.use(DictMixin);
 
 /**
  * If you don't want to use mock-server

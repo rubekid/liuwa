@@ -1,15 +1,16 @@
 package com.liuwa.generator.util;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import org.apache.velocity.VelocityContext;
 import com.alibaba.fastjson.JSONObject;
 import com.liuwa.common.constant.GenConstants;
 import com.liuwa.common.utils.DateUtils;
 import com.liuwa.common.utils.StringUtils;
 import com.liuwa.generator.domain.GenTable;
 import com.liuwa.generator.domain.GenTableColumn;
+import org.apache.velocity.VelocityContext;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * 模板处理工具类
@@ -69,6 +70,7 @@ public class VelocityUtils
         velocityContext.put("columns", columns);
         velocityContext.put("delFlagColumn", delFlagColumn);
         velocityContext.put("table", genTable);
+        velocityContext.put("dicts", getDicts(genTable));
         setMenuVelocityContext(velocityContext, genTable);
         if (GenConstants.TPL_TREE.equals(tplCategory))
         {
@@ -281,6 +283,38 @@ public class VelocityUtils
             }
         }
         return importList;
+    }
+
+    /**
+     * 根据列类型获取字典组
+     *
+     * @param genTable 业务表对象
+     * @return 返回字典组
+     */
+    public static String getDicts(GenTable genTable)
+    {
+        List<GenTableColumn> columns = new ArrayList<GenTableColumn>();
+        columns.addAll(genTable.getColumns());
+
+        // 有附表
+        if(GenConstants.TPL_SUB.equals(genTable.getTplCategory())){
+            columns.addAll(genTable.getSubTable().getColumns());
+        }
+        List<String> dicts = new ArrayList<String>();
+        for (GenTableColumn column : columns)
+        {
+            String dict = "'" + column.getDictType() + "'";
+            if(dicts.contains(dict)){
+                continue;
+            }
+            if (!column.isSuperColumn() && StringUtils.isNotEmpty(column.getDictType()) && StringUtils.equalsAny(
+                    column.getHtmlType(), new String[] { GenConstants.HTML_SELECT, GenConstants.HTML_RADIO }))
+            {
+
+                dicts.add(dict);
+            }
+        }
+        return StringUtils.join(dicts, ", ");
     }
 
     /**

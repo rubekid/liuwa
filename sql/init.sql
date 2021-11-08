@@ -464,6 +464,7 @@ insert into sys_dict_type values(7,  '通知类型', 'sys_notice_type',     1, '
 insert into sys_dict_type values(8,  '通知状态', 'sys_notice_status',   1, 'Number', 1, sysdate(), 1, null, '通知状态列表');
 insert into sys_dict_type values(9,  '操作类型', 'sys_oper_type',       1, 'Number', 1, sysdate(), 1, null, '操作类型列表');
 insert into sys_dict_type values(10, '系统状态', 'sys_common_status',   1, 'Number', 1, sysdate(), 1, null, '登录状态列表');
+INSERT INTO sys_dict_type VALUES (11, '布尔是否', 'sys_true_false',     1, 'Boolean', 1, sysdate(), 1, NULL, '系统布尔值是否列表');
 
 
 -- ----------------------------
@@ -517,6 +518,8 @@ insert into sys_dict_data values(25, 8,  '生成代码', '8',       'sys_oper_ty
 insert into sys_dict_data values(26, 9,  '清空数据', '9',       'sys_oper_type',       '',   'danger',  0, 1, 1, sysdate(), 1, null, '清空操作');
 insert into sys_dict_data values(27, 1,  '成功',     '1',       'sys_common_status',   '',   'primary', 0, 1, 1, sysdate(), 1, null, '正常状态');
 insert into sys_dict_data values(28, 2,  '失败',     '0',       'sys_common_status',   '',   'danger',  0, 1, 1, sysdate(), 1, null, '停用状态');
+insert into sys_dict_data values(29, 1,  '是',       'true',    'sys_yes_no',          '',   'primary', 1, 1, 1, sysdate(), 1, null, '布尔值是');
+insert into sys_dict_data values(30, 2,  '否',       'false',   'sys_yes_no',          '',   'danger',  0, 1, 1, sysdate(), 1, null, '布尔值否');
 
 
 -- ----------------------------

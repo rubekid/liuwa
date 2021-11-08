@@ -171,6 +171,8 @@ export default {
 					 columns: [],
       // 字典信息
       dictOptions: [],
+					 // 字典类型
+      dictTypes:{},
       // 菜单信息
       menus: [],
       // 表详细信息
@@ -192,6 +194,11 @@ export default {
       /** 查询字典下拉列表 */
       getDictOptionselect().then(response => {
         this.dictOptions = response.data;
+        let typeMap = {};
+        this.dictOptions.forEach(item => {
+          typeMap[item.dictType] =  item.dataType;
+        });
+        this.dictTypes = typeMap;
       });
       /** 查询菜单下拉列表 */
       getMenuTreeselect().then(response => {
@@ -204,11 +211,36 @@ export default {
     submitForm() {
       const basicForm = this.$refs.basicInfo.$refs.basicInfoForm;
       const genForm = this.$refs.genInfo.$refs.genInfoForm;
+						for(let i = 0; i< this.columns.length; i++){
+							 let column = this.columns[i];
+								if(column.dictType){
+									 let dataType = this.dictTypes[column.dictType];
+										if(dataType == 'Number' &&
+											(column.javaType != 'Integer'
+												&& column.javaType != 'Long'
+												&& column.javaType != 'Double'
+												&& column.javaType != 'BigDecimal' )){
+												this.$modal.error("Java类型和字典类型不匹配");
+												return ;
+										}
+									 else if(dataType == 'Boolean' &&
+										 (column.javaType != 'Boolean')){
+											this.$modal.error("Java类型和字典类型不匹配");
+											return ;
+										}
+										else if(dataType == 'String' &&
+											(column.javaType != 'String')){
+											this.$modal.error("Java类型和字典类型不匹配");
+											return ;
+										}
+								}
+						}
       Promise.all([basicForm, genForm].map(this.getFormPromise)).then(res => {
         const validateResult = res.every(item => !!item);
         if (validateResult) {
           const genTable = Object.assign({}, basicForm.model, genForm.model);
           genTable.columns = this.columns;
+
           genTable.params = {
             treeCode: genTable.treeCode,
             treeName: genTable.treeName,
@@ -216,6 +248,9 @@ export default {
             parentMenuId: genTable.parentMenuId,
             menuIcon: genTable.menuIcon
           };
+
+
+
           updateGenTable(genTable).then(res => {
             this.$modal.success(res.msg);
             if (res.code === 200) {

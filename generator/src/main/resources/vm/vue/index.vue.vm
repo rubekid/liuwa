@@ -26,7 +26,7 @@
       <el-form-item label="${comment}" prop="${column.javaField}">
         <el-select v-model="queryParams.${column.javaField}" placeholder="请选择${comment}" clearable size="small">
           <el-option
-            v-for="dict in ${column.javaField}Options"
+            v-for="dict in sysDictMap.${dictType}"
             :key="dict.dictValue"
             :label="dict.dictLabel"
             :value="dict.dictValue"
@@ -122,6 +122,7 @@
     <el-table v-loading="loading" :data="${businessName}List" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
 #foreach($column in $columns)
+#set($dictType=$column.dictType)
 #set($javaField=$column.javaField)
 #set($parentheseIndex=$column.columnComment.indexOf("（"))
 #if($parentheseIndex != -1)
@@ -148,7 +149,7 @@
 #elseif($column.list && "" != $column.dictType)
       <el-table-column label="${comment}" align="center" prop="${javaField}">
         <template slot-scope="scope">
-          <dict-tag :options="${javaField}Options" :value="scope.row.${javaField}"/>
+          <dict-tag :options="sysDictMap.${dictType}" :value="scope.row.${javaField}"/>
         </template>
       </el-table-column>
 #elseif($column.list && "" != $javaField)
@@ -197,6 +198,9 @@ export default {
   components:{
     ${BusinessName}Form
   },
+#if(${dicts} != '')
+  dicts: [${dicts}],
+#end
   data() {
     return {
       // 遮罩层
@@ -224,10 +228,7 @@ export default {
 #else
 #set($comment=$column.columnComment)
 #end
-#if(${column.dictType} != '')
-      // $comment字典
-      ${column.javaField}Options: [],
-#elseif($column.htmlType == "datetime" && $column.queryType == "BETWEEN")
+#if($column.htmlType == "datetime" && $column.queryType == "BETWEEN")
 #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
       // $comment时间范围
       daterange${AttrName}: [],
@@ -251,13 +252,6 @@ export default {
   },
   created() {
     this.getList();
-#foreach ($column in $columns)
-#if(${column.dictType} != '')
-    this.getDicts("${column.dictType}").then(response => {
-      this.${column.javaField}Options = response.data;
-    });
-#end
-#end
   },
   methods: {
     /** 查询${functionName}列表 */
