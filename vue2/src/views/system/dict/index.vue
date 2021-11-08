@@ -342,13 +342,13 @@ export default {
     if (valid) {
      if (this.form.dictId != undefined) {
       updateType(this.form).then(response => {
-       this.msgSuccess("修改成功");
+       this.$modal.success("修改成功");
        this.open = false;
        this.getList();
       });
      } else {
       addType(this.form).then(response => {
-       this.msgSuccess("新增成功");
+       this.$modal.success("新增成功");
        this.open = false;
        this.getList();
       });
@@ -359,36 +359,28 @@ export default {
   /** 删除按钮操作 */
   handleDelete(row) {
    const dictIds = row.dictId || this.ids;
-   this.$confirm('是否确认删除字典编号为"' + dictIds + '"的数据项?', "警告", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning"
-   }).then(function() {
+   this.$modal.confirm('是否确认删除字典编号为"' + dictIds + '"的数据项?').then(() => {
     return delType(dictIds);
    }).then(() => {
     this.getList();
-    this.msgSuccess("删除成功");
+    this.$modal.success("删除成功");
    }).catch(() => {});
   },
   /** 导出按钮操作 */
   handleExport() {
    const queryParams = this.queryParams;
-   this.$confirm('是否确认导出所有类型数据项?', "警告", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning"
-   }).then(() => {
+   this.$modal.confirm('是否确认导出所有类型数据项?').then(() => {
     this.exportLoading = true;
     return exportType(queryParams);
    }).then(response => {
-    this.download(response.msg);
+    this.$downloader.download(response.data);
     this.exportLoading = false;
    }).catch(() => {});
   },
   /** 刷新缓存按钮操作 */
   handleRefreshCache() {
    refreshCache().then(() => {
-    this.msgSuccess("刷新成功");
+    this.$modal.success("刷新成功");
    });
   }
  }

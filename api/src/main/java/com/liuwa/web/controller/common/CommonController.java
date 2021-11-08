@@ -2,6 +2,9 @@ package com.liuwa.web.controller.common;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.liuwa.common.utils.DateUtils;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,8 @@ import com.liuwa.common.utils.StringUtils;
 import com.liuwa.common.utils.file.FileUploadUtils;
 import com.liuwa.common.utils.file.FileUtils;
 import com.liuwa.framework.config.ServerConfig;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * 通用请求处理
@@ -46,7 +51,8 @@ public class CommonController
             {
                 throw new Exception(StringUtils.format("文件名称({})非法，不允许下载。 ", fileName));
             }
-            String realFileName = System.currentTimeMillis() + fileName.substring(fileName.indexOf("_") + 1);
+            String ext = fileName.substring(fileName.lastIndexOf("."));
+            String realFileName = new String(Base64.decodeBase64(fileName.substring(0, fileName.indexOf("_"))), StandardCharsets.UTF_8) + "_" + DateUtils.dateTimeNow() + ext;
             String filePath = SysConfig.getDownloadPath() + fileName;
 
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);

@@ -202,42 +202,30 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const infoIds = row.infoId || this.ids;
-      this.$confirm('是否确认删除访问编号为"' + infoIds + '"的数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
+      this.$modal.confirm('是否确认删除访问编号为"' + infoIds + '"的数据项?').then(() => {
           return delLogininfor(infoIds);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除成功");
+          this.$modal.success("删除成功");
         }).catch(() => {});
     },
     /** 清空按钮操作 */
     handleClean() {
-        this.$confirm('是否确认清空所有登录日志数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
+        this.$modal.confirm('是否确认清空所有登录日志数据项?').then(() => {
           return cleanLogininfor();
         }).then(() => {
           this.getList();
-          this.msgSuccess("清空成功");
+          this.$modal.success("清空成功");
         }).catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有操作日志数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
+      this.$modal.confirm('是否确认导出所有操作日志数据项?').then(() => {
           this.exportLoading = true;
           return exportLogininfor(queryParams);
         }).then(response => {
-          this.download(response.msg);
+          this.$downloader.download(response.data);
           this.exportLoading = false;
         }).catch(() => {});
     }

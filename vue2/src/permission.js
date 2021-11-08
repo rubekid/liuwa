@@ -27,8 +27,8 @@ router.beforeEach((to, from, next) => {
             next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
           })
         }).catch(err => {
-											 debugger;
-												if(err.code == 'ECONNABORTED' || err.message.toLowerCase().includes("timeout")){
+												var msg = err.message || err;
+											 if(err.code == 'ECONNABORTED' || msg.toLowerCase().includes("timeout")){
 														Message.error('请求超时, 请刷新重试');
 														return ;
 												}

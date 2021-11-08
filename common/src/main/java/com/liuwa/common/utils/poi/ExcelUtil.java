@@ -15,6 +15,7 @@ import com.liuwa.common.utils.file.FileTypeUtils;
 import com.liuwa.common.utils.file.FileUtils;
 import com.liuwa.common.utils.file.ImageUtils;
 import com.liuwa.common.utils.reflect.ReflectUtils;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ooxml.POIXMLDocumentPart;
 import org.apache.poi.ss.usermodel.*;
@@ -32,6 +33,7 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -500,7 +502,7 @@ public class ExcelUtil<T>
             String filename = encodingFilename(sheetName);
             out = new FileOutputStream(getAbsoluteFile(filename));
             wb.write(out);
-            return AjaxResult.success(filename);
+            return AjaxResult.success("生成成功", filename);
         }
         catch (Exception e)
         {
@@ -1035,11 +1037,11 @@ public class ExcelUtil<T>
     }
 
     /**
-     * 编码文件名
+     * 编码文件名  表名称_yyyyMMddHHmmss.xlsx
      */
     public String encodingFilename(String filename)
     {
-        filename = UUID.randomUUID().toString() + "_" + filename + ".xlsx";
+        filename =  Base64.encodeBase64String(filename.getBytes(StandardCharsets.UTF_8)) + "_" + UUID.randomUUID().toString() + ".xlsx";
         return filename;
     }
 

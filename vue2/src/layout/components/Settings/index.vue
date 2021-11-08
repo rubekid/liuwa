@@ -169,7 +169,7 @@ export default {
         spinner: "el-icon-loading",
         background: "rgba(0, 0, 0, 0.7)"
       });
-      localStorage.setItem(
+					 this.$cache.local.set(
         "layout-setting",
         `{
             "topNav":${this.topNav},
@@ -181,7 +181,7 @@ export default {
             "theme":"${this.theme}"
           }`
       );
-      setTimeout(loading.close(), 1000)
+      setTimeout(() => loading.close(), 1000)
     },
     resetSetting() {
       this.$loading({
@@ -191,7 +191,7 @@ export default {
         spinner: "el-icon-loading",
         background: "rgba(0, 0, 0, 0.7)"
       });
-      localStorage.removeItem("layout-setting")
+					 this.$cache.local.remove("layout-setting")
       setTimeout("window.location.reload()", 1000)
     }
   }

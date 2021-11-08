@@ -583,9 +583,9 @@ create table sys_job (
   primary key (job_id, job_name, job_group)
 ) engine=innodb auto_increment=100 comment = '定时任务调度表';
 
-insert into sys_job values(1, '系统默认（无参）', 'DEFAULT', 'taskJob.noParams',        '0/10 * * * * ?', 3, 1, 1, 1, sysdate(), 1, null, '');
-insert into sys_job values(2, '系统默认（有参）', 'DEFAULT', 'taskJob.params(\'liuwa\')',  '0/15 * * * * ?', 3, 1, 1, 1, sysdate(), 1, null, '');
-insert into sys_job values(3, '系统默认（多参）', 'DEFAULT', 'taskJob.multipleParams(\'liuwa\', true, 2000L, 316.50D, 100)',  '0/20 * * * * ?', 3, 1, 1, 1, sysdate(), 1, null, '');
+insert into sys_job values(1, '系统默认（无参）', 'DEFAULT', 'taskJob.noParams',        '0/10 * * * * ?', 3, 1, 1, 0, sysdate(), 1, null, '');
+insert into sys_job values(2, '系统默认（有参）', 'DEFAULT', 'taskJob.params(\'liuwa\')',  '0/15 * * * * ?', 3, 1, 1, 0, sysdate(), 1, null, '');
+insert into sys_job values(3, '系统默认（多参）', 'DEFAULT', 'taskJob.multipleParams(\'liuwa\', true, 2000L, 316.50D, 100)',  '0/20 * * * * ?', 3, 1, 1, 0, sysdate(), 1, null, '');
 
 
 -- ----------------------------

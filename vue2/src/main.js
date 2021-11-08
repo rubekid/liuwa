@@ -11,12 +11,13 @@ import App from './App'
 import store from './store'
 import router from './router'
 import directive from './directive' //directive
+import plugins from './plugins' // plugins
 
 import './assets/icons' // icon
 import './permission' // permission control
 import { getDicts } from "@/api/system/dict/data";
 import { getConfigKey } from "@/api/system/config";
-import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, download, handleTree } from "@/utils/common";
+import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree } from "@/utils/common";
 import Pagination from "@/components/Pagination";
 // 自定义表格工具组件
 import RightToolbar from "@/components/RightToolbar"
@@ -45,7 +46,6 @@ Vue.prototype.resetForm = resetForm
 Vue.prototype.addDateRange = addDateRange
 Vue.prototype.selectDictLabel = selectDictLabel
 Vue.prototype.selectDictLabels = selectDictLabels
-Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
 
 Vue.prototype.msgSuccess = function(msg) {
@@ -72,6 +72,7 @@ Vue.component('MultiImageUpload', MultiImageUpload)
 Vue.component('ImageView', ImageView)
 
 Vue.use(directive)
+Vue.use(plugins)
 Vue.use(VueMeta)
 
 /**

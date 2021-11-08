@@ -294,13 +294,13 @@ export default {
         if (valid) {
           if (this.form.noticeId != undefined) {
             updateNotice(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.$modal.success("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
             addNotice(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.$modal.success("新增成功");
               this.open = false;
               this.getList();
             });
@@ -311,15 +311,11 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const noticeIds = row.noticeId || this.ids
-      this.$confirm('是否确认删除公告编号为"' + noticeIds + '"的数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
+      this.$modal.confirm('是否确认删除公告编号为"' + noticeIds + '"的数据项?').then(() => {
           return delNotice(noticeIds);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除成功");
+          this.$modal.success("删除成功");
         }).catch(() => {});
     }
   }

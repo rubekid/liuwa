@@ -22,15 +22,6 @@ Message:
 ## 未同步功能
 SHA-1: 12ab8b03d9acb77848c4db9bb0451e77af60acb6
 * 使用vue-data-dict，简化数据字典使用
-SHA-1: 258335cc6599dacd6130e1da988a403efe67219d
-* 新增通用方法简化模态/缓存使用
-SHA-1: ded99502ae2d7824d9584b5c69f4dfcf7bdb6759
-* 新增通用方法简化下载使用
-SHA-1: c2a179e9dd0bcc0b7f0607b0220d1264dae46461
-* 新增认证对象简化权限验证
-
-
-
 
 
 

@@ -50,10 +50,10 @@
         </dependency>
 
         <!-- 定时任务-->
-        <!--<dependency>
+        <dependency>
             <groupId>com.liuwa</groupId>
             <artifactId>quartz</artifactId>
-        </dependency>-->
+        </dependency>
 
         <!-- 代码生成-->
         <dependency>

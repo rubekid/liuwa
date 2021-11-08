@@ -123,15 +123,28 @@
             <el-radio label="1">请选择字典生成</el-radio>
           </el-radio-group>
         </el-form-item>
-#elseif($column.htmlType == "datetime")
+#elseif($column.htmlType == "date")
         <el-form-item label="${comment}" prop="${field}">
           <el-date-picker clearable size="small"
             v-model="form.${field}"
             type="date"
+            :editable="false"
             value-format="yyyy-MM-dd"
             placeholder="选择${comment}">
           </el-date-picker>
         </el-form-item>
+#elseif($column.htmlType == "datetime")
+        <el-form-item label="${comment}" prop="${field}">
+          <el-date-picker clearable size="small"
+            v-model="form.${field}"
+            type="datetime"
+            :editable="false"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            default-time="00:00:00"
+            placeholder="选择${comment}">
+          </el-date-picker>
+        </el-form-item>
+
 #elseif($column.htmlType == "textarea")
         <el-form-item label="${comment}" prop="${field}">
           <el-input v-model="form.${field}" type="textarea" placeholder="请输入内容" />
@@ -232,13 +245,23 @@
               <el-radio-group v-model="scope.row.$javaField">
                      <el-radio label="1">请选择字典生成</el-radio>
               </el-radio-group>
-#elseif($column.htmlType == "datetime")
+#elseif($column.htmlType == "date")
               <el-date-picker clearable size="large"
                     v-model="scope.row.$javaField"
                     type="date"
+                    :editable="false"
                     value-format="yyyy-MM-dd"
                     placeholder="选择${comment}">
               </el-date-picker>
+#elseif($column.htmlType == "datetime")
+  <el-date-picker clearable size="large"
+                  v-model="scope.row.$javaField"
+                  type="datetime"
+                  :editable="false"
+                  default-time="00:00:00"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  placeholder="选择${comment}">
+  </el-date-picker>
 #elseif($column.htmlType == "textarea")
               <el-input v-model="scope.row.$javaField" type="textarea" placeholder="请输入内容" />
 #end
@@ -515,7 +538,7 @@ export default {
           });
           if (this.form.${pkColumn.javaField} != null) {
             update${BusinessName}(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.#[[$modal]]#.success("修改成功");
               this.open = false;
               this.$emit('success', this.from);
             }).catch(err => {
@@ -525,7 +548,7 @@ export default {
             });
           } else {
             add${BusinessName}(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.#[[$modal]]#.success("新增成功");
               this.open = false;
               this.$emit('success', this.from);
             }).catch(err => {
