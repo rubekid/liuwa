@@ -12,7 +12,7 @@ export default {
 		* @param isDelete
 		*/
   download(name, isDelete = true) {
-    var url = baseURL + "/common/download?fileName=" + encodeURI(name) + "&delete=" + isDelete
+    let url = baseURL + "/common/download?fileName=" + encodeURI(name) + "&delete=" + isDelete
     axios({
       method: 'get',
       url: url,
@@ -33,7 +33,7 @@ export default {
 		* @param resource
 		*/
   resource(resource) {
-    var url = baseURL + "/common/download/resource?resource=" + encodeURI(resource);
+    let url = baseURL + "/common/download/resource?resource=" + encodeURI(resource);
     axios({
       method: 'get',
       url: url,
@@ -55,7 +55,7 @@ export default {
 		* @param name
 		*/
   zip(url, name) {
-    var url = baseURL + url
+    url = baseURL + url
     axios({
       method: 'get',
       url: url,
