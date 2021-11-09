@@ -106,6 +106,21 @@
       </el-form-item>
 
      </el-col>
+					<el-col :span="12">
+						<el-form-item prop="formSize">
+          <span slot="label">
+            表单窗体尺寸
+											<el-tooltip content="样式在common.scss中， 如：.form-dialog-large" placement="top">
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+          </span>
+								 	<el-select v-model="info.formSize" @change="tplSelectChange">
+											<el-option label="大(1000px)" value="large" />
+											<el-option label="中（700px）" value="medium" />
+											<el-option label="小（500px）" value="small" />
+									 </el-select>
+						</el-form-item>
+					</el-col>
 
       <el-col :span="12">
         <el-form-item prop="genType">
@@ -120,7 +135,7 @@
         </el-form-item>
       </el-col>
 
-      <el-col :span="24" v-if="info.genType == '1'">
+      <el-col :span="12" v-if="info.genType == '1'">
         <el-form-item prop="genPath">
           <span slot="label">
             自定义路径
@@ -314,6 +329,9 @@ export default {
         this.info.subTableName = '';
         this.info.subTableFkName = '';
       }
+						else{
+								this.info.formSize = 'large';
+						}
     },
     /** 设置关联外键 */
     setSubTableColumns(value) {

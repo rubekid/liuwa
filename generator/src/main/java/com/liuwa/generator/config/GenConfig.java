@@ -27,6 +27,9 @@ public class GenConfig
     /** 表前缀(类名不会包含表前缀) */
     public static String tablePrefix;
 
+    /** 前端页面模板路径 如：vue/vue2/ */
+    public static String frontTplPath;
+
     public static String getAuthor()
     {
         return author;
@@ -69,5 +72,14 @@ public class GenConfig
     public void setTablePrefix(String tablePrefix)
     {
         GenConfig.tablePrefix = tablePrefix;
+    }
+
+    public static String getFrontTplPath() {
+        return frontTplPath;
+    }
+
+    @Value("${frontTplPath}")
+    public void setFrontTplPath(String frontTplPath) {
+        GenConfig.frontTplPath = frontTplPath;
     }
 }

@@ -188,6 +188,7 @@ export default {
         if(!res.data.info.menuIcon){
          res.data.info.menuIcon = ''
         }
+
         this.info = res.data.info;
         this.tables = res.data.tables;
       });
@@ -246,7 +247,8 @@ export default {
             treeName: genTable.treeName,
             treeParentCode: genTable.treeParentCode,
             parentMenuId: genTable.parentMenuId,
-            menuIcon: genTable.menuIcon
+            menuIcon: genTable.menuIcon,
+											 formSize: genTable.formSize
           };
 
 

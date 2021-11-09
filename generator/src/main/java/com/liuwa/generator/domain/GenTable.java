@@ -95,6 +95,9 @@ public class GenTable extends BaseEntity
     /** 菜单图标 */
     private String menuIcon;
 
+    /** 表单大小 */
+    private String formSize;
+
     /** 上级菜单名称字段 */
     private String parentMenuName;
 
@@ -334,6 +337,14 @@ public class GenTable extends BaseEntity
 
     public void setMenuIcon(String menuIcon) {
         this.menuIcon = menuIcon;
+    }
+
+    public String getFormSize() {
+        return formSize;
+    }
+
+    public void setFormSize(String formSize) {
+        this.formSize = formSize;
     }
 
     public boolean isSub()

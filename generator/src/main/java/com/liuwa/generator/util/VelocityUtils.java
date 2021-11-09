@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.liuwa.common.constant.GenConstants;
 import com.liuwa.common.utils.DateUtils;
 import com.liuwa.common.utils.StringUtils;
+import com.liuwa.generator.config.GenConfig;
 import com.liuwa.generator.domain.GenTable;
 import com.liuwa.generator.domain.GenTableColumn;
 import org.apache.velocity.VelocityContext;
@@ -27,6 +28,9 @@ public class VelocityUtils
 
     /** 默认上级菜单 顶级菜单 */
     private static final long DEFAULT_PARENT_MENU_ID = 0;
+
+    /** 前端页面模板路劲 */
+    private static String frontTplPath = GenConfig.getFrontTplPath();
 
     /**
      * 设置模板变量信息
@@ -71,6 +75,7 @@ public class VelocityUtils
         velocityContext.put("delFlagColumn", delFlagColumn);
         velocityContext.put("table", genTable);
         velocityContext.put("dicts", getDicts(genTable));
+        setFormlocityContext(velocityContext, genTable);
         setMenuVelocityContext(velocityContext, genTable);
         if (GenConstants.TPL_TREE.equals(tplCategory))
         {
@@ -90,6 +95,13 @@ public class VelocityUtils
         long parentMenuId = getParentMenuId(paramsObj);
         context.put("parentMenuId", parentMenuId);
         context.put("menuIcon", getMenuIcon(paramsObj));
+    }
+
+    public static void setFormlocityContext(VelocityContext context, GenTable genTable)
+    {
+        String options = genTable.getOptions();
+        JSONObject paramsObj = JSONObject.parseObject(options);
+        context.put("formSize", getFormSize(paramsObj));
     }
 
     public static void setTreeVelocityContext(VelocityContext context, GenTable genTable)
@@ -150,18 +162,18 @@ public class VelocityUtils
         templates.add("vm/js/api.js.vm");
         if (GenConstants.TPL_CRUD.equals(tplCategory))
         {
-            templates.add("vm/vue/index.vue.vm");
-            templates.add("vm/vue/form.vue.vm");
+            templates.add("vm/"+ frontTplPath +"index.vue.vm");
+            templates.add("vm/"+ frontTplPath +"form.vue.vm");
         }
         else if (GenConstants.TPL_TREE.equals(tplCategory))
         {
-            templates.add("vm/vue/index-tree.vue.vm");
-            templates.add("vm/vue/form-tree.vue.vm");
+            templates.add("vm/" + frontTplPath + "index-tree.vue.vm");
+            templates.add("vm/" + frontTplPath + "form-tree.vue.vm");
         }
         else if (GenConstants.TPL_SUB.equals(tplCategory))
         {
-            templates.add("vm/vue/index.vue.vm");
-            templates.add("vm/vue/form.vue.vm");
+            templates.add("vm/" + frontTplPath + "index.vue.vm");
+            templates.add("vm/" + frontTplPath + "form.vue.vm");
             templates.add("vm/java/sub-domain.java.vm");
         }
         return templates;
@@ -360,6 +372,22 @@ public class VelocityUtils
             return paramsObj.getString(GenConstants.MENU_ICON);
         }
         return "#";
+    }
+
+    /**
+     * 获取表单Size
+     *
+     * @param paramsObj 生成其他选项
+     * @return 表单size
+     */
+    public static String getFormSize(JSONObject paramsObj)
+    {
+        if (StringUtils.isNotEmpty(paramsObj) && paramsObj.containsKey(GenConstants.FORM_SIZE)
+                && StringUtils.isNotEmpty(paramsObj.getString(GenConstants.FORM_SIZE)))
+        {
+            return paramsObj.getString(GenConstants.FORM_SIZE);
+        }
+        return "";
     }
 
     /**

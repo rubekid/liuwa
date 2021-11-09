@@ -34,6 +34,9 @@ public class GenConstants
     /** 菜单图标 */
     public static final String MENU_ICON = "menuIcon";
 
+    /** 表单尺寸 */
+    public static final String FORM_SIZE = "formSize";
+
     /** 数据库字符串类型 */
     public static final String[] COLUMNTYPE_STR = { "char", "varchar", "nvarchar", "varchar2" };
 

@@ -316,9 +316,17 @@
   width: 700px;
  }
 
- .form-dialog.form-dialog-large{
-  width: 1000px;
+	.form-dialog.form-dialog-large{
+		width: 1000px;
+	}
+
+ .form-dialog.form-dialog-medium{
+  width: 700px;
  }
+
+	.form-dialog.form-dialog-small{
+		width: 500px;
+	}
 
  .el-dialog__body {
      max-height: 75vh;
