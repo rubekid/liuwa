@@ -45,22 +45,27 @@
 
           <el-table-column label="插入" min-width="5%">
             <template slot-scope="scope">
-              <el-checkbox true-label="1" v-model="scope.row.isInsert"></el-checkbox>
+              <el-checkbox v-model="scope.row.insert"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column label="编辑" min-width="5%">
             <template slot-scope="scope">
-              <el-checkbox true-label="1" v-model="scope.row.isEdit"></el-checkbox>
+              <el-checkbox v-model="scope.row.edit"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column label="列表" min-width="5%">
             <template slot-scope="scope">
-              <el-checkbox true-label="1" v-model="scope.row.isList"></el-checkbox>
+              <el-checkbox v-model="scope.row.list"></el-checkbox>
             </template>
           </el-table-column>
+									<el-table-column label="排序" min-width="5%">
+										<template slot-scope="scope">
+											<el-checkbox v-model="scope.row.sort"></el-checkbox>
+										</template>
+									</el-table-column>
           <el-table-column label="查询" min-width="5%">
             <template slot-scope="scope">
-              <el-checkbox true-label="1" v-model="scope.row.isQuery"></el-checkbox>
+              <el-checkbox v-model="scope.row.query"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column label="查询方式" min-width="10%">
@@ -79,7 +84,7 @@
           </el-table-column>
           <el-table-column label="必填" min-width="5%">
             <template slot-scope="scope">
-              <el-checkbox true-label="1" v-model="scope.row.isRequired"></el-checkbox>
+              <el-checkbox v-model="scope.row.required"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column label="显示类型" min-width="12%">
@@ -285,7 +290,7 @@ export default {
         const targetRow = this.columns.splice(evt.oldIndex, 1)[0];
         this.columns.splice(evt.newIndex, 0, targetRow);
         for (let index in this.columns) {
-          this.columns[index].sort = parseInt(index) + 1;
+          this.columns[index].displayIndex = parseInt(index) + 1;
         }
       }
     });

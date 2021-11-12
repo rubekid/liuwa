@@ -78,22 +78,29 @@ public class GenUtils
         }
 
         // 插入字段（默认所有字段都需要插入）
-        column.setIsInsert(GenConstants.REQUIRE);
+        column.setInsert(GenConstants.REQUIRE);
 
         // 编辑字段
         if (!arraysContains(GenConstants.COLUMNNAME_NOT_EDIT, columnName) && !column.isPk())
         {
-            column.setIsEdit(GenConstants.REQUIRE);
+            column.setEdit(GenConstants.REQUIRE);
         }
         // 列表字段
         if (!arraysContains(GenConstants.COLUMNNAME_NOT_LIST, columnName) && !column.isPk())
         {
-            column.setIsList(GenConstants.REQUIRE);
+            column.setList(GenConstants.REQUIRE);
         }
+
+        // 排序字段
+        if (!arraysContains(GenConstants.COLUMNNAME_NOT_LIST, columnName) && !column.isPk())
+        {
+            column.setSort(GenConstants.REQUIRE);
+        }
+
         // 查询字段
         if (!arraysContains(GenConstants.COLUMNNAME_NOT_QUERY, columnName) && !column.isPk())
         {
-            column.setIsQuery(GenConstants.REQUIRE);
+            column.setQuery(GenConstants.REQUIRE);
         }
 
         // 查询字段类型

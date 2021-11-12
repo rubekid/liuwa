@@ -1,6 +1,6 @@
 <template>
   <div class="app-container home">
-    <el-alert type="success" :center="true"><i class="el-icon-success"></i> 欢迎使用遛娃管理系统，您本次登录时间为{{parseTime(sysUser.loginDate, '{y}年{m}月{d}日{h}点{i}分')}}，登录IP：{{sysUser.loginIp}}</el-alert>
+    <el-alert type="success" :center="true"><i class="el-icon-success"></i> 欢迎使用遛娃管理系统，您上次登录时间为{{parseTime(sysUser.loginDate, '{y}年{m}月{d}日{h}点{i}分')}}，登录IP：{{sysUser.loginIp}}</el-alert>
 
 
     <!-- 实时统计 -->

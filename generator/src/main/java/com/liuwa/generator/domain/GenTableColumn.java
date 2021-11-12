@@ -36,25 +36,30 @@ public class GenTableColumn extends BaseEntity
     private String javaField;
 
     /** 是否主键（1是） */
-    private String isPk;
+    private boolean isPk;
 
     /** 是否自增（1是） */
-    private String isIncrement;
+    private boolean isIncrement;
 
     /** 是否必填（1是） */
-    private String isRequired;
+    private boolean isRequired;
 
     /** 是否为插入字段（1是） */
-    private String isInsert;
+    private boolean isInsert;
 
     /** 是否编辑字段（1是） */
-    private String isEdit;
+    private boolean isEdit;
 
     /** 是否列表字段（1是） */
-    private String isList;
+    private boolean isList;
+
+
+    /** 是否排序字段（1是）*/
+    private boolean isSort;
 
     /** 是否查询字段（1是） */
-    private String isQuery;
+    private boolean isQuery;
+
 
     /** 查询方式（EQ等于、NE不等于、GT大于、LT小于、LIKE模糊、BETWEEN范围） */
     private String queryType;
@@ -71,7 +76,7 @@ public class GenTableColumn extends BaseEntity
     private String dictType;
 
     /** 排序 */
-    private Integer sort;
+    private Integer displayIndex;
 
     public void setColumnId(Long columnId)
     {
@@ -148,144 +153,68 @@ public class GenTableColumn extends BaseEntity
         return StringUtils.capitalize(javaField);
     }
 
-    public void setIsPk(String isPk)
-    {
-        this.isPk = isPk;
-    }
-
-    public String getIsPk()
-    {
+    public boolean isPk() {
         return isPk;
     }
 
-    public boolean isPk()
-    {
-        return isPk(this.isPk);
+    public void setPk(boolean pk) {
+        isPk = pk;
     }
 
-    public boolean isPk(String isPk)
-    {
-        return isPk != null && StringUtils.equals("1", isPk);
-    }
-
-    public String getIsIncrement()
-    {
+    public boolean isIncrement() {
         return isIncrement;
     }
 
-    public void setIsIncrement(String isIncrement)
-    {
-        this.isIncrement = isIncrement;
+    public void setIncrement(boolean increment) {
+        isIncrement = increment;
     }
 
-    public boolean isIncrement()
-    {
-        return isIncrement(this.isIncrement);
-    }
-
-    public boolean isIncrement(String isIncrement)
-    {
-        return isIncrement != null && StringUtils.equals("1", isIncrement);
-    }
-
-    public void setIsRequired(String isRequired)
-    {
-        this.isRequired = isRequired;
-    }
-
-    public String getIsRequired()
-    {
+    public boolean isRequired() {
         return isRequired;
     }
 
-    public boolean isRequired()
-    {
-        return isRequired(this.isRequired);
+    public void setRequired(boolean required) {
+        isRequired = required;
     }
 
-    public boolean isRequired(String isRequired)
-    {
-        return isRequired != null && StringUtils.equals("1", isRequired);
-    }
-
-    public void setIsInsert(String isInsert)
-    {
-        this.isInsert = isInsert;
-    }
-
-    public String getIsInsert()
-    {
+    public boolean isInsert() {
         return isInsert;
     }
 
-    public boolean isInsert()
-    {
-        return isInsert(this.isInsert);
+    public void setInsert(boolean insert) {
+        isInsert = insert;
     }
 
-    public boolean isInsert(String isInsert)
-    {
-        return isInsert != null && StringUtils.equals("1", isInsert);
-    }
-
-    public void setIsEdit(String isEdit)
-    {
-        this.isEdit = isEdit;
-    }
-
-    public String getIsEdit()
-    {
+    public boolean isEdit() {
         return isEdit;
     }
 
-    public boolean isEdit()
-    {
-        return isInsert(this.isEdit);
+    public void setEdit(boolean edit) {
+        isEdit = edit;
     }
 
-    public boolean isEdit(String isEdit)
-    {
-        return isEdit != null && StringUtils.equals("1", isEdit);
-    }
-
-    public void setIsList(String isList)
-    {
-        this.isList = isList;
-    }
-
-    public String getIsList()
-    {
+    public boolean isList() {
         return isList;
     }
 
-    public boolean isList()
-    {
-        return isList(this.isList);
+    public void setList(boolean list) {
+        isList = list;
     }
 
-    public boolean isList(String isList)
-    {
-        return isList != null && StringUtils.equals("1", isList);
+    public boolean isSort() {
+        return isSort;
     }
 
-    public void setIsQuery(String isQuery)
-    {
-        this.isQuery = isQuery;
+    public void setSort(boolean sort) {
+        isSort = sort;
     }
 
-    public String getIsQuery()
-    {
+    public boolean isQuery() {
         return isQuery;
     }
 
-    public boolean isQuery()
-    {
-        return isQuery(this.isQuery);
-    }
-
-    public boolean isQuery(String isQuery)
-    {
-        return isQuery != null && StringUtils.equals("1", isQuery);
+    public void setQuery(boolean query) {
+        isQuery = query;
     }
 
     public void setQueryType(String queryType)
@@ -326,14 +255,12 @@ public class GenTableColumn extends BaseEntity
         return dictType;
     }
 
-    public void setSort(Integer sort)
-    {
-        this.sort = sort;
+    public Integer getDisplayIndex() {
+        return displayIndex;
     }
 
-    public Integer getSort()
-    {
-        return sort;
+    public void setDisplayIndex(Integer displayIndex) {
+        this.displayIndex = displayIndex;
     }
 
     public boolean isSuperColumn()
