@@ -11,12 +11,10 @@
 * 
 
 ## 若依版本同步进度
-已同步到 
-Revision: cc4c52c998f5ffd6adc63d62d870ce76ffa9ae61
-Author: RuoYi <yzz_ivy@163.com>
-Date: 2021/11/1 15:03:06
-Message:
-任务屏蔽违规字符
+已同步到
+SHA-1: 4e817a11092343ff0bac1e80cbbb486e189075fe
+* 升级axios到最新版本0.24.0
+
 
 
 ## 未同步功能
