@@ -140,6 +140,18 @@ public class SysRoleServiceImpl implements SysRoleService
     }
 
     /**
+     * 通过角色key查询角色
+     *
+     * @param roleKey 角色key
+     * @return 角色对象信息
+     */
+    @Override
+    public SysRole selectRoleByKey(String roleKey)
+    {
+        return roleMapper.selectRoleByKey(roleKey);
+    }
+
+    /**
      * 校验角色名称是否唯一
      * 
      * @param role 角色信息
@@ -186,6 +198,9 @@ public class SysRoleServiceImpl implements SysRoleService
         if (StringUtils.isNotNull(role.getRoleId()) && role.isAdmin() && !SecurityUtils.isDeveloper())
         {
             throw new ServiceException("不允许操作超级管理员角色");
+        }
+        else if(role.isSys()){
+            throw new ServiceException("不允许操作系统配置的角色");
         }
     }
 

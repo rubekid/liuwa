@@ -138,7 +138,7 @@
             >修改</el-button>
            </template>
 
-          <template v-if="scope.row.roleId !== 1">
+          <template v-if="!scope.row.sys">
             <el-button
               size="mini"
               type="text"

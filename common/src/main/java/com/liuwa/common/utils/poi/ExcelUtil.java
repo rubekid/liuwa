@@ -33,6 +33,7 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -1041,7 +1042,16 @@ public class ExcelUtil<T>
      */
     public String encodingFilename(String filename)
     {
-        filename =  Base64.encodeBase64String(filename.getBytes(StandardCharsets.UTF_8)) + "_" + UUID.randomUUID().toString() + ".xlsx";
+
+        filename = Base64.encodeBase64String(filename.getBytes(StandardCharsets.UTF_8));
+        try{
+            filename = URLEncoder.encode(filename, StandardCharsets.UTF_8.toString());
+        }
+        catch (UnsupportedEncodingException ex){
+            log.error(ex.getMessage(), ex);
+        }
+
+        filename = filename + "_" + UUID.randomUUID().toString() + ".xlsx";
         return filename;
     }
 

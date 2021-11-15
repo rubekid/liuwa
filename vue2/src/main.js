@@ -25,7 +25,9 @@ import Pagination from "@/components/Pagination";
 import RightToolbar from "@/components/RightToolbar"
 // 富文本组件
 import Editor from "@/components/Editor"
-// 文本组件
+// 区域组件
+import Region from "@/components/Region"
+// 数值组件
 import Number from "@/components/Number"
 // 文件上传组件
 import FileUpload from "@/components/FileUpload"
@@ -64,6 +66,7 @@ Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)
 Vue.component('Editor', Editor)
 Vue.component('Number', Number)
+Vue.component("Region", Region);
 Vue.component('FileUpload', FileUpload)
 Vue.component('SingleImageUpload', SingleImageUpload)
 Vue.component('MultiImageUpload', MultiImageUpload)

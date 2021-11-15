@@ -6,7 +6,7 @@ import com.liuwa.common.utils.StringUtils;
 
 /**
  * 代码生成业务字段表 gen_table_column
- * 
+ *
  * @author liuwa
  */
 public class GenTableColumn extends BaseEntity
@@ -238,7 +238,7 @@ public class GenTableColumn extends BaseEntity
     }
 
     public String getGroupType() {
-        return groupType;
+        return groupType == null ? "" :  groupType.trim();
     }
 
     public void setGroupType(String groupType) {

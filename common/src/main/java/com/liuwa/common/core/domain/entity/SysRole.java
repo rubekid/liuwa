@@ -47,6 +47,9 @@ public class SysRole extends BaseEntity
     @Excel(name = "角色状态", readConverterExp = "0=正常,1=停用")
     private Integer status;
 
+    /** 是否是系统角色（不可删除） */
+    private boolean isSys;
+
     /** 用户是否存在此角色标识 默认不存在 */
     private boolean flag = false;
 
@@ -159,6 +162,14 @@ public class SysRole extends BaseEntity
     public void setStatus(Integer status)
     {
         this.status = status;
+    }
+
+    public boolean isSys() {
+        return isSys;
+    }
+
+    public void setSys(boolean sys) {
+        isSys = sys;
     }
 
     public boolean isFlag()

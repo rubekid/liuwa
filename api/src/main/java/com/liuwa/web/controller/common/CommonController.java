@@ -21,6 +21,7 @@ import com.liuwa.common.utils.file.FileUploadUtils;
 import com.liuwa.common.utils.file.FileUtils;
 import com.liuwa.framework.config.ServerConfig;
 
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -52,7 +53,16 @@ public class CommonController
                 throw new Exception(StringUtils.format("文件名称({})非法，不允许下载。 ", fileName));
             }
             String ext = fileName.substring(fileName.lastIndexOf("."));
-            String realFileName = new String(Base64.decodeBase64(fileName.substring(0, fileName.indexOf("_"))), StandardCharsets.UTF_8) + "_" + DateUtils.dateTimeNow() + ext;
+
+            String base64String = fileName.substring(0, fileName.indexOf("_"));
+            try{
+                base64String = URLDecoder.decode(base64String, StandardCharsets.UTF_8.toString());
+            }
+            catch (UnsupportedOperationException ex){
+                log.error(ex.getMessage(), ex);
+            }
+
+            String realFileName = new String(Base64.decodeBase64(base64String), StandardCharsets.UTF_8) + "_" + DateUtils.dateTimeNow() + ext;
             String filePath = SysConfig.getDownloadPath() + fileName;
 
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);

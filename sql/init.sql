@@ -111,6 +111,7 @@ create table sys_role (
   menu_check_strictly  tinyint(1)      default 1                  comment '菜单树选择项是否关联显示',
   dept_check_strictly  tinyint(1)      default 1                  comment '部门树选择项是否关联显示',
   status               tinyint(1)      not null                   comment '角色状态（1正常 0停用）',
+  is_sys               tinyint(1)      default 0                  comment '是否是系统角色（不可删除）',
   del_flag             tinyint(1)      default 0                  comment '删除标志（0代表存在 1代表删除）',
   create_by            bigint(20)      default 0                  comment '创建者',
   create_time          datetime                                   comment '创建时间',
