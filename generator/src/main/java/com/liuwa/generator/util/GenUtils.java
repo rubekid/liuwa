@@ -77,8 +77,13 @@ public class GenUtils
             }
         }
 
-        // 插入字段（默认所有字段都需要插入）
-        column.setInsert(GenConstants.REQUIRE);
+        // 插入字段
+        if(!arraysContains(GenConstants.COLUMNNAME_NOT_INSERT, columnName) && !column.isPk()){
+            column.setInsert(GenConstants.REQUIRE);
+        }
+        else{
+            column.setRequired(!GenConstants.REQUIRE);
+        }
 
         // 编辑字段
         if (!arraysContains(GenConstants.COLUMNNAME_NOT_EDIT, columnName) && !column.isPk())
@@ -91,10 +96,10 @@ public class GenUtils
             column.setList(GenConstants.REQUIRE);
         }
 
-        // 排序字段
+        // 排序字段(默认不排序)
         if (!arraysContains(GenConstants.COLUMNNAME_NOT_LIST, columnName) && !column.isPk())
         {
-            column.setSort(GenConstants.REQUIRE);
+            column.setSort(!GenConstants.REQUIRE);
         }
 
         // 查询字段
