@@ -457,7 +457,7 @@ create table sys_dict_type
 
 insert into sys_dict_type values(1,  '用户性别', 'sys_user_sex',        1, 'Number', 1, sysdate(), 1, null, '用户性别列表');
 insert into sys_dict_type values(2,  '菜单状态', 'sys_show_hide',       1, 'Number', 1, sysdate(), 1, null, '菜单状态列表');
-insert into sys_dict_type values(3,  '系统开关', 'sys_on_off',  		1, 'Number', 1, sysdate(), 1, null, '系统开关列表');
+insert into sys_dict_type values(3,  '系统开关', 'sys_on_off',  		   1, 'Number', 1, sysdate(), 1, null, '系统开关列表');
 insert into sys_dict_type values(4,  '任务状态', 'sys_job_status',      1, 'Number', 1, sysdate(), 1, null, '任务状态列表');
 insert into sys_dict_type values(5,  '任务分组', 'sys_job_group',       1, 'String', 1, sysdate(), 1, null, '任务分组列表');
 insert into sys_dict_type values(6,  '系统是否', 'sys_yes_no',          1, 'Number', 1, sysdate(), 1, null, '系统是否列表');
@@ -465,7 +465,8 @@ insert into sys_dict_type values(7,  '通知类型', 'sys_notice_type',     1, '
 insert into sys_dict_type values(8,  '通知状态', 'sys_notice_status',   1, 'Number', 1, sysdate(), 1, null, '通知状态列表');
 insert into sys_dict_type values(9,  '操作类型', 'sys_oper_type',       1, 'Number', 1, sysdate(), 1, null, '操作类型列表');
 insert into sys_dict_type values(10, '系统状态', 'sys_common_status',   1, 'Number', 1, sysdate(), 1, null, '登录状态列表');
-INSERT INTO sys_dict_type VALUES (11, '布尔是否', 'sys_true_false',     1, 'Boolean', 1, sysdate(), 1, NULL, '系统布尔值是否列表');
+INSERT INTO sys_dict_type VALUES(11, '布尔是否', 'sys_true_false',      1, 'Boolean', 1, sysdate(), 1, NULL, '系统布尔值是否列表');
+INSERT INTO sys_dict_type VALUES(12, '布尔开关', 'sys_switch',          1, 'Boolean', 1, sysdate(), 1, NULL, '系统布尔值开关列表');
 
 
 -- ----------------------------
@@ -519,9 +520,10 @@ insert into sys_dict_data values(25, 8,  '生成代码', '8',       'sys_oper_ty
 insert into sys_dict_data values(26, 9,  '清空数据', '9',       'sys_oper_type',       '',   'danger',  0, 1, 1, sysdate(), 1, null, '清空操作');
 insert into sys_dict_data values(27, 1,  '成功',     '1',       'sys_common_status',   '',   'primary', 0, 1, 1, sysdate(), 1, null, '正常状态');
 insert into sys_dict_data values(28, 2,  '失败',     '0',       'sys_common_status',   '',   'danger',  0, 1, 1, sysdate(), 1, null, '停用状态');
-insert into sys_dict_data values(29, 1,  '是',       'true',    'sys_yes_no',          '',   'primary', 1, 1, 1, sysdate(), 1, null, '布尔值是');
-insert into sys_dict_data values(30, 2,  '否',       'false',   'sys_yes_no',          '',   'danger',  0, 1, 1, sysdate(), 1, null, '布尔值否');
-
+insert into sys_dict_data values(29, 1,  '是',       'true',    'sys_true_false',      '',   'primary', 1, 1, 1, sysdate(), 1, null, '布尔值是');
+insert into sys_dict_data values(30, 2,  '否',       'false',   'sys_true_false',      '',   'danger',  0, 1, 1, sysdate(), 1, null, '布尔值否');
+insert into sys_dict_data values(31, 1,  '正常',      'true',    'sys_switch',          '',   'primary', 1, 1, 1, sysdate(), 1, null, '布尔值正常');
+insert into sys_dict_data values(32, 2,  '关闭',      'false',   'sys_switch',          '',   'danger',  0, 1, 1, sysdate(), 1, null, '布尔值关闭');
 
 -- ----------------------------
 -- 13、参数配置表

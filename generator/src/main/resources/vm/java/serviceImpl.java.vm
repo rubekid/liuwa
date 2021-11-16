@@ -23,6 +23,17 @@ import ${packageName}.service.${ClassName}Service;
 @Service
 public class ${ClassName}ServiceImpl extends CurdServiceImpl<${pkColumn.javaType}, ${ClassName}Dao, ${ClassName}> implements ${ClassName}Service{
 
+#foreach($column in $columns)
+#if($column.htmlType == 'switch')
+#set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+    public void update${AttrName}(${ClassName} ${className}){
+        super.updateSelective(${className});
+    }
+#end
+#end
+
+
+
 #if($table.sub)
 
     @Resource
@@ -115,4 +126,6 @@ public class ${ClassName}ServiceImpl extends CurdServiceImpl<${pkColumn.javaType
     }
 
 #end
+
+
 }

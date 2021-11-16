@@ -103,6 +103,20 @@ public class ${ClassName}Controller extends BaseController{
         return AjaxResult.success();
     }
 
+#foreach($column in $columns)
+#if($column.htmlType == 'switch')
+#set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+    @PreAuthorize("@ss.hasPermi('${permissionPrefix}:edit')")
+    @Log(title = "${functionName}", businessType = BusinessType.UPDATE)
+    @PutMapping("/change${AttrName}")
+    public AjaxResult change${AttrName}(@RequestBody ${ClassName} ${className}){
+        ${className}Service.update${AttrName}(${className});
+        return AjaxResult.success();
+    }
+#end
+#end
+
+
     /**
      * 删除${functionName}
      */

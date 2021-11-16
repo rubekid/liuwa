@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.liuwa.common.annotation.DefaultValue;
 import com.liuwa.common.annotation.Excel;
+import java.util.Date;
 #if($table.crud || $table.sub)
 import com.liuwa.common.core.domain.BaseEntity;
 #elseif($table.tree)
@@ -27,6 +28,7 @@ import com.liuwa.common.core.domain.TreeEntity;
 public class ${ClassName} extends ${Entity}<${pkColumn.javaType}>{
     private static final long serialVersionUID = 1L;
 
+#set($columnIndex = 0)
 #foreach ($column in $columns)
 #if(!$table.isSuperColumn($column.javaField))
     /** $column.columnComment */
@@ -38,12 +40,18 @@ public class ${ClassName} extends ${Entity}<${pkColumn.javaType}>{
 #set($comment=$column.columnComment)
 #end
 #if($parentheseIndex != -1)
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()", sort=$columnIndex)
 #elseif($column.javaType == 'Date')
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "${comment}", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "${comment}", width = 30, dateFormat = "yyyy-MM-dd", sort=$columnIndex)
+#elseif($column.htmlType == "switch")
+    @Excel(name = "${comment}" dictType = "sys_switch", sort=$columnIndex)
+#elseif($column.htmlType == "singleImage")
+    @Excel(name = "${comment}", cellType = Excel.ColumnType.IMAGE, sort=$columnIndex)
+#elseif($column.dictType != "")
+    @Excel(name = "${comment}" dictType = "$column.dictType", sort=$columnIndex)
 #else
-    @Excel(name = "${comment}")
+    @Excel(name = "${comment}", sort=$columnIndex)
 #end
 #end
 #if(!$column.required && !$column.pk && $column.insert)
@@ -51,6 +59,7 @@ public class ${ClassName} extends ${Entity}<${pkColumn.javaType}>{
 #end
     private $column.javaType $column.javaField;
 
+#set($columnIndex = $columnIndex + 10)
 #end
 #end
 #if($table.sub)
@@ -75,6 +84,30 @@ public class ${ClassName} extends ${Entity}<${pkColumn.javaType}>{
         return $column.javaField;
     }
 
+#end
+#end
+
+#foreach ($column in $columns)
+#if($table.isSuperColumn($column.javaField) && $column.list)
+#if($column.javaField.length() > 2 && $column.javaField.substring(1,2).matches("[A-Z]"))
+#set($AttrName=$column.javaField)
+#else
+#set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+#end
+#if($column.javaType == 'Date')
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "${column.columnComment}", width = 30, dateFormat = "yyyy-MM-dd", sort=$columnIndex)
+#elseif($column.dictType != "")
+    @Excel(name = "${column.columnComment}" dictType = "$column.dictType", sort=$columnIndex)
+#else
+    @Excel(name = "${column.columnComment}", sort=$columnIndex)
+#end
+    public $column.javaType get${AttrName}()
+    {
+        return super.get${AttrName}();
+    }
+
+#set($columnIndex = $columnIndex + 10)
 #end
 #end
 

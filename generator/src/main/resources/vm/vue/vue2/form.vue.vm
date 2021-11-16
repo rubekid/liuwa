@@ -1,416 +1,416 @@
 <template>
 
-  <el-dialog :title="title"
-             :close-on-click-modal="false"
-             :close-on-press-escape="false"
-             :visible.sync="open" custom-class="form-dialog #if($formSize!= "") form-dialog-$formSize#end" append-to-body>
-    <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        #foreach($column in $columns)
-            #set($field=$column.javaField)
-            #if($column.insert && !$column.pk)
-                #if(($column.usableColumn) || (!$column.superColumn))
-                    #set($parentheseIndex=$column.columnComment.indexOf("（"))
-                    #if($parentheseIndex != -1)
-                        #set($comment=$column.columnComment.substring(0, $parentheseIndex))
-                    #else
-                        #set($comment=$column.columnComment)
+    <el-dialog :title="title"
+               :close-on-click-modal="false"
+               :close-on-press-escape="false"
+               :visible.sync="open" custom-class="form-dialog #if($formSize!= "") form-dialog-$formSize#end" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+#foreach($column in $columns)
+#set($field=$column.javaField)
+#if($column.insert && !$column.pk)
+#if(($column.usableColumn) || (!$column.superColumn))
+#set($parentheseIndex=$column.columnComment.indexOf("（"))
+#if($parentheseIndex != -1)
+#set($comment=$column.columnComment.substring(0, $parentheseIndex))
+#else
+#set($comment=$column.columnComment)
+#end
+#set($dictType=$column.dictType)
+#if($column.htmlType == "input")
+        <el-form-item label="${comment}" prop="${field}">
+          <el-input v-model="form.${field}" placeholder="请输入${comment}" />
+        </el-form-item>
+#elseif($column.htmlType == "money")
+        <el-form-item label="${comment}" prop="${field}">
+          <number type="money" v-model="form.${field}" placeholder="请输入${comment}" />
+        </el-form-item>
+#elseif($column.htmlType == "integer")
+        <el-form-item label="${comment}" prop="${field}">
+          <number type="integer" v-model="form.${field}" placeholder="请输入${comment}" />
+        </el-form-item>
+#elseif($column.htmlType == "decimal")
+        <el-form-item label="${comment}" prop="${field}">
+          <number type="decimal" v-model="form.${field}" placeholder="请输入${comment}" />
+        </el-form-item>
+#elseif($column.htmlType == "percent")
+        <el-form-item label="${comment}" prop="${field}">
+          <number type="percent" v-model="form.${field}" placeholder="请输入${comment}" />
+        </el-form-item>
+#elseif($column.htmlType == "ratio")
+        <el-form-item label="${comment}" prop="${field}">
+          <number type="ratio" v-model="form.${field}" placeholder="请输入${comment}" />
+        </el-form-item>
+#elseif($column.htmlType == "rate")
+        <el-form-item label="${comment}" prop="${field}">
+            <el-rate v-model="form.${field}"></el-rate>
+        </el-form-item>
+#elseif($column.htmlType == "color")
+         <el-form-item label="${comment}" prop="${field}">
+             <el-color-picker v-model="form.${field}"></el-color-picker>
+         </el-form-item>
+#elseif($column.htmlType == "switch")
+          <el-form-item label="${comment}" prop="${field}">
+              <el-switch
+                      v-model="form.${field}">
+              </el-switch>
+          </el-form-item>
+
+#elseif($column.htmlType == "singleImage")
+        <el-form-item label="${comment}" prop="${field}">
+          <single-image-upload v-model="form.${field}"/>
+        </el-form-item>
+#elseif($column.htmlType == "multiImage")
+        <el-form-item label="${comment}" prop="${field}">
+          <multi-image-upload v-model="form.${field}"/>
+        </el-form-item>
+#elseif($column.htmlType == "fileUpload")
+        <el-form-item label="${comment}">
+          <fileUpload v-model="form.${field}"/>
+        </el-form-item>
+#elseif($column.htmlType == "editor")
+        <el-form-item label="${comment}">
+          <editor v-model="form.${field}" :min-height="192"/>
+        </el-form-item>
+#elseif($column.htmlType == "select" && "" != $dictType)
+        <el-form-item label="${comment}" prop="${field}">
+          <el-select v-model="form.${field}" placeholder="请选择${comment}">
+            <el-option
+              v-for="dict in sysDictMap.${dictType}"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="dict.dictValue"
+
+            ></el-option>
+          </el-select>
+        </el-form-item>
+#elseif($column.htmlType == "select" && $dictType)
+        <el-form-item label="${comment}" prop="${field}">
+          <el-select v-model="form.${field}" placeholder="请选择${comment}">
+            <el-option label="请选择字典生成" value="" />
+          </el-select>
+        </el-form-item>
+#elseif($column.htmlType == "checkbox" && "" != $dictType)
+        <el-form-item label="${comment}">
+          <el-checkbox-group v-model="form.${field}">
+            <el-checkbox
+              v-for="dict in sysDictMap.${dictType}"
+              :key="dict.dictValue"
+              :label="dict.dictValue">
+              {{dict.dictLabel}}
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+#elseif($column.htmlType == "checkbox" && $dictType)
+        <el-form-item label="${comment}">
+          <el-checkbox-group v-model="form.${field}">
+            <el-checkbox>请选择字典生成</el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+#elseif($column.htmlType == "radio" && "" != $dictType)
+        <el-form-item label="${comment}">
+          <el-radio-group v-model="form.${field}">
+            <el-radio
+              v-for="dict in sysDictMap.${dictType}"
+              :key="dict.dictValue"
+              :label="dict.dictValue"
+
+            >{{dict.dictLabel}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+#elseif($column.htmlType == "radio" && $dictType)
+        <el-form-item label="${comment}">
+          <el-radio-group v-model="form.${field}">
+            <el-radio label="1">请选择字典生成</el-radio>
+          </el-radio-group>
+        </el-form-item>
+#elseif($column.htmlType == "date")
+        <el-form-item label="${comment}" prop="${field}">
+          <el-date-picker clearable size="small"
+            v-model="form.${field}"
+            type="date"
+            :editable="false"
+            value-format="yyyy-MM-dd"
+            placeholder="选择${comment}">
+          </el-date-picker>
+        </el-form-item>
+#elseif($column.htmlType == "datetime")
+        <el-form-item label="${comment}" prop="${field}">
+          <el-date-picker clearable size="small"
+            v-model="form.${field}"
+            type="datetime"
+            :editable="false"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            default-time="00:00:00"
+            placeholder="选择${comment}">
+          </el-date-picker>
+        </el-form-item>
+#elseif($column.htmlType == "province")
+#set($groupType=$column.groupType)
+         <el-form-item label="${groupType}区域" prop="region">
+           <region
+               :province.sync="form.${field}"
+#foreach($tcolumn in $columns)
+#if($tcolumn.groupType == $groupType && $tcolumn.htmlType == "city")
+               :city.sync="form.${tcolumn.javaField}"
+#end
+#if($tcolumn.groupType == $groupType && $tcolumn.htmlType == "district")
+               :district.sync="form.${tcolumn.javaField}"
+#end
+#end
+           ></region>
+          </el-form-item>
+#elseif($column.htmlType == "textarea")
+        <el-form-item label="${comment}" prop="${field}">
+          <el-input v-model="form.${field}" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+#end
+#end
+#end
+#end
+#if($table.sub)
+        <el-divider content-position="center">${subTable.functionName}信息</el-divider>
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd${subClassName}">添加</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDelete${subClassName}">删除</el-button>
+          </el-col>
+        </el-row>
+        <el-table :data="${subclassName}List" :row-class-name="row${subClassName}Index" @selection-change="handle${subClassName}SelectionChange" ref="${subclassName}">
+          <el-table-column type="selection" width="50" align="center" />
+          <el-table-column label="序号" align="center" prop="index" width="50"/>
+#foreach($column in $subTable.columns)
+#set($javaField=$column.javaField)
+#set($parentheseIndex=$column.columnComment.indexOf("（"))
+#if($parentheseIndex != -1)
+#set($comment=$column.columnComment.substring(0, $parentheseIndex))
+#else
+#set($comment=$column.columnComment)
+#end
+#if($column.pk || $javaField == ${subTableFkclassName})
+#elseif($column.list && "" != $javaField)
+#set($dictType=$column.dictType)
+          <el-table-column label="$comment" prop="${javaField}">
+            <template slot-scope="scope">
+#if($column.htmlType == "input")
+              <el-input v-model="scope.row.$javaField" placeholder="请输入${comment}" />
+#elseif($column.htmlType == "money")
+              <number type="money" v-model="scope.row.$javaField" placeholder="请输入${comment}" />
+#elseif($column.htmlType == "integer")
+              <number type="integer" v-model="scope.row.$javaField" placeholder="请输入${comment}" />
+#elseif($column.htmlType == "decimal")
+              <number type="decimal" v-model="scope.row.$javaField" placeholder="请输入${comment}" />
+#elseif($column.htmlType == "percent")
+              <number type="percent" v-model="scope.row.$javaField" placeholder="请输入${comment}" />
+#elseif($column.htmlType == "ratio")
+              <number type="ratio" v-model="scope.row.$javaField" placeholder="请输入${comment}" />
+#elseif($column.htmlType == "rate")
+              <el-rate v-model="scope.row.$javaField"></el-rate>
+#elseif($column.htmlType == "color")
+              <el-color-picker v-model="scope.row.$javaField"></el-color-picker>
+#elseif($column.htmlType == "switch")
+              <el-switch v-model="scope.row.$javaField"></el-switch>
+#elseif($column.htmlType == "singleImage")
+              <single-image-upload v-model="scope.row.$javaField"/>
+#elseif($column.htmlType == "multiImage")
+              <multi-image-upload v-model="scope.row.$javaField"/>
+#elseif($column.htmlType == "fileUpload")
+              <fileUpload v-model="scope.row.$javaField"/>
+#elseif($column.htmlType == "editor")
+              <editor v-model="scope.row.$javaField" :min-height="192"/>
+#elseif($column.htmlType == "select" && "" != $dictType)
+              <el-select v-model="scope.row.$javaField" placeholder="请选择${comment}">
+                  <el-option
+                      v-for="dict in sysDictMap.${dictType}"
+                      :key="dict.dictValue"
+                      :label="dict.dictLabel"
+                      :value="dict.dictValue"
+
+                  ></el-option>
+              </el-select>
+#elseif($column.htmlType == "select" && $dictType)
+              <el-select v-model="scope.row.$javaField" placeholder="请选择${comment}">
+                  <el-option label="请选择字典生成" value="" />
+              </el-select>
+#elseif($column.htmlType == "checkbox" && "" != $dictType)
+              <el-checkbox-group v-model="scope.row.$javaField">
+                  <el-checkbox
+                      v-for="dict in sysDictMap.${dictType}"
+                      :key="dict.dictValue"
+                      :label="dict.dictValue">
+                    {{dict.dictLabel}}
+                  </el-checkbox>
+              </el-checkbox-group>
+#elseif($column.htmlType == "checkbox" && $dictType)
+              <el-checkbox-group v-model="scope.row.$javaField">
+                <el-checkbox>请选择字典生成</el-checkbox>
+              </el-checkbox-group>
+#elseif($column.htmlType == "radio" && "" != $dictType)
+              <el-radio-group v-model="scope.row.$javaField">
+                  <el-radio
+                      v-for="dict in sysDictMap.${dictType}"
+                      :key="dict.dictValue"
+                      :label="dict.dictValue"
+                  >{{dict.dictLabel}}</el-radio>
+              </el-radio-group>
+#elseif($column.htmlType == "radio" && $dictType)
+              <el-radio-group v-model="scope.row.$javaField">
+                     <el-radio label="1">请选择字典生成</el-radio>
+              </el-radio-group>
+#elseif($column.htmlType == "date")
+              <el-date-picker clearable size="large"
+                    v-model="scope.row.$javaField"
+                    type="date"
+                    :editable="false"
+                    value-format="yyyy-MM-dd"
+                    placeholder="选择${comment}">
+              </el-date-picker>
+#elseif($column.htmlType == "datetime")
+                <el-date-picker clearable size="large"
+                  v-model="scope.row.$javaField"
+                  type="datetime"
+                  :editable="false"
+                  default-time="00:00:00"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  placeholder="选择${comment}">
+                </el-date-picker>
+#elseif($column.htmlType == "province")
+    #set($groupType=$column.groupType)
+             <region
+                :province.sync="scope.row.$javaField"
+                #foreach($tcolumn in $columns)
+                    #if($tcolumn.groupType == $groupType && $tcolumn.htmlType == "city")
+                :city.sync="scope.row.${tcolumn.javaField}"
                     #end
-                    #set($dictType=$column.dictType)
-                    #if($column.htmlType == "input")
-                      <el-form-item label="${comment}" prop="${field}">
-                        <el-input v-model="form.${field}" placeholder="请输入${comment}" />
-                      </el-form-item>
-                    #elseif($column.htmlType == "money")
-                      <el-form-item label="${comment}" prop="${field}">
-                        <number type="money" v-model="form.${field}" placeholder="请输入${comment}" />
-                      </el-form-item>
-                    #elseif($column.htmlType == "integer")
-                      <el-form-item label="${comment}" prop="${field}">
-                        <number type="integer" v-model="form.${field}" placeholder="请输入${comment}" />
-                      </el-form-item>
-                    #elseif($column.htmlType == "decimal")
-                      <el-form-item label="${comment}" prop="${field}">
-                        <number type="decimal" v-model="form.${field}" placeholder="请输入${comment}" />
-                      </el-form-item>
-                    #elseif($column.htmlType == "percent")
-                      <el-form-item label="${comment}" prop="${field}">
-                        <number type="percent" v-model="form.${field}" placeholder="请输入${comment}" />
-                      </el-form-item>
-                    #elseif($column.htmlType == "ratio")
-                      <el-form-item label="${comment}" prop="${field}">
-                        <number type="ratio" v-model="form.${field}" placeholder="请输入${comment}" />
-                      </el-form-item>
-                    #elseif($column.htmlType == "rate")
-                      <el-form-item label="${comment}" prop="${field}">
-                        <el-rate v-model="form.${field}"></el-rate>
-                      </el-form-item>
-                    #elseif($column.htmlType == "color")
-                      <el-form-item label="${comment}" prop="${field}">
-                        <el-color-picker v-model="form.${field}"></el-color-picker>
-                      </el-form-item>
-                    #elseif($column.htmlType == "switch")
-                      <el-form-item label="${comment}" prop="${field}">
-                        <el-switch
-                            v-model="form.${field}">
-                        </el-switch>
-                      </el-form-item>
-
-                    #elseif($column.htmlType == "singleImage")
-                      <el-form-item label="${comment}" prop="${field}">
-                        <single-image-upload v-model="form.${field}"/>
-                      </el-form-item>
-                    #elseif($column.htmlType == "multiImage")
-                      <el-form-item label="${comment}" prop="${field}">
-                        <multi-image-upload v-model="form.${field}"/>
-                      </el-form-item>
-                    #elseif($column.htmlType == "fileUpload")
-                      <el-form-item label="${comment}">
-                        <fileUpload v-model="form.${field}"/>
-                      </el-form-item>
-                    #elseif($column.htmlType == "editor")
-                      <el-form-item label="${comment}">
-                        <editor v-model="form.${field}" :min-height="192"/>
-                      </el-form-item>
-                    #elseif($column.htmlType == "select" && "" != $dictType)
-                      <el-form-item label="${comment}" prop="${field}">
-                        <el-select v-model="form.${field}" placeholder="请选择${comment}">
-                          <el-option
-                              v-for="dict in sysDictMap.${dictType}"
-                              :key="dict.dictValue"
-                              :label="dict.dictLabel"
-                              :value="dict.dictValue"
-
-                          ></el-option>
-                        </el-select>
-                      </el-form-item>
-                    #elseif($column.htmlType == "select" && $dictType)
-                      <el-form-item label="${comment}" prop="${field}">
-                        <el-select v-model="form.${field}" placeholder="请选择${comment}">
-                          <el-option label="请选择字典生成" value="" />
-                        </el-select>
-                      </el-form-item>
-                    #elseif($column.htmlType == "checkbox" && "" != $dictType)
-                      <el-form-item label="${comment}">
-                        <el-checkbox-group v-model="form.${field}">
-                          <el-checkbox
-                              v-for="dict in sysDictMap.${dictType}"
-                              :key="dict.dictValue"
-                              :label="dict.dictValue">
-                            {{dict.dictLabel}}
-                          </el-checkbox>
-                        </el-checkbox-group>
-                      </el-form-item>
-                    #elseif($column.htmlType == "checkbox" && $dictType)
-                      <el-form-item label="${comment}">
-                        <el-checkbox-group v-model="form.${field}">
-                          <el-checkbox>请选择字典生成</el-checkbox>
-                        </el-checkbox-group>
-                      </el-form-item>
-                    #elseif($column.htmlType == "radio" && "" != $dictType)
-                      <el-form-item label="${comment}">
-                        <el-radio-group v-model="form.${field}">
-                          <el-radio
-                              v-for="dict in sysDictMap.${dictType}"
-                              :key="dict.dictValue"
-                              :label="dict.dictValue"
-
-                          >{{dict.dictLabel}}</el-radio>
-                        </el-radio-group>
-                      </el-form-item>
-                    #elseif($column.htmlType == "radio" && $dictType)
-                      <el-form-item label="${comment}">
-                        <el-radio-group v-model="form.${field}">
-                          <el-radio label="1">请选择字典生成</el-radio>
-                        </el-radio-group>
-                      </el-form-item>
-                    #elseif($column.htmlType == "date")
-                      <el-form-item label="${comment}" prop="${field}">
-                        <el-date-picker clearable size="small"
-                                        v-model="form.${field}"
-                                        type="date"
-                                        :editable="false"
-                                        value-format="yyyy-MM-dd"
-                                        placeholder="选择${comment}">
-                        </el-date-picker>
-                      </el-form-item>
-                    #elseif($column.htmlType == "datetime")
-                      <el-form-item label="${comment}" prop="${field}">
-                        <el-date-picker clearable size="small"
-                                        v-model="form.${field}"
-                                        type="datetime"
-                                        :editable="false"
-                                        value-format="yyyy-MM-dd HH:mm:ss"
-                                        default-time="00:00:00"
-                                        placeholder="选择${comment}">
-                        </el-date-picker>
-                      </el-form-item>
-                    #elseif($column.htmlType == "province")
-                        #set($groupType=$column.groupType)
-                      <el-form-item label="${groupType}区域" prop="region">
-                        <region
-                            :province.sync="form.${field}"
-                            #foreach($tcolumn in $columns)
-                                #if($tcolumn.groupType == $groupType && $tcolumn.htmlType == "city")
-                            :city.sync="form.${tcolumn.javaField}"
-                                #end
-                                #if($tcolumn.groupType == $groupType && $tcolumn.htmlType == "district")
-                            :district.sync="form.${tcolumn.javaField}"
-                                #end
-                            #end
-                        ></region>
-                      </el-form-item>
-                    #elseif($column.htmlType == "textarea")
-                      <el-form-item label="${comment}" prop="${field}">
-                        <el-input v-model="form.${field}" type="textarea" placeholder="请输入内容" />
-                      </el-form-item>
+                    #if($tcolumn.groupType == $groupType && $tcolumn.htmlType == "district")
+                :district.sync="scope.row.${tcolumn.javaField}"
                     #end
                 #end
-            #end
-        #end
-        #if($table.sub)
-          <el-divider content-position="center">${subTable.functionName}信息</el-divider>
-          <el-row :gutter="10" class="mb8">
-            <el-col :span="1.5">
-              <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAdd${subClassName}">添加</el-button>
-            </el-col>
-            <el-col :span="1.5">
-              <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDelete${subClassName}">删除</el-button>
-            </el-col>
-          </el-row>
-          <el-table :data="${subclassName}List" :row-class-name="row${subClassName}Index" @selection-change="handle${subClassName}SelectionChange" ref="${subclassName}">
-            <el-table-column type="selection" width="50" align="center" />
-            <el-table-column label="序号" align="center" prop="index" width="50"/>
-              #foreach($column in $subTable.columns)
-                  #set($javaField=$column.javaField)
-                  #set($parentheseIndex=$column.columnComment.indexOf("（"))
-                  #if($parentheseIndex != -1)
-                      #set($comment=$column.columnComment.substring(0, $parentheseIndex))
-                  #else
-                      #set($comment=$column.columnComment)
-                  #end
-                  #if($column.pk || $javaField == ${subTableFkclassName})
-                  #elseif($column.list && "" != $javaField)
-                      #set($dictType=$column.dictType)
-                    <el-table-column label="$comment" prop="${javaField}">
-                      <template slot-scope="scope">
-                          #if($column.htmlType == "input")
-                            <el-input v-model="scope.row.$javaField" placeholder="请输入${comment}" />
-                          #elseif($column.htmlType == "money")
-                            <number type="money" v-model="scope.row.$javaField" placeholder="请输入${comment}" />
-                          #elseif($column.htmlType == "integer")
-                            <number type="integer" v-model="scope.row.$javaField" placeholder="请输入${comment}" />
-                          #elseif($column.htmlType == "decimal")
-                            <number type="decimal" v-model="scope.row.$javaField" placeholder="请输入${comment}" />
-                          #elseif($column.htmlType == "percent")
-                            <number type="percent" v-model="scope.row.$javaField" placeholder="请输入${comment}" />
-                          #elseif($column.htmlType == "ratio")
-                            <number type="ratio" v-model="scope.row.$javaField" placeholder="请输入${comment}" />
-                          #elseif($column.htmlType == "rate")
-                            <el-rate v-model="scope.row.$javaField"></el-rate>
-                          #elseif($column.htmlType == "color")
-                            <el-color-picker v-model="scope.row.$javaField"></el-color-picker>
-                          #elseif($column.htmlType == "switch")
-                            <el-switch v-model="scope.row.$javaField"></el-switch>
-                          #elseif($column.htmlType == "singleImage")
-                            <single-image-upload v-model="scope.row.$javaField"/>
-                          #elseif($column.htmlType == "multiImage")
-                            <multi-image-upload v-model="scope.row.$javaField"/>
-                          #elseif($column.htmlType == "fileUpload")
-                            <fileUpload v-model="scope.row.$javaField"/>
-                          #elseif($column.htmlType == "editor")
-                            <editor v-model="scope.row.$javaField" :min-height="192"/>
-                          #elseif($column.htmlType == "select" && "" != $dictType)
-                            <el-select v-model="scope.row.$javaField" placeholder="请选择${comment}">
-                              <el-option
-                                  v-for="dict in sysDictMap.${dictType}"
-                                  :key="dict.dictValue"
-                                  :label="dict.dictLabel"
-                                  :value="dict.dictValue"
+             ></region>
 
-                              ></el-option>
-                            </el-select>
-                          #elseif($column.htmlType == "select" && $dictType)
-                            <el-select v-model="scope.row.$javaField" placeholder="请选择${comment}">
-                              <el-option label="请选择字典生成" value="" />
-                            </el-select>
-                          #elseif($column.htmlType == "checkbox" && "" != $dictType)
-                            <el-checkbox-group v-model="scope.row.$javaField">
-                              <el-checkbox
-                                  v-for="dict in sysDictMap.${dictType}"
-                                  :key="dict.dictValue"
-                                  :label="dict.dictValue">
-                                {{dict.dictLabel}}
-                              </el-checkbox>
-                            </el-checkbox-group>
-                          #elseif($column.htmlType == "checkbox" && $dictType)
-                            <el-checkbox-group v-model="scope.row.$javaField">
-                              <el-checkbox>请选择字典生成</el-checkbox>
-                            </el-checkbox-group>
-                          #elseif($column.htmlType == "radio" && "" != $dictType)
-                            <el-radio-group v-model="scope.row.$javaField">
-                              <el-radio
-                                  v-for="dict in sysDictMap.${dictType}"
-                                  :key="dict.dictValue"
-                                  :label="dict.dictValue"
-                              >{{dict.dictLabel}}</el-radio>
-                            </el-radio-group>
-                          #elseif($column.htmlType == "radio" && $dictType)
-                            <el-radio-group v-model="scope.row.$javaField">
-                              <el-radio label="1">请选择字典生成</el-radio>
-                            </el-radio-group>
-                          #elseif($column.htmlType == "date")
-                            <el-date-picker clearable size="large"
-                                            v-model="scope.row.$javaField"
-                                            type="date"
-                                            :editable="false"
-                                            value-format="yyyy-MM-dd"
-                                            placeholder="选择${comment}">
-                            </el-date-picker>
-                          #elseif($column.htmlType == "datetime")
-                            <el-date-picker clearable size="large"
-                                            v-model="scope.row.$javaField"
-                                            type="datetime"
-                                            :editable="false"
-                                            default-time="00:00:00"
-                                            value-format="yyyy-MM-dd HH:mm:ss"
-                                            placeholder="选择${comment}">
-                            </el-date-picker>
-                          #elseif($column.htmlType == "province")
-                              #set($groupType=$column.groupType)
-                            <region
-                                :province.sync="scope.row.$javaField"
-                                #foreach($tcolumn in $columns)
-                                    #if($tcolumn.groupType == $groupType && $tcolumn.htmlType == "city")
-                                :city.sync="scope.row.${tcolumn.javaField}"
-                                    #end
-                                    #if($tcolumn.groupType == $groupType && $tcolumn.htmlType == "district")
-                                :district.sync="scope.row.${tcolumn.javaField}"
-                                    #end
-                                #end
-                            ></region>
-
-                          #elseif($column.htmlType == "textarea")
-                            <el-input v-model="scope.row.$javaField" type="textarea" placeholder="请输入内容" />
-                          #end
-                      </template>
-                    </el-table-column>
-                  #end
-              #end
-          </el-table>
-        #end
-    </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="submitForm">确 定</el-button>
-      <el-button @click="cancel">取 消</el-button>
-    </div>
-  </el-dialog>
+#elseif($column.htmlType == "textarea")
+              <el-input v-model="scope.row.$javaField" type="textarea" placeholder="请输入内容" />
+#end
+            </template>
+          </el-table-column>
+#end
+#end
+        </el-table>
+#end
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
 
 </template>
 
 <script>
-  import { get${BusinessName}, add${BusinessName}, update${BusinessName} } from "@/api/${moduleName}/${businessName}";
-  import { Loading } from 'element-ui';
+import { get${BusinessName}, add${BusinessName}, update${BusinessName} } from "@/api/${moduleName}/${businessName}";
+import { Loading } from 'element-ui';
 
-  export default {
-    name: "${BusinessName}Form",
-    props:{
-      item:{
+export default {
+  name: "${BusinessName}Form",
+  props:{
+    item:{
         type: Object
+    }
+  },
+#if(${dicts} != '')
+  dicts: [${dicts}],
+#end
+  data() {
+    return {
+      // 表单初始化完成
+      formInited: false,
+      // 页面/弹窗标题
+      title: '',
+#foreach ($column in $columns)
+#if($column.insert && !$column.pk)
+#set($parentheseIndex=$column.columnComment.indexOf("（"))
+#if($parentheseIndex != -1)
+#set($comment=$column.columnComment.substring(0, $parentheseIndex))
+#else
+#set($comment=$column.columnComment)
+#end
+#end
+#end
+#if($table.sub)
+#foreach($column in $subTable.columns)
+#if($column.insert && !$column.pk)
+#set($parentheseIndex=$column.columnComment.indexOf("（"))
+#if($parentheseIndex != -1)
+#set($comment=$column.columnComment.substring(0, $parentheseIndex))
+#else
+#set($comment=$column.columnComment)
+#end
+#end
+#end
+#end
+      // 是否显示弹出层
+      open: false,
+      // 表单参数
+      form: {},
+#if($table.sub)
+      // 子表选中数据
+      checked${subClassName}: [],
+
+      // ${subTable.functionName}表格数据
+      ${subclassName}List: [],
+#end
+      // 表单校验
+      rules: {
+#foreach ($column in $columns)
+#if($column.required)
+#set($parentheseIndex=$column.columnComment.indexOf("（"))
+#if($parentheseIndex != -1)
+#set($comment=$column.columnComment.substring(0, $parentheseIndex))
+#else
+#set($comment=$column.columnComment)
+#end
+        $column.javaField: [
+          { required: true, message: "$comment不能为空", trigger: #if($column.htmlType == "select")"change"#else"blur"#end }
+        ]#if($velocityCount != $columns.size()),#end
+
+#end
+#end
       }
-    },
-      #if(${dicts} != '')
-        dicts: [${dicts}],
-      #end
-    data() {
-      return {
-        // 表单初始化完成
-        formInited: false,
-        // 页面/弹窗标题
-        title: '',
-          #foreach ($column in $columns)
-              #if($column.insert && !$column.pk)
-                  #set($parentheseIndex=$column.columnComment.indexOf("（"))
-                  #if($parentheseIndex != -1)
-                      #set($comment=$column.columnComment.substring(0, $parentheseIndex))
-                  #else
-                      #set($comment=$column.columnComment)
-                  #end
-              #end
-          #end
-          #if($table.sub)
-              #foreach($column in $subTable.columns)
-                  #if($column.insert && !$column.pk)
-                      #set($parentheseIndex=$column.columnComment.indexOf("（"))
-                      #if($parentheseIndex != -1)
-                          #set($comment=$column.columnComment.substring(0, $parentheseIndex))
-                      #else
-                          #set($comment=$column.columnComment)
-                      #end
-                  #end
-              #end
-          #end
-        // 是否显示弹出层
-        open: false,
-        // 表单参数
-        form: {},
-          #if($table.sub)
-            // 子表选中数据
-            checked${subClassName}: [],
-
-            // ${subTable.functionName}表格数据
-                  ${subclassName}List: [],
-          #end
-        // 表单校验
-        rules: {
-            #foreach ($column in $columns)
-                #if($column.required)
-                    #set($parentheseIndex=$column.columnComment.indexOf("（"))
-                    #if($parentheseIndex != -1)
-                        #set($comment=$column.columnComment.substring(0, $parentheseIndex))
-                    #else
-                        #set($comment=$column.columnComment)
-                    #end
-                        $column.javaField: [
-                    { required: true, message: "$comment不能为空", trigger: #if($column.htmlType == "select")"change"#else"blur"#end }
-                  ]#if($velocityCount != $columns.size()),#end
-
-                #end
-            #end
+    };
+  },
+  created() {
+    this.open = true;
+  },
+  mounted(){
+    // 获取 from并加入loading，避免网络差造成假死现象
+    this.$nextTick(() => {
+      if(this.$refs.form){
+        if(!this.dataInited){
+          this.loadingInstance = Loading.service({
+            target: this.$refs.form.$el,
+            fullscreen: false
+          });
         }
-      };
-    },
-    created() {
-      this.open = true;
-    },
-    mounted(){
-      // 获取 from并加入loading，避免网络差造成假死现象
-      this.$nextTick(() => {
-        if(this.$refs.form){
-          if(!this.dataInited){
-            this.loadingInstance = Loading.service({
-              target: this.$refs.form.$el,
-              fullscreen: false
-            });
-          }
-        }
-      })
+      }
+    })
 
-      if(this.item.${pkColumn.javaField}){
-        this.title = "修改${functionName}";
-        this.handleUpdate(this.item.${pkColumn.javaField});
-      }
-      else{
-        this.title = "添加${functionName}";
-        this.handleAdd();
-        this.formInited = true;
-      }
-    },
-    computed:{
-      dataInited(){
-        return this.formInited;
-      }
-    },
-    watch:{
+    if(this.item.${pkColumn.javaField}){
+      this.title = "修改${functionName}";
+      this.handleUpdate(this.item.${pkColumn.javaField});
+    }
+    else{
+      this.title = "添加${functionName}";
+      this.handleAdd();
+      this.formInited = true;
+    }
+  },
+  computed:{
+    dataInited(){
+      return this.formInited;
+    }
+  },
+  watch:{
       open(newVal){
         if(!newVal){
           this.$emit('update:item', null);
@@ -421,131 +421,134 @@
           this.loadingInstance.close();
         }
       }
+  },
+  methods: {
+
+    // 取消按钮
+    cancel() {
+      this.open = false;
+      this.reset();
     },
-    methods: {
+    // 表单重置
+    reset() {
+      this.form = {
+#foreach ($column in $columns)
+#if($column.htmlType == "radio")
+        $column.javaField: #if($column.javaType == "Integer" || $column.javaType == "Long")1#else"1"#end#if($velocityCount != $columns.size()),#end
 
-      // 取消按钮
-      cancel() {
-        this.open = false;
-        this.reset();
-      },
-      // 表单重置
-      reset() {
-        this.form = {
-            #foreach ($column in $columns)
-                #if($column.htmlType == "radio")
-                    $column.javaField: #if($column.javaType == "Integer" || $column.javaType == "Long")1#else"1"#end#if($velocityCount != $columns.size()),#end
+#elseif($column.htmlType == "switch")
+        $column.javaField: #if($column.javaType == "Boolean")true#else 1#end#if($velocityCount != $columns.size()),#end
 
-                #elseif($column.htmlType == "checkbox")
-                        $column.javaField: []#if($velocityCount != $columns.size()),#end
+#elseif($column.htmlType == "checkbox")
+        $column.javaField: []#if($velocityCount != $columns.size()),#end
 
-                #else
-                        $column.javaField: null#if($velocityCount != $columns.size()),#end
+#else
+        $column.javaField: null#if($velocityCount != $columns.size()),#end
 
-                #end
-            #end
-        };
-          #if($table.sub)
-            this.${subclassName}List = [];
-          #end
-        this.resetForm("form");
-      },
-      /** 新增按钮操作 */
-      handleAdd() {
-        this.reset();
-      },
-      /** 修改按钮操作 */
-      handleUpdate(${pkColumn.javaField}) {
-        this.reset();
-        get${BusinessName}(${pkColumn.javaField}).then(response => {
-          this.form = response.data;
-            #foreach ($column in $columns)
-                #if($column.htmlType == "checkbox")
-                  this.form.$column.javaField = this.form.${column.javaField}.split(",");
-                #end
-            #end
-            #if($table.sub)
-              this.${subclassName}List = response.data.${subclassName}List || [];
-            #end
-        }).finally(()=>{
-          this.formInited = true;
-        });;
-      },
-        #if($table.sub)
-          /** ${subTable.functionName}序号 */
-          row${subClassName}Index({ row, rowIndex }) {
-            row.index = rowIndex + 1;
-          },
-          /** ${subTable.functionName}添加按钮操作 */
-          handleAdd${subClassName}() {
-            let obj = {};
-              #foreach($column in $subTable.columns)
-                  #if($column.pk || $column.javaField == ${subTableFkclassName})
-                  #elseif($column.list && "" != $javaField)
-                    obj.$column.javaField = "";
-                  #end
-              #end
-            this.${subclassName}List.push(obj);
-          },
-          /** ${subTable.functionName}删除按钮操作 */
-          handleDelete${subClassName}() {
-            if (this.checked${subClassName}.length == 0) {
-              this.msgError("请先选择要删除的${subTable.functionName}数据");
-            } else {
-              const ${subclassName}List = this.${subclassName}List;
-              const checked${subClassName} = this.checked${subClassName};
-              this.${subclassName}List = ${subclassName}List.filter(function(item) {
-                return checked${subClassName}.indexOf(item.index) == -1
-              });
-            }
-          },
-          /** 复选框选中数据 */
-          handle${subClassName}SelectionChange(selection) {
-            this.checked${subClassName} = selection.map(item => item.index)
-          },
-        #end
-      /** 提交按钮 */
-      submitForm() {
-        this.#[[$]]#refs["form"].validate(valid => {
-          if (valid) {
-            #foreach ($column in $columns)
-            #if($column.htmlType == "checkbox")
-            this.form.$column.javaField = this.form.${column.javaField}.join(",");
-            #end
-            #end
-            #if($table.sub)
-            this.form.${subclassName}List = this.${subclassName}List;
-            #end
-
-            let loadingInstance = Loading.service({
-              target: this.$refs.form.$el,
-              fullscreen: false,
-              text: '提交中'
-            });
-            if (this.form.${pkColumn.javaField} != null) {
-              update${BusinessName}(this.form).then(response => {
-                this.#[[$modal]]#.success("修改成功");
-                this.open = false;
-                this.$emit('success', this.from);
-              }).catch(err => {
-                console.log(err);
-              }).finally(()=>{
-                loadingInstance.close();
-              });
-            } else {
-              add${BusinessName}(this.form).then(response => {
-                this.#[[$modal]]#.success("新增成功");
-                this.open = false;
-                this.$emit('success', this.from);
-              }).catch(err => {
-                console.log(err);
-              }).finally(()=>{
-                loadingInstance.close();
-              });
-            }
-          }
+#end
+#end
+      };
+#if($table.sub)
+      this.${subclassName}List = [];
+#end
+      this.resetForm("form");
+    },
+    /** 新增按钮操作 */
+    handleAdd() {
+      this.reset();
+    },
+    /** 修改按钮操作 */
+    handleUpdate(${pkColumn.javaField}) {
+      this.reset();
+      get${BusinessName}(${pkColumn.javaField}).then(response => {
+        this.form = response.data;
+#foreach ($column in $columns)
+#if($column.htmlType == "checkbox")
+        this.form.$column.javaField = this.form.${column.javaField}.split(",");
+#end
+#end
+#if($table.sub)
+        this.${subclassName}List = response.data.${subclassName}List || [];
+#end
+      }).finally(()=>{
+        this.formInited = true;
+      });;
+    },
+#if($table.sub)
+	/** ${subTable.functionName}序号 */
+    row${subClassName}Index({ row, rowIndex }) {
+      row.index = rowIndex + 1;
+    },
+    /** ${subTable.functionName}添加按钮操作 */
+    handleAdd${subClassName}() {
+      let obj = {};
+#foreach($column in $subTable.columns)
+#if($column.pk || $column.javaField == ${subTableFkclassName})
+#elseif($column.list && "" != $javaField)
+      obj.$column.javaField = "";
+#end
+#end
+      this.${subclassName}List.push(obj);
+    },
+    /** ${subTable.functionName}删除按钮操作 */
+    handleDelete${subClassName}() {
+      if (this.checked${subClassName}.length == 0) {
+        this.msgError("请先选择要删除的${subTable.functionName}数据");
+      } else {
+        const ${subclassName}List = this.${subclassName}List;
+        const checked${subClassName} = this.checked${subClassName};
+        this.${subclassName}List = ${subclassName}List.filter(function(item) {
+          return checked${subClassName}.indexOf(item.index) == -1
         });
       }
+    },
+    /** 复选框选中数据 */
+    handle${subClassName}SelectionChange(selection) {
+      this.checked${subClassName} = selection.map(item => item.index)
+    },
+#end
+    /** 提交按钮 */
+    submitForm() {
+      this.#[[$]]#refs["form"].validate(valid => {
+        if (valid) {
+#foreach ($column in $columns)
+#if($column.htmlType == "checkbox")
+          this.form.$column.javaField = this.form.${column.javaField}.join(",");
+#end
+#end
+#if($table.sub)
+          this.form.${subclassName}List = this.${subclassName}List;
+#end
+
+          let loadingInstance = Loading.service({
+            target: this.$refs.form.$el,
+            fullscreen: false,
+            text: '提交中'
+          });
+          if (this.form.${pkColumn.javaField} != null) {
+            update${BusinessName}(this.form).then(response => {
+              this.#[[$modal]]#.success("修改成功");
+              this.open = false;
+              this.$emit('success', this.from);
+            }).catch(err => {
+              console.log(err);
+            }).finally(()=>{
+              loadingInstance.close();
+            });
+          } else {
+            add${BusinessName}(this.form).then(response => {
+              this.#[[$modal]]#.success("新增成功");
+              this.open = false;
+              this.$emit('success', this.from);
+            }).catch(err => {
+               console.log(err);
+            }).finally(()=>{
+               loadingInstance.close();
+            });
+          }
+        }
+      });
     }
-  };
+  }
+};
 </script>

@@ -81,6 +81,13 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
         return entity;
     }
 
+    @Transactional(readOnly = false)
+    public T updateSelective(T entity){
+        entity.preUpdate();
+        curdDao.updateSelective(entity);
+        return entity;
+    }
+
     /**
      * 删除数据（物理删除，从数据库中彻底删除）
      * @param id

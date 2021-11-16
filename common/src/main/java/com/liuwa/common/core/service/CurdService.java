@@ -48,6 +48,13 @@ public interface CurdService <Pk, D extends CurdDao<Pk, T>, T extends BaseEntity
     public T update(T entity);
 
     /**
+     * 选择性更新
+     * @param entity
+     * @return
+     */
+    public T updateSelective(T entity);
+
+    /**
      * 删除数据（物理删除，从数据库中彻底删除）
      * @param id
      * @return
