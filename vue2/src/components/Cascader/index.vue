@@ -56,6 +56,12 @@ export default {
    this.modelValue = this.value;
    this.refreshSelects();
   },
+		watch:{
+			value(val){
+				this.modelValue = val;
+				this.refreshSelects();
+			}
+		},
   methods:{
    changeOption(e, index, item){
 

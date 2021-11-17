@@ -316,6 +316,12 @@ public class VelocityUtils
         for (GenTableColumn column : columns)
         {
             String dict = "'" + column.getDictType() + "'";
+
+            // 开关字典
+            if("switch".equals(column.getHtmlType())){
+                dict = "'sys_switch'";
+            }
+
             if(dicts.contains(dict)){
                 continue;
             }

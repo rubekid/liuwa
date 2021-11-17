@@ -167,6 +167,17 @@
      padding-right: 0;
      width: inherit;
  }
+
+	.el-form-item {
+		.el-select, .el-cascader{
+			width:100%;
+		}
+
+		.lw-cascader  .el-select{
+			width: 140px;
+		}
+	}
+
 	/** 表格中日期选择器 100% */
 	.el-table td .el-date-editor.el-input{
 		width:100%;
