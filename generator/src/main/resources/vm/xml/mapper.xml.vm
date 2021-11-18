@@ -129,7 +129,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="update" parameterType="${ClassName}">
         UPDATE ${tableName} SET
 #foreach($column in $columns)
-#if($column.columnName != $pkColumn.columnName)
+#if($column.columnName != $pkColumn.columnName && $column.edit)
             $column.columnName = #{$column.javaField}#if($foreach.hasNext),#end
 
 #end

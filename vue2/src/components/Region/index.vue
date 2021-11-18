@@ -83,7 +83,18 @@ export default {
 
 	},
 	watch: {
+		province(val){
+			if(!val){
+				this.regionValue = [];
+				return;
+			}
+			let value = [this.province, this.city, this.district];
+			if(this.depth < 3){
+				value = value.slice(0, this.depth);
+			}
+			this.regionValue = value;
 
+		}
 	},
 	mounted() {
 

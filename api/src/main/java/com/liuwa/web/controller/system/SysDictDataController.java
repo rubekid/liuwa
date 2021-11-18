@@ -88,18 +88,24 @@ public class SysDictDataController extends BaseController
                     SysDictDataOption<Double> option = new SysDictDataOption<Double>();
                     option.setDictValue(Double.valueOf(value));
                     option.setDictLabel(label);
+                    option.setListClass(dataItem.getListClass());
+                    option.setCssClass(dataItem.getCssClass());
                     items.add(option);
                 }
                 else if(SysDictType.DATA_TYPE_BOOLEAN.equals(sysDictType.getDataType())){
                     SysDictDataOption<Boolean> option = new SysDictDataOption<Boolean>();
                     option.setDictValue(Boolean.valueOf(value));
                     option.setDictLabel(label);
+                    option.setListClass(dataItem.getListClass());
+                    option.setCssClass(dataItem.getCssClass());
                     items.add(option);
                 }
                 else{
                     SysDictDataOption<String> option = new SysDictDataOption<String>();
                     option.setDictValue(value);
                     option.setDictLabel(label);
+                    option.setListClass(dataItem.getListClass());
+                    option.setCssClass(dataItem.getCssClass());
                     items.add(option);
                 }
             }

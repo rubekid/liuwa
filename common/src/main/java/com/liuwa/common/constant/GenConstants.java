@@ -60,8 +60,7 @@ public class GenConstants {
     public static final String[] COLUMNNAME_NOT_LIST = { "id", "create_by", "create_time", "del_flag", "update_by", "update_time" };
 
     /** 页面不需要查询字段 */
-    public static final String[] COLUMNNAME_NOT_QUERY = { "id", "create_by", "create_time", "del_flag", "update_by",
-            "update_time", "remark" };
+    public static final String[] COLUMNNAME_NOT_QUERY = { "id", "create_by", "create_time", "del_flag", "update_by", "update_time", "remark" };
 
     /** Entity基类字段 */
     public static final String[] BASE_ENTITY = { "id", "createBy", "createTime", "updateBy", "updateTime", "remark", "delFlag" };
@@ -80,6 +79,9 @@ public class GenConstants {
 
     /** 单选框 */
     public static final String HTML_RADIO = "radio";
+
+    /** 开关 */
+    public static final String HTML_SWITCH = "switch";
 
     /** 复选框 */
     public static final String HTML_CHECKBOX = "checkbox";

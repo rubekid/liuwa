@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.liuwa.common.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -199,7 +201,7 @@ public class SysRoleServiceImpl implements SysRoleService
         {
             throw new ServiceException("不允许操作超级管理员角色");
         }
-        else if(role.isSys()){
+        else if(role.isSys() && !UserUtils.getSysUser().isDeveloper()){
             throw new ServiceException("不允许操作系统配置的角色");
         }
     }

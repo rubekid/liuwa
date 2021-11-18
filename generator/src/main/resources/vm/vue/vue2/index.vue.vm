@@ -173,14 +173,14 @@
       </el-table-column>
 
 #elseif($column.list && $column.htmlType == "switch")
-  <el-table-column label="${comment}" align="center" prop="${javaField}">
-    <template slot-scope="scope">
-      <el-switch
-          v-model="scope.row.${javaField}"
-          @change="handleStatusChange(scope.row)"
-      ></el-switch>
-    </template>
-  </el-table-column>
+      <el-table-column label="${comment}" align="center" prop="${javaField}">
+        <template slot-scope="scope">
+          <el-switch
+              v-model="scope.row.${javaField}"
+              @change="handleStatusChange(scope.row)"
+          ></el-switch>
+        </template>
+      </el-table-column>
 
 
 #elseif($column.list && "" != $column.dictType)

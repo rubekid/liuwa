@@ -315,18 +315,20 @@ public class VelocityUtils
         List<String> dicts = new ArrayList<String>();
         for (GenTableColumn column : columns)
         {
-            String dict = "'" + column.getDictType() + "'";
-
             // 开关字典
             if("switch".equals(column.getHtmlType())){
-                dict = "'sys_switch'";
+                column.setDictType("sys_switch");
             }
+
+            String dict = "'" + column.getDictType() + "'";
+
+
 
             if(dicts.contains(dict)){
                 continue;
             }
             if (!column.isSuperColumn() && StringUtils.isNotEmpty(column.getDictType()) && StringUtils.equalsAny(
-                    column.getHtmlType(), new String[] { GenConstants.HTML_SELECT, GenConstants.HTML_RADIO }))
+                    column.getHtmlType(), new String[] { GenConstants.HTML_SELECT, GenConstants.HTML_RADIO, GenConstants.HTML_SWITCH }))
             {
 
                 dicts.add(dict);

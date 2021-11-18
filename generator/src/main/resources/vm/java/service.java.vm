@@ -16,6 +16,9 @@ public interface ${ClassName}Service extends CurdService<${pkColumn.javaType}, $
 #foreach($column in $columns)
 #if($column.htmlType == 'switch')
 #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+    /**
+     * 变更${column.columnComment}
+     */
     public void update${AttrName}(${ClassName} ${className});
 #end
 #end
