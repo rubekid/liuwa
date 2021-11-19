@@ -319,6 +319,9 @@ public class SysUser extends BaseEntity
      * @return
      */
     public boolean hasRole(String roleKey){
+        if(roles== null){
+            return false;
+        }
         for(SysRole role :roles){
             if(role.getRoleKey().equals(roleKey)){
                 return true;
