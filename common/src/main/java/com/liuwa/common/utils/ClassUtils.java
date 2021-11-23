@@ -8,12 +8,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.liuwa.common.annotation.DictLabel;
 import com.liuwa.common.core.domain.BaseEntity;
@@ -197,4 +192,23 @@ public class ClassUtils {
 		}
     	return result.toArray(new Method[result.size()]);
     }
+
+	/**
+	 * 根据方法名获取方法数组
+	 * @param clazz
+	 * @param methodNames
+	 * @return
+	 */
+	public static Method[] getDeclaredMethods(Class<?> clazz, String ... methodNames){
+		Method[] methods = clazz.getDeclaredMethods();
+		List<Method> result = new ArrayList<Method>();
+		List<String> methodNameList = Arrays.asList(methodNames);
+
+		for(Method method : methods){
+			if(methodNameList.contains(method.getName())){
+				result.add(method);
+			}
+		}
+		return result.toArray(new Method[result.size()]);
+	}
 }
