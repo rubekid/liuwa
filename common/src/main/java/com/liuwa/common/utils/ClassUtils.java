@@ -2,6 +2,7 @@ package com.liuwa.common.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -14,6 +15,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
+import com.liuwa.common.annotation.DictLabel;
+import com.liuwa.common.core.domain.BaseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -177,4 +180,21 @@ public class ClassUtils {
 		}
 		return null;
 	}
+
+	/**
+	 * 根据注解获取方法数组
+	 * @param clazz
+	 * @param annotationClass
+	 * @return
+	 */
+    public static Method[] getDeclaredMethods(Class<?> clazz, Class<? extends Annotation> annotationClass) {
+    	Method[] methods = clazz.getDeclaredMethods();
+    	List<Method> result = new ArrayList<Method>();
+    	for(Method method : methods){
+    		if(method.isAnnotationPresent(annotationClass)){
+    			result.add(method);
+			}
+		}
+    	return result.toArray(new Method[result.size()]);
+    }
 }

@@ -2,7 +2,9 @@ package com.liuwa.common.core.service;
 
 import com.liuwa.common.core.dao.CurdDao;
 import com.liuwa.common.core.domain.BaseEntity;
+import com.liuwa.common.core.domain.model.SysDictDataOption;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -32,6 +34,9 @@ public interface CurdService <Pk, D extends CurdDao<Pk, T>, T extends BaseEntity
      * @param t
      */
     void checkUniqueKey(T t);
+
+    /** 字典 */
+    List<SysDictDataOption> dicts() throws InvocationTargetException, IllegalAccessException;
 
     /**
      * 查询列表

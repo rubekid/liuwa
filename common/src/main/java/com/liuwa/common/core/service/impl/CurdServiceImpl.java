@@ -1,8 +1,10 @@
 package com.liuwa.common.core.service.impl;
 
+import com.liuwa.common.annotation.DictLabel;
 import com.liuwa.common.annotation.Unique;
 import com.liuwa.common.core.dao.CurdDao;
 import com.liuwa.common.core.domain.BaseEntity;
+import com.liuwa.common.core.domain.model.SysDictDataOption;
 import com.liuwa.common.core.service.CurdService;
 import com.liuwa.common.exception.ExistException;
 import com.liuwa.common.exception.ServiceException;
@@ -13,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +80,39 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
                 }
             }
         }
+    }
+
+    @Override
+    public List<SysDictDataOption> dicts() {
+        List<SysDictDataOption> items = new ArrayList<SysDictDataOption>();
+        List<T> list = findAll();
+        if(list.size() == 0){
+            return  items;
+        }
+        Method[] methods = ClassUtils.getDeclaredMethods(entityClazz.getClass(), DictLabel.class);
+        if(methods.length == 0){
+            throw new ServiceException("未配置DictLabel字段");
+        }
+        Method method = methods[0];
+        method.setAccessible(true);
+
+        for(T entity : list){
+            try{
+                String label = String.valueOf(method.invoke(entity));
+                SysDictDataOption<Pk> option = new SysDictDataOption<Pk>();
+                option.setDictValue((Pk)entity.getId());
+                option.setDictLabel(label);
+                option.setListClass("");
+                option.setCssClass("");
+                items.add(option);
+            }
+            catch (InvocationTargetException | IllegalAccessException ex){
+                logger.error(ex.getMessage(), ex);
+                throw new ServiceException("获取DictLabel字段异常");
+            }
+        }
+
+        return items;
     }
 
     /**

@@ -226,6 +226,13 @@
                 <artifactId>common</artifactId>
                 <version>${liuwa.version}</version>
             </dependency>
+			
+			<!-- CURD -->
+            <dependency>
+                <groupId>com.liuwa</groupId>
+                <artifactId>curd</artifactId>
+                <version>${liuwa.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -237,6 +244,7 @@
         <module>quartz</module>
         <module>generator</module>
         <module>common</module>
+        <module>curd</module>
         <module>qiniu</module>
     </modules>
     <packaging>pom</packaging>
