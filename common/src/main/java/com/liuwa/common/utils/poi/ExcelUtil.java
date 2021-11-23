@@ -259,7 +259,12 @@ public class ExcelUtil<T>
                     // 如果不存在实例则新建.
                     entity = (entity == null ? clazz.newInstance() : entity);
                     // 从map中得到对应列的field.
-                    Field field = (Field) entry.getValue()[0];
+                    Object obj = entry.getValue()[0];
+                    if(!(obj instanceof Field)){
+                        log.error("不是Field {}", obj);
+                        continue;
+                    }
+                    Field field = (Field) obj;
                     Excel attr = (Excel) entry.getValue()[1];
                     // 取得类型,并根据对象类型设置值.
                     Class<?> fieldType = field.getType();

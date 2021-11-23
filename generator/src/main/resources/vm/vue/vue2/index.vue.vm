@@ -134,7 +134,7 @@
 #if($supportImport)
       <el-col :span="1.5">
         <!-- 导入${functionName} -->
-        <import-excel title="${functionName}" url="/${moduleName}/${businessName}/import" v-hasPermi="['${moduleName}:${businessName}:import']" />
+        <import-excel title="${functionName}" url="/${moduleName}/${businessName}/import" v-hasPermi="['${moduleName}:${businessName}:import']" @complete="getList" />
       </el-col>
 #end
 #if($supportExport)
