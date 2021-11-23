@@ -21,11 +21,30 @@ public interface CurdService <Pk, D extends CurdDao<Pk, T>, T extends BaseEntity
     public T get(Pk id);
 
     /**
+     * 通过唯一值获取，通常用在判断是否已存在
+     * @param t
+     * @return
+     */
+    T findByUniqueKey(T t);
+
+    /**
+     * 检测唯一值是否合法
+     * @param t
+     */
+    void checkUniqueKey(T t);
+
+    /**
      * 查询列表
      * @param entity
      * @return
      */
     public List<T> findList(T entity);
+
+    /**
+     * 获取全部列表
+     * @return
+     */
+    public List<T> findAll();
 
     /**
      * 保存

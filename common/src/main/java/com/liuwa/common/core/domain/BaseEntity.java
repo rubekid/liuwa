@@ -283,6 +283,7 @@ public class BaseEntity<Pk> implements Serializable
      * 是否已删除
      * @return
      */
+    @JsonIgnore
     public boolean hasDeleted(){
         return delFlag == DEL_FLAG_DELETE;
     }
@@ -291,8 +292,18 @@ public class BaseEntity<Pk> implements Serializable
      * 获取对象显示名称
      * @return
      */
+    @JsonIgnore
     public String getObjectName(){
         return this.getClass().getSimpleName() + "@Id_" + getId();
+    }
+
+    /**
+     * 是否需要检测唯一值
+     * @return
+     */
+    @JsonIgnore
+    public boolean needCheckUnique(){
+        return false;
     }
 
 }

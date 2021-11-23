@@ -1,13 +1,19 @@
 package com.liuwa.common.core.service.impl;
 
+import com.liuwa.common.annotation.Unique;
 import com.liuwa.common.core.dao.CurdDao;
 import com.liuwa.common.core.domain.BaseEntity;
 import com.liuwa.common.core.service.CurdService;
+import com.liuwa.common.exception.ExistException;
+import com.liuwa.common.exception.ServiceException;
+import com.liuwa.common.utils.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +30,12 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
     @Autowired
     private D curdDao;
 
+
+    /**
+     * 实体类型
+     */
+    private T entityClazz;
+
     /**
      * 获取单条数据
      * @param id
@@ -34,12 +46,60 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
     }
 
     /**
+     * 通过唯一键获取数据
+     * @param entity
+     * @return
+     */
+    public T findByUniqueKey(T entity){
+        return  curdDao.findByUniqueKey(entity);
+    }
+
+    /**
+     * 检测唯一值是否合法(反射会一定程度影响效率，可以在实现类中重写该方法)
+     * @param entity
+     */
+    public void checkUniqueKey(T entity){
+        Field[] fields = entity.getClass().getDeclaredFields();
+        for(Field field : fields){
+            if(field.isAnnotationPresent(Unique.class)){
+                field.setAccessible(true);
+                try{
+                    T condition = (T) entity.getClass().newInstance();
+                    field.set(condition, field.get(entity));
+                    T exist = findByUniqueKey(condition);
+                    if(exist != null){
+                        throw new ExistException("该'" + field.getAnnotation(Unique.class).name() + "'已存在");
+                    }
+                }
+                catch (InstantiationException | IllegalAccessException ex){
+                    logger.error(ex.getMessage(), ex);
+                }
+            }
+        }
+    }
+
+    /**
      * 查询列表
      * @param entity
      * @return
      */
     public List<T> findList(T entity){
         return curdDao.findList(entity);
+    }
+
+    /**
+     * 获取全部
+     * @return
+     */
+    public List<T> findAll(){
+        try {
+            T entity = (T) entityClazz.getClass().newInstance();
+            return findList(entity);
+        }
+        catch (InstantiationException | IllegalAccessException ex){
+            logger.error(ex.getMessage(), ex);
+            throw new ServiceException("findAll 异常");
+        }
     }
 
     /**
@@ -65,6 +125,7 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
     @Transactional(readOnly = false)
     public T insert(T entity){
         entity.preInsert();
+        checkUniqueKey(entity);
         curdDao.insert(entity);
         return entity;
     }
@@ -77,6 +138,7 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
     @Transactional(readOnly = false)
     public T update(T entity){
         entity.preUpdate();
+        checkUniqueKey(entity);
         curdDao.update(entity);
         return entity;
     }
@@ -84,6 +146,7 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
     @Transactional(readOnly = false)
     public T updateSelective(T entity){
         entity.preUpdate();
+        checkUniqueKey(entity);
         curdDao.updateSelective(entity);
         return entity;
     }
@@ -120,12 +183,12 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
         T entity = null;
         try{
             entity = (T) BaseEntity.class.newInstance();
+            entity.setId(id);
+            deleteByLogic(entity);
         }
         catch (InstantiationException | IllegalArgumentException | IllegalAccessException  ex){
             logger.error(ex.getMessage(), ex);
         }
-        entity.setId(id);
-        deleteByLogic(entity);
     }
 
     @Override
@@ -135,8 +198,17 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
 
     @Override
     public void batchDeleteByLogic(Pk[] ids) {
-        for(Pk id : ids){
-            deleteByLogic(id);
+        T entity = null;
+        try{
+            entity = (T) BaseEntity.class.newInstance();
+            for(Pk id : ids){
+                entity.setId(id);
+                deleteByLogic(entity);
+            }
         }
+        catch (InstantiationException | IllegalArgumentException | IllegalAccessException  ex){
+            logger.error(ex.getMessage(), ex);
+        }
+
     }
 }

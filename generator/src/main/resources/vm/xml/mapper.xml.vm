@@ -29,6 +29,76 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 #end
     </sql>
 
+    <!-- 获取$functionName -->
+    <select id="get" parameterType="${pkColumn.javaType}" resultMap="#if($table.sub)${ClassName}${subClassName}Result#else${ClassName}Result#end">
+#if($table.crud || $table.tree)
+            SELECT
+            <include refid="${className}Columns"/>
+            FROM
+            ${tableName} a
+            WHERE
+            a.${pkColumn.columnName} = #{${pkColumn.javaField}}
+#elseif($table.sub)
+            SELECT#foreach($column in $columns) a.$column.columnName#if($velocityCount != $columns.size()),#end#end,
+            #foreach($column in $subTable.columns) b.$column.columnName as sub_$column.columnName#if($velocityCount != $subTable.columns.size()),#end#end
+
+            FROM ${tableName} a
+            LEFT JOIN ${subTableName} b ON b.${subTableFkName} = a.${pkColumn.columnName}
+            WHERE a.${pkColumn.columnName} = #{${pkColumn.javaField}}
+#end
+    </select>
+
+
+#if($hasUniqueKey)
+    <!-- 通过唯一键获取$functionName -->
+    <select id="findByUniqueKey" parameterType="${ClassName}" resultMap="#if($table.sub)${ClassName}${subClassName}Result#else${ClassName}Result#end">
+#if($table.crud || $table.tree)
+        SELECT
+        <include refid="${className}Columns"/>
+        FROM
+        ${tableName} a
+        WHERE
+        <choose>
+#foreach ($column in $uniqueColumns)
+#set($javaField=$column.javaField)
+#set($javaType=$column.javaType)
+#set($columnName=$column.columnName)
+            <when test="$javaField != null #if($javaType == 'String' ) and $javaField.trim() != ''#end">
+                a.$columnName = #{$javaField}
+            </when>
+#end
+            <otherwise>
+                1!=1
+            </otherwise>
+        </choose>
+
+
+#elseif($table.sub)
+        SELECT#foreach($column in $columns) a.$column.columnName#if($velocityCount != $columns.size()),#end#end,
+        #foreach($column in $subTable.columns) b.$column.columnName as sub_$column.columnName#if($velocityCount != $subTable.columns.size()),#end#end
+
+        FROM ${tableName} a
+        LEFT JOIN ${subTableName} b ON b.${subTableFkName} = a.${pkColumn.columnName}
+        WHERE
+            <choose>
+#foreach ($column in $uniqueColumns)
+#set($javaField=$column.javaField)
+#set($javaType=$column.javaType)
+#set($columnName=$column.columnName)
+                <when test="$javaField != null #if($javaType == 'String' ) and $javaField.trim() != ''#end">
+                    a.$columnName = #{$javaField}
+                </when>
+#end
+                <otherwise>
+                    1!=1
+                </otherwise>
+            </choose>
+
+#end
+        </select>
+#end
+
+    <!-- 获取$functionName 列表 -->
     <select id="findList" parameterType="${ClassName}" resultMap="${ClassName}Result">
         SELECT
             <include refid="${className}Columns"/>
@@ -89,25 +159,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 #end
         </where>
     </select>
-    
-    <select id="get" parameterType="${pkColumn.javaType}" resultMap="#if($table.sub)${ClassName}${subClassName}Result#else${ClassName}Result#end">
-#if($table.crud || $table.tree)
-        SELECT
-            <include refid="${className}Columns"/>
-        FROM
-            ${tableName} a
-        WHERE
-            ${pkColumn.columnName} = #{${pkColumn.javaField}}
-#elseif($table.sub)
-        SELECT#foreach($column in $columns) a.$column.columnName#if($velocityCount != $columns.size()),#end#end,
-           #foreach($column in $subTable.columns) b.$column.columnName as sub_$column.columnName#if($velocityCount != $subTable.columns.size()),#end#end
 
-        FROM ${tableName} a
-        LEFT JOIN ${subTableName} b ON b.${subTableFkName} = a.${pkColumn.columnName}
-        WHERE a.${pkColumn.columnName} = #{${pkColumn.javaField}}
-#end
-    </select>
-        
+
+    <!-- 插入$functionName  -->
     <insert id="insert" parameterType="${ClassName}"#if($pkColumn.increment) useGeneratedKeys="true" keyProperty="$pkColumn.javaField"#end>
         INSERT INTO ${tableName}(
 #foreach($column in $columns)
@@ -126,10 +180,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         )
     </insert>
 
+    <!-- 更新$functionName  -->
     <update id="update" parameterType="${ClassName}">
         UPDATE ${tableName} SET
 #foreach($column in $columns)
-#if($column.columnName != $pkColumn.columnName && $column.edit)
+#if($column.columnName != $pkColumn.columnName and $column.edit  and $column.javaField != "delFlag" and $column.javaField != "createBy" and $column.javaField != "createTime")
             $column.columnName = #{$column.javaField}#if($foreach.hasNext),#end
 
 #end
@@ -138,11 +193,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             ${pkColumn.columnName} = #{${pkColumn.javaField}}
     </update>
 
+    <!-- 选择性更新$functionName  -->
     <update id="updateSelective" parameterType="${ClassName}">
         UPDATE ${tableName}
         <trim prefix="SET" suffixOverrides=",">
 #foreach($column in $columns)
-#if($column.columnName != $pkColumn.columnName and $column.javaField != "delFlag" and $column.javaField != "createBy" and $column.javaField != "createTime")
+#if($column.columnName != $pkColumn.columnName and $column.edit and $column.javaField != "delFlag" and $column.javaField != "createBy" and $column.javaField != "createTime")
             <if test="$column.javaField != null#if($column.javaType == 'String' && $column.required) and $column.javaField != ''#end">
                 $column.columnName = #{$column.javaField},
             </if>
@@ -152,10 +208,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE ${pkColumn.columnName} = #{${pkColumn.javaField}}
     </update>
 
+    <!-- 删除$functionName  -->
     <delete id="delete" parameterType="${pkColumn.javaType}">
         DELETE FROM ${tableName} WHERE ${pkColumn.columnName} = #{${pkColumn.javaField}}
     </delete>
 
+    <!-- 批量删除$functionName  -->
     <delete id="batchDelete">
         DELETE FROM ${tableName} WHERE ${pkColumn.columnName} IN
         <foreach item="${pkColumn.javaField}" collection="array" open="(" separator="," close=")">

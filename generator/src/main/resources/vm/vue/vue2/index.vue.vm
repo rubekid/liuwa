@@ -249,9 +249,15 @@ import {
   export${BusinessName}
 } from "@/api/${moduleName}/${businessName}";
 import ${BusinessName}Form from './form'
+#if($supportImport)
+import ImportExcel from '@/components/ImportExcel'
+#end
 export default {
   name: "${BusinessName}",
   components:{
+#if($supportImport)
+    ImportExcel,
+#end
     ${BusinessName}Form
   },
 #if(${dicts} != '')

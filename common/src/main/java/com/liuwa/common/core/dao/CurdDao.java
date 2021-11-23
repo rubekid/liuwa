@@ -12,11 +12,18 @@ import java.util.List;
 public interface CurdDao<Pk, T extends BaseEntity> {
 
     /**
-     * 获取单挑数据
+     * 获取单条数据
      * @param id
      * @return
      */
     public T get(Pk id);
+
+    /**
+     * 通过唯一键获取数据
+     * @param entity
+     * @return
+     */
+    public T findByUniqueKey(T entity);
 
     /**
      * 查询列表

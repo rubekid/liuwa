@@ -1,5 +1,11 @@
 package com.liuwa.common.utils.bean;
 
+import com.liuwa.common.core.domain.BaseEntity;
+import com.liuwa.common.utils.ClassUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +19,8 @@ import java.util.regex.Pattern;
  */
 public class BeanUtils extends org.springframework.beans.BeanUtils
 {
+    private static final Logger logger = LoggerFactory.getLogger(BeanUtils.class);
+
     /** Bean方法名中属性名开始的下标 */
     private static final int BEAN_METHOD_PROP_INDEX = 3;
 
@@ -106,5 +114,60 @@ public class BeanUtils extends org.springframework.beans.BeanUtils
     public static boolean isMethodPropEquals(String m1, String m2)
     {
         return m1.substring(BEAN_METHOD_PROP_INDEX).equals(m2.substring(BEAN_METHOD_PROP_INDEX));
+    }
+
+
+
+    /**
+     * 数据转换
+     * @param list
+     * @param clazz
+     * @param ignoreProperties
+     * @return
+     */
+    public static <T> List<T> convert(List<?> list, Class<T> clazz, String ... ignoreProperties ){
+        if(list == null){
+            return null;
+        }
+        List<T> items = new ArrayList<T>();
+
+        for(int i=0; i< list.size(); i++){
+            items.add(convert(list.get(i), clazz, ignoreProperties));
+        }
+
+        return items;
+    }
+
+    /**
+     * 对象转换
+     * @param object
+     * @param clazz
+     * @param ignoreProperties
+     * @return
+     */
+    public static <T> T convert(Object object, Class<T> clazz, String ... ignoreProperties){
+        if(object == null){
+            return null;
+        }
+        try {
+            T item = clazz.newInstance();
+            copyProperties(object, item, ignoreProperties);
+            if(object instanceof BaseEntity){
+                try{
+                    Method setId = ClassUtils.findMethod(item, "setId");
+                    if(setId != null){
+                        setId.invoke(item, ((BaseEntity) object).getId());
+                    }
+                }
+                catch (InvocationTargetException ex){
+                    logger.error(ex.getMessage(), ex);
+                }
+            }
+
+            return item;
+        } catch (InstantiationException | IllegalAccessException ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 }

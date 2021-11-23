@@ -78,6 +78,7 @@ public class VelocityUtils
         setFormlocityContext(velocityContext, genTable);
         setMenuVelocityContext(velocityContext, genTable);
         setDataTransferVelocityContext(velocityContext, genTable);
+        setUniqueVelocityContext(velocityContext, genTable);
         if (GenConstants.TPL_TREE.equals(tplCategory))
         {
             setTreeVelocityContext(velocityContext, genTable);
@@ -115,6 +116,26 @@ public class VelocityUtils
         context.put("formSize", getFormSize(paramsObj));
     }
 
+    /**
+     * 设置唯一值查询
+     * @param context
+     * @param genTable
+     */
+    public static void setUniqueVelocityContext(VelocityContext context, GenTable genTable)
+    {
+
+        boolean hasUniqueKey = false;
+        List<GenTableColumn> uniqueColumns = new ArrayList<GenTableColumn>();
+        for(GenTableColumn column : genTable.getColumns()){
+            if(column.isUnique()){
+                hasUniqueKey = true;
+                uniqueColumns.add(column);
+            }
+        }
+
+        context.put("hasUniqueKey", hasUniqueKey);
+        context.put("uniqueColumns", uniqueColumns);
+    }
 
     /**
      * 设置数据迁移
@@ -123,11 +144,15 @@ public class VelocityUtils
      */
     public static void setDataTransferVelocityContext(VelocityContext context, GenTable genTable)
     {
+        Boolean supportImport = null;
+        Boolean supportExport = null;
         String options = genTable.getOptions();
-        JSONObject paramsObj = JSONObject.parseObject(options);
+        if(options != null){
+            JSONObject paramsObj = JSONObject.parseObject(options);
 
-        Boolean supportImport = paramsObj.getBoolean(GenConstants.SUPPORT_IMPORT);
-        Boolean supportExport = paramsObj.getBoolean(GenConstants.SUPPORT_EXPORT);
+            supportImport = paramsObj.getBoolean(GenConstants.SUPPORT_IMPORT);
+            supportExport = paramsObj.getBoolean(GenConstants.SUPPORT_EXPORT);
+        }
 
 
         // 默认支持导出 不支持导入

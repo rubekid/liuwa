@@ -38,6 +38,14 @@ public class ${ClassName}ServiceImpl extends ${curdServiceImpl}<${pkColumn.javaT
 #end
 #end
 
+#if($supportImport)
+    @Override
+    public ${ClassName} findByUniqueKey(${ClassName} ${className}) {
+        // TODO
+        return null;
+    }
+#end
+
 
 
 #if($table.sub)

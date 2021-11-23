@@ -3,7 +3,9 @@ package com.liuwa.common.utils;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +26,27 @@ import org.slf4j.LoggerFactory;
 public class ClassUtils {
 
 	private static Logger logger = LoggerFactory.getLogger(ClassUtils.class);
+
+	/**
+	 * 根据字段名称获取字段
+	 * @param obj
+	 * @param fieldName
+	 * @return
+	 */
+	public static Field getField(Object obj, String fieldName){
+
+		Class clazz = obj.getClass();
+		while (clazz != null){
+			Field[] fields = clazz.getDeclaredFields();
+			for(Field field : fields){
+				if(field.getName().equals(fieldName)){
+					return field;
+				}
+			}
+			clazz = clazz.getSuperclass();
+		}
+		return null;
+	}
 
 	/**
 	 * 返回某个父类底下所有的实现类
@@ -137,5 +160,21 @@ public class ClassUtils {
 			logger.error(ex.getMessage(), ex);
 		}
 		return t;
+	}
+
+	/**
+	 * 通过方法名获取方法对象
+	 * @param obj
+	 * @param methodName
+	 * @return
+	 */
+	public static Method findMethod(Object obj, String methodName){
+		Method[] methods = obj.getClass().getDeclaredMethods();
+		for(Method method : methods){
+			if(method.getName().equals(methodName)){
+				return method;
+			}
+		}
+		return null;
 	}
 }

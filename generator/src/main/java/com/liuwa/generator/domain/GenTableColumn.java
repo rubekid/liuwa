@@ -57,6 +57,9 @@ public class GenTableColumn extends BaseEntity
     /** 是否排序字段（1是）*/
     private boolean isSort;
 
+    /** 是否唯一值 （1是 默认 0） */
+    private boolean isUnique;
+
     /** 是否查询字段（1是） */
     private boolean isQuery;
 
@@ -207,6 +210,14 @@ public class GenTableColumn extends BaseEntity
 
     public void setSort(boolean sort) {
         isSort = sort;
+    }
+
+    public boolean isUnique() {
+        return isUnique;
+    }
+
+    public void setUnique(boolean unique) {
+        isUnique = unique;
     }
 
     public boolean isQuery() {
