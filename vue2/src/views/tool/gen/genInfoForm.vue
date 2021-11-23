@@ -107,6 +107,35 @@
 
      </el-col>
 					<el-col :span="12">
+						<el-form-item prop="supportImport">
+          <span slot="label">
+            支持导入
+											<el-tooltip content="导入列表数据" placement="top">
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+          </span>
+
+										<el-radio-group v-model="info.supportImport">
+											<el-radio :label="true">支持</el-radio>
+											<el-radio :label="false">不支持</el-radio>
+										</el-radio-group>
+
+						</el-form-item>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item prop="supportExport">
+         <span slot="label">
+            支持导出
+											<el-tooltip content="导出列表数据" placement="top">
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+          </span>
+
+										<el-radio v-model="info.supportExport" :label="true">支持</el-radio>
+										<el-radio v-model="info.supportExport" :label="false">不支持</el-radio>
+						</el-form-item>
+					</el-col>
+					<el-col :span="12">
 						<el-form-item prop="formSize">
           <span slot="label">
             表单窗体尺寸
@@ -301,7 +330,10 @@ export default {
       }
     };
   },
-  created() {},
+  created() {
+
+			console.log(this.info);
+		},
   watch: {
     'info.subTableName': function(val) {
       this.setSubTableColumns(val);

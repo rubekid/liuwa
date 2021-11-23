@@ -98,6 +98,12 @@ public class GenTable extends BaseEntity
     /** 表单大小 */
     private String formSize;
 
+    /** 是否支持导入 */
+    private Boolean supportImport;
+
+    /** 是否支持导出 */
+    private Boolean supportExport;
+
     /** 上级菜单名称字段 */
     private String parentMenuName;
 
@@ -345,6 +351,23 @@ public class GenTable extends BaseEntity
 
     public void setFormSize(String formSize) {
         this.formSize = formSize;
+    }
+
+
+    public Boolean getSupportImport() {
+        return supportImport;
+    }
+
+    public void setSupportImport(Boolean supportImport) {
+        this.supportImport = supportImport;
+    }
+
+    public Boolean getSupportExport() {
+        return supportExport;
+    }
+
+    public void setSupportExport(Boolean supportExport) {
+        this.supportExport = supportExport;
     }
 
     public boolean isSub()

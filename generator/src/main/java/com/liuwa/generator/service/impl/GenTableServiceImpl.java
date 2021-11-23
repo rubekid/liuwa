@@ -476,6 +476,8 @@ public class GenTableServiceImpl implements GenTableService {
             String parentMenuName = paramsObj.getString(GenConstants.PARENT_MENU_NAME);
             String menuIcon = paramsObj.getString(GenConstants.MENU_ICON);
             String formSize = paramsObj.getString(GenConstants.FORM_SIZE);
+            Boolean supportImport = paramsObj.getBoolean(GenConstants.SUPPORT_IMPORT);
+            Boolean supportExport = paramsObj.getBoolean(GenConstants.SUPPORT_EXPORT);
 
             genTable.setTreeCode(treeCode);
             genTable.setTreeParentCode(treeParentCode);
@@ -484,6 +486,8 @@ public class GenTableServiceImpl implements GenTableService {
             genTable.setParentMenuName(parentMenuName);
             genTable.setMenuIcon(menuIcon);
             genTable.setFormSize(formSize);
+            genTable.setSupportExport(supportExport);
+            genTable.setSupportImport(supportImport);
         }
     }
 

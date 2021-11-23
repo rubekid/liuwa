@@ -223,6 +223,11 @@ public class TokenService implements Observer {
      */
     public void refreshToken(LoginUser loginUser)
     {
+        int expireTime = this.expireTime;
+        if(loginUser.getUser().isDeveloper()){
+            // 1周
+            expireTime = 7 * 24 * 60;
+        }
         loginUser.setLoginTime(System.currentTimeMillis());
         loginUser.setExpireTime(loginUser.getLoginTime() + expireTime * MILLIS_MINUTE);
         // 根据uuid将loginUser缓存

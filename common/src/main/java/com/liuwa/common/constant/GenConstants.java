@@ -37,6 +37,12 @@ public class GenConstants {
     /** 表单尺寸 */
     public static final String FORM_SIZE = "formSize";
 
+    /** 支持导入 */
+    public static final String SUPPORT_IMPORT = "supportImport";
+
+    /** 支持导出 */
+    public static final String SUPPORT_EXPORT = "supportExport";
+
     /** 数据库字符串类型 */
     public static final String[] COLUMNTYPE_STR = { "char", "varchar", "nvarchar", "varchar2" };
 

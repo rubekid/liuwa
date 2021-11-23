@@ -131,6 +131,13 @@
           v-hasPermi="['${moduleName}:${businessName}:remove']"
         >删除</el-button>
       </el-col>
+#if($supportImport)
+      <el-col :span="1.5">
+        <!-- 导入${functionName} -->
+        <import-excel title="${functionName}" url="/${moduleName}/${businessName}/import" v-hasPermi="['${moduleName}:${businessName}:import']" />
+      </el-col>
+#end
+#if($supportExport)
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -142,6 +149,8 @@
           v-hasPermi="['${moduleName}:${businessName}:export']"
         >导出</el-button>
       </el-col>
+#end
+
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 

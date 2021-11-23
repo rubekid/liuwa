@@ -1,7 +1,12 @@
 package ${packageName}.service.impl;
 
 import org.springframework.stereotype.Service;
-import com.liuwa.common.core.service.impl.CurdServiceImpl;
+
+#set($curdServiceImpl = "CurdServiceImpl")
+#if($supportImport)
+    #set($curdServiceImpl = "CurdImportServiceImpl")
+#end
+import com.liuwa.common.core.service.impl.${curdServiceImpl};
 #if($table.sub)
 import java.util.List;
 import java.util.ArrayList;
@@ -21,7 +26,7 @@ import ${packageName}.service.${ClassName}Service;
  * @date ${datetime}
  */
 @Service
-public class ${ClassName}ServiceImpl extends CurdServiceImpl<${pkColumn.javaType}, ${ClassName}Dao, ${ClassName}> implements ${ClassName}Service{
+public class ${ClassName}ServiceImpl extends ${curdServiceImpl}<${pkColumn.javaType}, ${ClassName}Dao, ${ClassName}> implements ${ClassName}Service{
 
 #foreach($column in $columns)
 #if($column.htmlType == 'switch')

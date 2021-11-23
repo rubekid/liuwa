@@ -77,6 +77,7 @@ public class VelocityUtils
         velocityContext.put("dicts", getDicts(genTable));
         setFormlocityContext(velocityContext, genTable);
         setMenuVelocityContext(velocityContext, genTable);
+        setDataTransferVelocityContext(velocityContext, genTable);
         if (GenConstants.TPL_TREE.equals(tplCategory))
         {
             setTreeVelocityContext(velocityContext, genTable);
@@ -88,6 +89,11 @@ public class VelocityUtils
         return velocityContext;
     }
 
+    /**
+     * 设置菜单
+     * @param context
+     * @param genTable
+     */
     public static void setMenuVelocityContext(VelocityContext context, GenTable genTable)
     {
         String options = genTable.getOptions();
@@ -97,6 +103,11 @@ public class VelocityUtils
         context.put("menuIcon", getMenuIcon(paramsObj));
     }
 
+    /**
+     * 设置表单
+     * @param context
+     * @param genTable
+     */
     public static void setFormlocityContext(VelocityContext context, GenTable genTable)
     {
         String options = genTable.getOptions();
@@ -104,6 +115,31 @@ public class VelocityUtils
         context.put("formSize", getFormSize(paramsObj));
     }
 
+
+    /**
+     * 设置数据迁移
+     * @param context
+     * @param genTable
+     */
+    public static void setDataTransferVelocityContext(VelocityContext context, GenTable genTable)
+    {
+        String options = genTable.getOptions();
+        JSONObject paramsObj = JSONObject.parseObject(options);
+
+        Boolean supportImport = paramsObj.getBoolean(GenConstants.SUPPORT_IMPORT);
+        Boolean supportExport = paramsObj.getBoolean(GenConstants.SUPPORT_EXPORT);
+
+
+        // 默认支持导出 不支持导入
+        context.put("supportImport", supportImport == null ? false : supportImport);
+        context.put("supportExport", supportExport == null ? true : supportExport);
+    }
+
+    /**
+     * 设置树形
+     * @param context
+     * @param genTable
+     */
     public static void setTreeVelocityContext(VelocityContext context, GenTable genTable)
     {
         String options = genTable.getOptions();

@@ -193,8 +193,18 @@ export default {
         if(!res.data.info.menuIcon){
          res.data.info.menuIcon = ''
         }
+							 let info = res.data.info;
 
-        this.info = res.data.info;
+								if(info.supportExport === undefined){
+										info.supportExport = true;
+								}
+								if(info.supportImport === undefined){
+										info.supportImport = false;
+								}
+
+							 this.info = info;
+
+
         this.tables = res.data.tables;
       });
       /** 查询字典下拉列表 */
@@ -246,6 +256,12 @@ export default {
         if (validateResult) {
           const genTable = Object.assign({}, basicForm.model, genForm.model);
           genTable.columns = this.columns;
+									 if(genTable.supportExport === undefined){
+												genTable.supportExport = true;
+											}
+										if(genTable.supportImport === undefined){
+											genTable.supportImport = false;
+										}
 
           genTable.params = {
             treeCode: genTable.treeCode,
@@ -253,8 +269,10 @@ export default {
             treeParentCode: genTable.treeParentCode,
             parentMenuId: genTable.parentMenuId,
             menuIcon: genTable.menuIcon,
-											 formSize: genTable.formSize
-          };
+											 formSize: genTable.formSize,
+											 supportImport: genTable.supportImport,
+          	 supportExport : genTable.supportExport
+										};
 
 
 

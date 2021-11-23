@@ -287,4 +287,12 @@ public class BaseEntity<Pk> implements Serializable
         return delFlag == DEL_FLAG_DELETE;
     }
 
+    /**
+     * 获取对象显示名称
+     * @return
+     */
+    public String getObjectName(){
+        return this.getClass().getSimpleName() + "@Id_" + getId();
+    }
+
 }

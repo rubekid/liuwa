@@ -2,7 +2,13 @@ package ${packageName}.service;
 
 import ${packageName}.domain.${ClassName};
 import ${packageName}.dao.${ClassName}Dao;
-import com.liuwa.common.core.service.CurdService;
+
+#set($curdService = "CurdService")
+#if($supportImport)
+#set($curdService = "CurdImportService")
+#end
+import com.liuwa.common.core.service.${curdService};
+
 
 
 /**
@@ -11,7 +17,7 @@ import com.liuwa.common.core.service.CurdService;
  * @author ${author}
  * @date ${datetime}
  */
-public interface ${ClassName}Service extends CurdService<${pkColumn.javaType}, ${ClassName}Dao, ${ClassName}>{
+public interface ${ClassName}Service extends ${curdService}<${pkColumn.javaType}, ${ClassName}Dao, ${ClassName}>{
 
 #foreach($column in $columns)
 #if($column.htmlType == 'switch')
