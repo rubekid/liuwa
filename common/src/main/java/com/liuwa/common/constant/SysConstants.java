@@ -7,6 +7,12 @@ package com.liuwa.common.constant;
  */
 public class SysConstants
 {
+
+    /**
+     * 基础包名
+     */
+    public static final String BASE_PACKAGE = "com.liuwa";
+
     /**
      * 平台内系统用户的唯一标志
      */
@@ -85,4 +91,9 @@ public class SysConstants
      */
     public static final int PASSWORD_MIN_LENGTH = 5;
     public static final int PASSWORD_MAX_LENGTH = 20;
+
+    /**
+     * 系统实体字典前缀
+     */
+    public static final String DICT_SYS_ENTITY = "sys_entity_";
 }

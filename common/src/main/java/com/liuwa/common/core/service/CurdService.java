@@ -36,7 +36,7 @@ public interface CurdService <Pk, D extends CurdDao<Pk, T>, T extends BaseEntity
     void checkUniqueKey(T t);
 
     /** 字典 */
-    List<SysDictDataOption> dicts() throws InvocationTargetException, IllegalAccessException;
+    List<SysDictDataOption> dicts();
 
     /**
      * 查询列表

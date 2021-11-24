@@ -1,6 +1,8 @@
 package com.liuwa.web.controller.system;
 
 import java.util.List;
+
+import com.liuwa.common.utils.DictUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -126,6 +128,7 @@ public class SysDictTypeController extends BaseController
     public AjaxResult optionselect()
     {
         List<SysDictType> dictTypes = dictTypeService.selectDictTypeAll();
+        dictTypes.addAll(DictUtils.getEntityDicts());
         return AjaxResult.success(dictTypes);
     }
 }

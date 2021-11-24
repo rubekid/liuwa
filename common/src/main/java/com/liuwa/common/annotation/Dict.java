@@ -6,10 +6,23 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 字典label字段
+ * 字典
  */
-@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DictLabel {
+@Target({ElementType.TYPE})
+public @interface Dict {
+
+    /**
+     * 名称
+     * @return
+     */
+    public String name();
+
+    /**
+     * 值
+     * @return
+     */
+    public String value() default  "";
+
 
 }

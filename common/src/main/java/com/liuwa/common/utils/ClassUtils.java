@@ -1,19 +1,15 @@
 package com.liuwa.common.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.*;
-
-import com.liuwa.common.annotation.DictLabel;
-import com.liuwa.common.core.domain.BaseEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 类的相关实现
@@ -34,6 +30,16 @@ public class ClassUtils {
 	public static Field getField(Object obj, String fieldName){
 
 		Class clazz = obj.getClass();
+		return getField(clazz, fieldName);
+	}
+
+	/**
+	 * 根据字段名称获取字段
+	 * @param clazz
+	 * @param fieldName
+	 * @return
+	 */
+	public static Field getField(Class clazz, String fieldName){
 		while (clazz != null){
 			Field[] fields = clazz.getDeclaredFields();
 			for(Field field : fields){
@@ -80,7 +86,7 @@ public class ClassUtils {
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
-	private static List<Class> getClassesByPackageName(String packageName)
+	public static List<Class> getClassesByPackageName(String packageName)
 			throws IOException, ClassNotFoundException {
 		ClassLoader classLoader = Thread.currentThread()
 				.getContextClassLoader();
@@ -179,14 +185,14 @@ public class ClassUtils {
 	/**
 	 * 根据注解获取方法数组
 	 * @param clazz
-	 * @param annotationClass
+	 * @param annotation
 	 * @return
 	 */
-    public static Method[] getDeclaredMethods(Class<?> clazz, Class<? extends Annotation> annotationClass) {
+    public static Method[] getDeclaredMethods(Class<?> clazz, Class<? extends Annotation> annotation) {
     	Method[] methods = clazz.getDeclaredMethods();
     	List<Method> result = new ArrayList<Method>();
     	for(Method method : methods){
-    		if(method.isAnnotationPresent(annotationClass)){
+    		if(method.isAnnotationPresent(annotation)){
     			result.add(method);
 			}
 		}
@@ -210,5 +216,30 @@ public class ClassUtils {
 			}
 		}
 		return result.toArray(new Method[result.size()]);
+	}
+
+	/**
+     * 扫描包名，根据注解获取类列表
+	 * @param packageName
+     * @param annotation
+     * @return
+     */
+	public static List<Class> findClassesByAnnotation(String packageName, Class<? extends Annotation> annotation ){
+		List<Class> classes = new ArrayList<Class>();
+		try{
+			List<Class> list = getClassesByPackageName(packageName);
+			for(Class item : list){
+				if(item.isAnnotationPresent(annotation)){
+					classes.add(item);
+				}
+			}
+		}
+		catch (IOException | ClassNotFoundException ex){
+			logger.error(ex.getMessage(), ex);
+		}
+		return classes;
+
+
+
 	}
 }

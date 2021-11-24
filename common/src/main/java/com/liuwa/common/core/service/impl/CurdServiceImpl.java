@@ -38,12 +38,7 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
     /**
      * 实体对象
      */
-    private T entity;
-
-    /**
-     * 实体类
-     */
-    private Class<?> entityClass = entity.getClass();
+    private T t;
 
     /**
      * 获取单条数据
@@ -73,7 +68,7 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
             if(field.isAnnotationPresent(Unique.class)){
                 field.setAccessible(true);
                 try{
-                    T condition = (T) entityClass.newInstance();
+                    T condition = (T) t.getClass().newInstance();
                     field.set(condition, field.get(entity));
                     T exist = findByUniqueKey(condition);
                     if(exist != null){
@@ -95,9 +90,9 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
             return  items;
         }
 
-        Method[] methods = ClassUtils.getDeclaredMethods(entityClass, DictLabel.class);
+        Method[] methods = ClassUtils.getDeclaredMethods(t.getClass(), DictLabel.class);
         if(methods.length == 0){
-            methods = ClassUtils.getDeclaredMethods(entityClass, "getName", "get" + entityClass.getSimpleName() + "Name", "getLabel");
+            methods = ClassUtils.getDeclaredMethods(t.getClass(), "getName", "get" + t.getClass().getSimpleName() + "Name", "getLabel");
         }
         if(methods.length == 0){
             throw new ServiceException("请先配置DictLabel字段");
@@ -139,7 +134,7 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
      */
     public List<T> findAll(){
         try {
-            T entity = (T) entityClass.newInstance();
+            T entity = (T) t.getClass().newInstance();
             return findList(entity);
         }
         catch (InstantiationException | IllegalAccessException ex){

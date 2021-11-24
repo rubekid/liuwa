@@ -4,8 +4,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.liuwa.common.constant.SysConstants;
 import com.liuwa.common.core.domain.entity.SysDictType;
 import com.liuwa.common.core.domain.model.SysDictDataOption;
+import com.liuwa.common.core.service.CurdService;
+import com.liuwa.common.utils.spring.SpringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -78,7 +81,16 @@ public class SysDictDataController extends BaseController
     @GetMapping(value = "/type/{dictType}")
     public AjaxResult dictType(@PathVariable String dictType) {
         List<SysDictDataOption> items = new ArrayList<SysDictDataOption>();
-        List<SysDictData> list = dictTypeService.selectDictDataByType(dictType);
+        List<SysDictData> list = new ArrayList<SysDictData>();
+        if(dictType.startsWith(SysConstants.DICT_SYS_ENTITY)){
+            String serviceName = dictType.substring(SysConstants.DICT_SYS_ENTITY.length()) + "Service";
+            CurdService curdService = SpringUtils.getBean(serviceName);
+            list =  curdService.dicts();
+        }
+        else{
+            list = dictTypeService.selectDictDataByType(dictType);
+        }
+
         if (!StringUtils.isNull(list)) {
             SysDictType sysDictType = dictTypeService.selectDictTypeByType(dictType);
             for(SysDictData dataItem : list){
@@ -88,24 +100,18 @@ public class SysDictDataController extends BaseController
                     SysDictDataOption<Double> option = new SysDictDataOption<Double>();
                     option.setDictValue(Double.valueOf(value));
                     option.setDictLabel(label);
-                    option.setListClass(dataItem.getListClass());
-                    option.setCssClass(dataItem.getCssClass());
                     items.add(option);
                 }
                 else if(SysDictType.DATA_TYPE_BOOLEAN.equals(sysDictType.getDataType())){
                     SysDictDataOption<Boolean> option = new SysDictDataOption<Boolean>();
                     option.setDictValue(Boolean.valueOf(value));
                     option.setDictLabel(label);
-                    option.setListClass(dataItem.getListClass());
-                    option.setCssClass(dataItem.getCssClass());
                     items.add(option);
                 }
                 else{
                     SysDictDataOption<String> option = new SysDictDataOption<String>();
                     option.setDictValue(value);
                     option.setDictLabel(label);
-                    option.setListClass(dataItem.getListClass());
-                    option.setCssClass(dataItem.getCssClass());
                     items.add(option);
                 }
             }

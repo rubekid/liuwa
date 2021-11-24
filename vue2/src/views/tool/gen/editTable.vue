@@ -231,6 +231,11 @@ export default {
 							 let column = this.columns[i];
 								if(column.dictType){
 									 let dataType = this.dictTypes[column.dictType];
+										let htmlType = column.htmlType;
+										// 复选框不限制
+										if(htmlType == 'checkbox'){
+											continue;
+										}
 										if(dataType == 'Number' &&
 											(column.javaType != 'Integer'
 												&& column.javaType != 'Long'
