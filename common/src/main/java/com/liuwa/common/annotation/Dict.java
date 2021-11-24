@@ -18,11 +18,4 @@ public @interface Dict {
      */
     public String name();
 
-    /**
-     * 值
-     * @return
-     */
-    public String value() default  "";
-
-
 }

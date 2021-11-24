@@ -1,6 +1,8 @@
 package ${packageName}.controller;
 
 import java.util.List;
+
+import com.liuwa.common.utils.bean.BeanUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -127,7 +129,14 @@ public class ${ClassName}Controller extends BaseController{
     @PutMapping
     public AjaxResult edit(@RequestBody ${ClassName} ${className})
     {
-        ${className}Service.update(${className});
+#if($pkColumn.javaField.length() > 2 && $pkColumn.javaField.substring(1,2).matches("[A-Z]"))
+#set($AttrName=$pkColumn.javaField)
+#else
+#set($AttrName=$pkColumn.javaField.substring(0,1).toUpperCase() + ${pkColumn.javaField.substring(1)})
+#end
+        ${ClassName} old${ClassName} = ${className}Service.get(${className}.get${AttrName}());
+        BeanUtils.copyBeanNotNull2Bean(${className}, old${ClassName});
+        ${className}Service.update(old${ClassName});
         return AjaxResult.success();
     }
 

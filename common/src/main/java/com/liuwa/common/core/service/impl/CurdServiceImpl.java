@@ -14,9 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,9 +34,21 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
 
 
     /**
-     * 实体对象
+     * 获取实体类
+     * @return
      */
-    private T t;
+    private Class getEntityClass(){
+        Type superClass = getClass().getGenericSuperclass();
+        ParameterizedType parameterizedType = null;
+        if(superClass instanceof  ParameterizedType){
+            parameterizedType = (ParameterizedType) superClass;
+            Type[] types = parameterizedType.getActualTypeArguments();
+            return (Class)types[2];
+        }
+        return null;
+    }
+
+
 
     /**
      * 获取单条数据
@@ -68,7 +78,7 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
             if(field.isAnnotationPresent(Unique.class)){
                 field.setAccessible(true);
                 try{
-                    T condition = (T) t.getClass().newInstance();
+                    T condition = (T) getEntityClass().newInstance();
                     field.set(condition, field.get(entity));
                     T exist = findByUniqueKey(condition);
                     if(exist != null){
@@ -90,9 +100,9 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
             return  items;
         }
 
-        Method[] methods = ClassUtils.getDeclaredMethods(t.getClass(), DictLabel.class);
+        Method[] methods = ClassUtils.getDeclaredMethods(getEntityClass(), DictLabel.class);
         if(methods.length == 0){
-            methods = ClassUtils.getDeclaredMethods(t.getClass(), "getName", "get" + t.getClass().getSimpleName() + "Name", "getLabel");
+            methods = ClassUtils.getDeclaredMethods(getEntityClass(), "getName", "get" + getEntityClass().getSimpleName() + "Name", "getLabel");
         }
         if(methods.length == 0){
             throw new ServiceException("请先配置DictLabel字段");
@@ -134,7 +144,7 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
      */
     public List<T> findAll(){
         try {
-            T entity = (T) t.getClass().newInstance();
+            T entity = (T) getEntityClass().newInstance();
             return findList(entity);
         }
         catch (InstantiationException | IllegalAccessException ex){

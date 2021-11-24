@@ -209,10 +209,7 @@ public class DictUtils
             }
             Dict dict = (Dict) clazz.getAnnotation(Dict.class);
             String name = dict.name();
-            String value = dict.value();
-            if(StringUtils.isEmpty(value)){
-                value = SysConstants.DICT_SYS_ENTITY + StringUtils.toUnderScoreCase(clazz.getSimpleName());
-            }
+            String value =  SysConstants.DICT_SYS_ENTITY + StringUtils.toUnderScoreCase(clazz.getSimpleName());
             SysDictType sysDictType = new SysDictType();
             sysDictType.setDictType(value);
             Field idField = ClassUtils.getField(clazz, "id");

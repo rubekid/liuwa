@@ -2,9 +2,11 @@ package com.liuwa.common.utils.bean;
 
 import com.liuwa.common.core.domain.BaseEntity;
 import com.liuwa.common.utils.ClassUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -169,5 +171,32 @@ public class BeanUtils extends org.springframework.beans.BeanUtils
             logger.error(ex.getMessage(), ex);
         }
         return null;
+    }
+
+    /**
+     * 对象拷贝
+     * 数据对象空值不拷贝到目标对象
+     *
+     * @param databean
+     * @param tobean
+     * @throws NoSuchMethodException
+     * copy
+     */
+    public static void copyBeanNotNull2Bean(Object databean,Object tobean)throws Exception
+    {
+        PropertyDescriptor origDescriptors[] = PropertyUtils.getPropertyDescriptors(databean);
+        for (int i = 0; i < origDescriptors.length; i++) {
+            String name = origDescriptors[i].getName();
+            if ("class".equals(name)) {
+                continue; // No point in trying to set an object's class
+            }
+            if (PropertyUtils.isReadable(databean, name) &&PropertyUtils.isWriteable(tobean, name)) {
+
+                Object value = PropertyUtils.getSimpleProperty(databean, name);
+                if(value!=null){
+                    org.apache.commons.beanutils.BeanUtils.copyProperty(tobean, name, value);
+                }
+            }
+        }
     }
 }

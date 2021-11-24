@@ -433,6 +433,7 @@ export default {
     reset() {
       this.form = {
 #foreach ($column in $columns)
+#if($column.insert || $column.edit)
 #if($column.htmlType == "radio")
         $column.javaField: #if($column.javaType == "Integer" || $column.javaType == "Long")1#else"1"#end#if($velocityCount != $columns.size()),#end
 
@@ -445,6 +446,7 @@ export default {
 #else
         $column.javaField: null#if($velocityCount != $columns.size()),#end
 
+#end
 #end
 #end
       };

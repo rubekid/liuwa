@@ -12,6 +12,7 @@
 #else
 #set($comment=$column.columnComment)
 #end
+    <el-col :span="columnSpan">
 #if($column.htmlType == "input")
       <el-form-item label="${comment}" prop="${column.javaField}">
         <el-input
@@ -22,7 +23,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-#elseif(($column.htmlType == "select" || $column.htmlType == "radio") && "" != $dictType)
+#elseif(($column.htmlType == "select" || $column.htmlType == "radio" || $column.htmlType == "checkbox") && "" != $dictType)
       <el-form-item label="${comment}" prop="${column.javaField}">
         <el-select v-model="queryParams.${column.javaField}" placeholder="请选择${comment}" clearable size="small">
           <el-option
@@ -33,7 +34,7 @@
           />
         </el-select>
       </el-form-item>
-#elseif(($column.htmlType == "select" || $column.htmlType == "radio"))
+#elseif($column.htmlType == "select" || $column.htmlType == "radio" || $column.htmlType == "checkbox")
       <el-form-item label="${comment}" prop="${column.javaField}">
         <el-select v-model="queryParams.${column.javaField}" placeholder="请选择${comment}" clearable size="small">
           <el-option label="请选择字典生成" value="" />
@@ -89,6 +90,7 @@
           ></region>
      </el-form-item>
 #end
+    </el-col>
 #end
 #end
       <el-form-item>
@@ -265,6 +267,7 @@ export default {
 #end
   data() {
     return {
+      columnSpan: 24,
       // 遮罩层
       loading: true,
       // 导出遮罩层
