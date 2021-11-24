@@ -355,6 +355,17 @@ public class SysUserServiceImpl implements SysUserService
     }
 
     /**
+     * 修改昵称
+     * @param userId
+     * @param nickName
+     * @return
+     */
+    @Override
+    public int updateNickName(Long userId, String nickName) {
+        return userMapper.updateNickName(userId, nickName);
+    }
+
+    /**
      * 重置用户密码
      * 
      * @param user 用户信息
