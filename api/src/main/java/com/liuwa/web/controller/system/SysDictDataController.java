@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  * 数据字典信息
- * 
+ *
  * @author liuwa
  */
 @RestController
@@ -77,7 +77,7 @@ public class SysDictDataController extends BaseController
         if(dictType.startsWith(SysConstants.DICT_SYS_ENTITY)){
             String serviceName = StringUtils.toCamelCase(dictType.substring(SysConstants.DICT_SYS_ENTITY.length())) + "Service";
             CurdService curdService = SpringUtils.getBean(serviceName);
-            list =  curdService.dicts();
+            items = curdService.dicts();
         }
         else{
             list = dictTypeService.selectDictDataByType(dictType);
@@ -92,6 +92,18 @@ public class SysDictDataController extends BaseController
 
         // 按数据类型调整
         if(dataType != null){
+
+            // 实体字典数据
+            if(dictType.startsWith(SysConstants.DICT_SYS_ENTITY)){
+                for(SysDictDataOption option : items ){
+                    SysDictData dictData = new SysDictData();
+                    dictData.setDictLabel(option.getDictLabel());
+                    dictData.setDictValue(String.valueOf(option.getDictValue()));
+                    list.add(dictData);
+                }
+                items = new ArrayList<SysDictDataOption>();
+            }
+
             for(SysDictData dataItem : list){
                 String label = dataItem.getDictLabel();
                 String value = dataItem.getDictValue();
@@ -115,6 +127,7 @@ public class SysDictDataController extends BaseController
                 }
             }
         }
+
 
 
         return AjaxResult.success(items);

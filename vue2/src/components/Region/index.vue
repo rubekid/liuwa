@@ -1,14 +1,14 @@
 <template>
 	<cascader v-if="mode == 'select'"
-		v-model="regionValue"
-		:placeholder="placeholder"
-		:options="options" value-key="name" label-key="name" @change="handleChange"></cascader>
+											v-model="regionValue"
+											:placeholder="placeholder"
+											:options="options" value-key="name" label-key="name" @change="handleChange"></cascader>
 	<el-cascader v-else
-		v-model="regionValue"
-		:options="options"
-		clearable
-  :props="{value: 'name', label: 'name', emitPath: emitPath,  expandTrigger: expandTrigger, checkStrictly:checkStrictly, multiple: multiple}"
-		@change="handleChange"></el-cascader>
+														v-model="regionValue"
+														:options="options"
+														clearable
+														:props="{value: 'name', label: 'name', emitPath: emitPath,  expandTrigger: expandTrigger, checkStrictly:checkStrictly, multiple: multiple}"
+														@change="handleChange"></el-cascader>
 </template>
 
 <script>
@@ -22,16 +22,19 @@ export default {
 		Cascader
 	},
 	props: {
+		value:{
+			type: String| Array
+		},
 		province: { // 省份
-			type: String,
+			type: String|Array,
 			default: ''
 		},
 		city: {   // 城市
-			type: String,
+			type: String|Array,
 			default: ''
 		},
 		district: { // 区县
-			type: String,
+			type: String|Array,
 			default: ''
 		},
 		placeholder: {
@@ -92,9 +95,9 @@ export default {
 		this.regionValue = value;
 	},
 	computed: {
-			multiple(){
-				return this.mode == 'multiple';
-			}
+		multiple(){
+			return this.mode == 'multiple';
+		}
 	},
 	watch: {
 		province(val){
@@ -107,6 +110,14 @@ export default {
 				value = value.slice(0, this.depth);
 			}
 			this.regionValue = value;
+		},
+		value(val){
+			if(typeof val == 'string'){
+				this.regionValue = val.split(',');
+			}
+			else{
+				this.regionValue = val;
+			}
 
 		}
 	},
@@ -118,6 +129,7 @@ export default {
 			this.$emit("update:province", e[0]);
 			this.$emit("update:city", e[1]);
 			this.$emit("update:district", e[2]);
+			this.$emit("input", e);
 			this.$emit("change", e);
 		}
 	}
