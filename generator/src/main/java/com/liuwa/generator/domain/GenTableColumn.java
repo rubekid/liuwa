@@ -1,7 +1,12 @@
 package com.liuwa.generator.domain;
 
 import javax.validation.constraints.NotBlank;
+
+import com.liuwa.common.constant.Constants;
+import com.liuwa.common.constant.GenConstants;
+import com.liuwa.common.constant.SysConstants;
 import com.liuwa.common.core.domain.BaseEntity;
+import com.liuwa.common.core.domain.entity.SysDictType;
 import com.liuwa.common.utils.StringUtils;
 
 /**
@@ -266,6 +271,7 @@ public class GenTableColumn extends BaseEntity
         return dictType;
     }
 
+
     public Integer getDisplayIndex() {
         return displayIndex;
     }
@@ -328,5 +334,12 @@ public class GenTableColumn extends BaseEntity
         {
             return this.columnComment;
         }
+    }
+
+    public String getDictDataType(){
+        if(GenConstants.HTML_CHECKBOX.equals(htmlType)){
+            return SysDictType.DATA_TYPE_STRING;
+        }
+        return null;
     }
 }

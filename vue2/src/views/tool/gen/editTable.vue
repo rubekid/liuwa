@@ -107,9 +107,10 @@
 															 <el-option label="日期时间控件" value="datetime" />
                 <el-option label="单图上传" value="singleImage" />
                 <el-option label="多图上传" value="multiImage" />
-                <el-option label="省份" value="province" />
+															 <el-option label="省份" value="province" />
                 <el-option label="城市" value="city" />
                 <el-option label="区县" value="district" />
+															 <el-option label="区域多选" value="regions" />
                 <el-option label="文件上传" value="fileUpload" />
                 <el-option label="富文本控件" value="editor" />
               </el-select>

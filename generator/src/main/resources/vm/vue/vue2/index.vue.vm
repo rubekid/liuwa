@@ -27,7 +27,7 @@
       <el-form-item label="${comment}" prop="${column.javaField}">
         <el-select v-model="queryParams.${column.javaField}" placeholder="请选择${comment}" clearable size="small">
           <el-option
-            v-for="dict in sysDictMap.${dictType}"
+            v-for="dict in dictData('${dictType}')"
             :key="dict.dictValue"
             :label="dict.dictLabel"
             :value="dict.dictValue"
@@ -44,7 +44,7 @@
       <el-form-item label="${comment}" prop="${column.javaField}">
         <el-select v-model="queryParams.${column.javaField}" placeholder="请选择${comment}" clearable size="small">
           <el-option
-              v-for="dict in sysDictMap.sys_switch"
+              v-for="dict in dictData('sys_switch')"
               :key="dict.dictValue"
               :label="dict.dictLabel"
               :value="dict.dictValue"
@@ -77,7 +77,7 @@
 #set($groupType=$column.groupType)
      <el-form-item label="${groupType}区域">
           <region
-              mode="multiple"
+              mode="select"
               :province.sync="queryParams.${column.javaField}"
 #foreach($tcolumn in $columns)
 #if($tcolumn.groupType == $groupType && $tcolumn.htmlType == "city")
@@ -197,14 +197,14 @@
 #elseif($column.list && "" != $column.dictType)
       <el-table-column label="${comment}" align="center" prop="${javaField}" #if($column.sort)sortable="custom" :sort-orders="['descending', 'ascending']"#end>
         <template slot-scope="scope">
-          <dict-tag :options="sysDictMap.${dictType}" :value="scope.row.${javaField}"/>
+          <dict-tag :options="dictData('${dictType}')" :value="scope.row.${javaField}"/>
         </template>
       </el-table-column>
 #elseif($column.list && "" != $javaField)
       <el-table-column label="${comment}" align="center" prop="${javaField}" #if($column.sort)sortable="custom" :sort-orders="['descending', 'ascending']"#end />
 #end
 #end
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right">
         <template slot-scope="scope">
           <el-button
             size="mini"

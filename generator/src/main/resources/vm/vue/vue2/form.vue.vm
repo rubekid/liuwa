@@ -75,7 +75,7 @@
         <el-form-item label="${comment}" prop="${field}">
           <el-select v-model="form.${field}" placeholder="请选择${comment}">
             <el-option
-              v-for="dict in sysDictMap.${dictType}"
+              v-for="dict in dictData('${dictType}')"
               :key="dict.dictValue"
               :label="dict.dictLabel"
               :value="dict.dictValue"
@@ -93,7 +93,7 @@
         <el-form-item label="${comment}">
           <el-checkbox-group v-model="form.${field}">
             <el-checkbox
-              v-for="dict in sysDictMap.${dictType}"
+              v-for="dict in dictData('${dictType}', 'String')"
               :key="dict.dictValue"
               :label="dict.dictValue">
               {{dict.dictLabel}}
@@ -110,7 +110,7 @@
         <el-form-item label="${comment}">
           <el-radio-group v-model="form.${field}">
             <el-radio
-              v-for="dict in sysDictMap.${dictType}"
+              v-for="dict in dictData('${dictType}')"
               :key="dict.dictValue"
               :label="dict.dictValue"
 
@@ -158,6 +158,16 @@
 #end
 #end
            ></region>
+          </el-form-item>
+#elseif($column.htmlType == "regions")
+          <el-form-item label="${comment}" prop="${field}">
+            <region
+                mode="multiple"
+                :depth="2"
+                :checkStrictly="true"
+                :emitPath="false"
+                v-model="form.${field}"
+            ></region>
           </el-form-item>
 #elseif($column.htmlType == "textarea")
         <el-form-item label="${comment}" prop="${field}">
@@ -222,7 +232,7 @@
 #elseif($column.htmlType == "select" && "" != $dictType)
               <el-select v-model="scope.row.$javaField" placeholder="请选择${comment}">
                   <el-option
-                      v-for="dict in sysDictMap.${dictType}"
+                      v-for="dict in dictData('${dictType}')"
                       :key="dict.dictValue"
                       :label="dict.dictLabel"
                       :value="dict.dictValue"
@@ -236,7 +246,7 @@
 #elseif($column.htmlType == "checkbox" && "" != $dictType)
               <el-checkbox-group v-model="scope.row.$javaField">
                   <el-checkbox
-                      v-for="dict in sysDictMap.${dictType}"
+                      v-for="dict in dictData('${dictType}', 'String')"
                       :key="dict.dictValue"
                       :label="dict.dictValue">
                     {{dict.dictLabel}}
@@ -249,7 +259,7 @@
 #elseif($column.htmlType == "radio" && "" != $dictType)
               <el-radio-group v-model="scope.row.$javaField">
                   <el-radio
-                      v-for="dict in sysDictMap.${dictType}"
+                      v-for="dict in dictData('${dictType}')"
                       :key="dict.dictValue"
                       :label="dict.dictValue"
                   >{{dict.dictLabel}}</el-radio>
@@ -440,7 +450,7 @@ export default {
 #elseif($column.htmlType == "switch")
         $column.javaField: #if($column.javaType == "Boolean")true#else 1#end#if($velocityCount != $columns.size()),#end
 
-#elseif($column.htmlType == "checkbox")
+#elseif($column.htmlType == "checkbox" || $column.htmlType == "regions")
         $column.javaField: []#if($velocityCount != $columns.size()),#end
 
 #else
@@ -465,7 +475,7 @@ export default {
       get${BusinessName}(${pkColumn.javaField}).then(response => {
         this.form = response.data;
 #foreach ($column in $columns)
-#if($column.htmlType == "checkbox")
+#if($column.htmlType == "checkbox" || $column.htmlType == "regions")
         this.form.$column.javaField = this.form.${column.javaField}.split(",");
 #end
 #end
@@ -513,13 +523,15 @@ export default {
     submitForm() {
       this.#[[$]]#refs["form"].validate(valid => {
         if (valid) {
+          // 使用副本，避免数据污染
+          let form = JSON.parse(JSON.stringify(this.form));
 #foreach ($column in $columns)
-#if($column.htmlType == "checkbox")
-          this.form.$column.javaField = this.form.${column.javaField}.join(",");
+#if($column.htmlType == "checkbox" || $column.htmlType == "regions")
+          form.$column.javaField = form.${column.javaField}.join(",");
 #end
 #end
 #if($table.sub)
-          this.form.${subclassName}List = this.${subclassName}List;
+          form.${subclassName}List = this.${subclassName}List;
 #end
 
           let loadingInstance = Loading.service({
@@ -527,21 +539,21 @@ export default {
             fullscreen: false,
             text: '提交中'
           });
-          if (this.form.${pkColumn.javaField} != null) {
-            update${BusinessName}(this.form).then(response => {
+          if (form.${pkColumn.javaField} != null) {
+            update${BusinessName}(form).then(response => {
               this.#[[$modal]]#.success("修改成功");
               this.open = false;
-              this.$emit('success', this.from);
+              this.$emit('success', from);
             }).catch(err => {
               console.log(err);
             }).finally(()=>{
               loadingInstance.close();
             });
           } else {
-            add${BusinessName}(this.form).then(response => {
+            add${BusinessName}(form).then(response => {
               this.#[[$modal]]#.success("新增成功");
               this.open = false;
-              this.$emit('success', this.from);
+              this.$emit('success', from);
             }).catch(err => {
                console.log(err);
             }).finally(()=>{

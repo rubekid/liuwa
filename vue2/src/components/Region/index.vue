@@ -1,5 +1,5 @@
 <template>
-	<cascader v-if="mode == 'multiple'"
+	<cascader v-if="mode == 'select'"
 		v-model="regionValue"
 		:placeholder="placeholder"
 		:options="options" value-key="name" label-key="name" @change="handleChange"></cascader>
@@ -7,7 +7,7 @@
 		v-model="regionValue"
 		:options="options"
 		clearable
-		:props="{value: 'name', label: 'name', expandTrigger: 'hover'}"
+  :props="{value: 'name', label: 'name', emitPath: emitPath,  expandTrigger: expandTrigger, checkStrictly:checkStrictly, multiple: multiple}"
 		@change="handleChange"></el-cascader>
 </template>
 
@@ -38,7 +38,19 @@ export default {
 			type: Array,
 			default: () => ['请选择省份', '请选择城市', '请选择区县']
 		},
-		mode: { // 模式  single 单个 multiple 多个下拉框
+		expandTrigger:{ // 次级菜单的展开方式	 click / hover
+			type: String,
+			default: 'click'
+		},
+		checkStrictly:{ // 是否严格的遵守父子节点不互相关联
+			type: Boolean,
+			default: false
+		},
+		emitPath:{ // 在选中节点改变时，是否返回由该节点所在的各级菜单的值所组成的数组，若设置 false，则只返回该节点的值
+			type: Boolean,
+			default: true
+		},
+		mode: { // 模式  single 单个 multiple 多选  select下拉
 			type: String,
 			default: 'single'
 		},
@@ -80,7 +92,9 @@ export default {
 		this.regionValue = value;
 	},
 	computed: {
-
+			multiple(){
+				return this.mode == 'multiple';
+			}
 	},
 	watch: {
 		province(val){

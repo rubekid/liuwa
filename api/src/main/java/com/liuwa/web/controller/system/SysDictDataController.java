@@ -1,35 +1,27 @@
 package com.liuwa.web.controller.system;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.liuwa.common.constant.SysConstants;
-import com.liuwa.common.core.domain.entity.SysDictType;
-import com.liuwa.common.core.domain.model.SysDictDataOption;
-import com.liuwa.common.core.service.CurdService;
-import com.liuwa.common.utils.spring.SpringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import com.liuwa.common.annotation.Log;
+import com.liuwa.common.constant.SysConstants;
 import com.liuwa.common.core.controller.BaseController;
 import com.liuwa.common.core.domain.AjaxResult;
 import com.liuwa.common.core.domain.entity.SysDictData;
+import com.liuwa.common.core.domain.entity.SysDictType;
+import com.liuwa.common.core.domain.model.SysDictDataOption;
 import com.liuwa.common.core.page.TableDataInfo;
+import com.liuwa.common.core.service.CurdService;
 import com.liuwa.common.enums.BusinessType;
 import com.liuwa.common.utils.StringUtils;
 import com.liuwa.common.utils.poi.ExcelUtil;
+import com.liuwa.common.utils.spring.SpringUtils;
 import com.liuwa.system.service.SysDictDataService;
 import com.liuwa.system.service.SysDictTypeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 数据字典信息
@@ -79,30 +71,37 @@ public class SysDictDataController extends BaseController
      * 根据字典类型查询字典数据信息
      */
     @GetMapping(value = "/type/{dictType}")
-    public AjaxResult dictType(@PathVariable String dictType) {
+    public AjaxResult dictType(@PathVariable String dictType, @RequestParam(value="dataType", required = false) String dataType) {
         List<SysDictDataOption> items = new ArrayList<SysDictDataOption>();
         List<SysDictData> list = new ArrayList<SysDictData>();
         if(dictType.startsWith(SysConstants.DICT_SYS_ENTITY)){
-            String serviceName = dictType.substring(SysConstants.DICT_SYS_ENTITY.length()) + "Service";
+            String serviceName = StringUtils.toCamelCase(dictType.substring(SysConstants.DICT_SYS_ENTITY.length())) + "Service";
             CurdService curdService = SpringUtils.getBean(serviceName);
             list =  curdService.dicts();
         }
         else{
             list = dictTypeService.selectDictDataByType(dictType);
+            if(list.size() >0){
+                if(dataType == null){
+                    SysDictType sysDictType = dictTypeService.selectDictTypeByType(dictType);
+                    dataType = sysDictType.getDataType();
+                }
+
+            }
         }
 
-        if (!StringUtils.isNull(list)) {
-            SysDictType sysDictType = dictTypeService.selectDictTypeByType(dictType);
+        // 按数据类型调整
+        if(dataType != null){
             for(SysDictData dataItem : list){
                 String label = dataItem.getDictLabel();
                 String value = dataItem.getDictValue();
-                if(SysDictType.DATA_TYPE_NUMBER.equals(sysDictType.getDataType())){
+                if(SysDictType.DATA_TYPE_NUMBER.equals(dataType)){
                     SysDictDataOption<Double> option = new SysDictDataOption<Double>();
                     option.setDictValue(Double.valueOf(value));
                     option.setDictLabel(label);
                     items.add(option);
                 }
-                else if(SysDictType.DATA_TYPE_BOOLEAN.equals(sysDictType.getDataType())){
+                else if(SysDictType.DATA_TYPE_BOOLEAN.equals(dataType)){
                     SysDictDataOption<Boolean> option = new SysDictDataOption<Boolean>();
                     option.setDictValue(Boolean.valueOf(value));
                     option.setDictLabel(label);
@@ -115,8 +114,8 @@ public class SysDictDataController extends BaseController
                     items.add(option);
                 }
             }
-
         }
+
 
         return AjaxResult.success(items);
     }

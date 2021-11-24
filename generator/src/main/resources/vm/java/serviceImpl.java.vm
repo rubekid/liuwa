@@ -25,7 +25,7 @@ import ${packageName}.service.${ClassName}Service;
  * @author ${author}
  * @date ${datetime}
  */
-@Service
+@Service("${className}Service")
 public class ${ClassName}ServiceImpl extends ${curdServiceImpl}<${pkColumn.javaType}, ${ClassName}Dao, ${ClassName}> implements ${ClassName}Service{
 
 #foreach($column in $columns)

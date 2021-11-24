@@ -80,6 +80,28 @@ public class GenConstants {
     /** 文本域 */
     public static final String HTML_TEXTAREA = "textarea";
 
+    /** 金额 */
+    public static final String HTML_MONEY = "money";
+
+    /** 整数 */
+    public static final String HTML_INTEGER = "integer";
+
+    /** 小数 */
+    public static final String HTML_DECIMAL = "decimal";
+
+    /** 百分比 */
+    public static final String HTML_PERCENT = "percent";
+
+    /** 比率 */
+    public static final String HTML_RATIO = "ratio";
+
+    /** 评分 */
+    public static final String HTML_RATE = "rate";
+
+    /** 颜色 */
+    public static final String HTML_COLOR = "color";
+
+
     /** 下拉框 */
     public static final String HTML_SELECT = "select";
 
@@ -93,6 +115,9 @@ public class GenConstants {
     public static final String HTML_CHECKBOX = "checkbox";
 
     /** 日期控件 */
+    public static final String HTML_DATE = "date";
+
+    /** 日期时间控件 */
     public static final String HTML_DATETIME = "datetime";
 
     /** 单图上传 */
@@ -103,6 +128,18 @@ public class GenConstants {
 
     /** 文件上传控件 */
     public static final String HTML_FILE_UPLOAD = "fileUpload";
+
+    /** 省份 */
+    public static final String HTML_PROVINCE = "province";
+
+    /** 城市 */
+    public static final String HTML_CITY = "city";
+
+    /** 区县 */
+    public static final String HTML_DISTRICT = "district";
+    /** 区域多选 */
+    public static final String HTML_REGIONS = "regions";
+
 
     /** 富文本控件 */
     public static final String HTML_EDITOR = "editor";

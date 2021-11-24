@@ -13,6 +13,7 @@ import router from './router'
 import directive from './directive' //directive
 import plugins from './plugins' // plugins
 import DictMixin from "@/mixins/DictMixin";
+import PermissionMixin from "@/mixins/PermissionMixin";
 
 
 import './assets/icons' // icon
@@ -75,7 +76,8 @@ Vue.component('ImageView', ImageView)
 Vue.use(directive)
 Vue.use(plugins)
 Vue.use(VueMeta)
-Vue.use(DictMixin);
+Vue.use(DictMixin)
+Vue.use(PermissionMixin)
 
 /**
  * If you don't want to use mock-server

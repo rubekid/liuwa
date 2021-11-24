@@ -25,7 +25,7 @@
       <el-form-item label="${comment}" prop="${column.javaField}">
         <el-select v-model="queryParams.${column.javaField}" placeholder="请选择${comment}" clearable size="small">
           <el-option
-            v-for="dict in sysDictMap.${dictType}"
+            v-for="dict in dictData('${dictType}')"
             :key="dict.dictValue"
             :label="dict.dictLabel"
             :value="dict.dictValue"
@@ -115,7 +115,7 @@
 #elseif($column.list && "" != $column.dictType)
       <el-table-column label="${comment}" align="center" prop="${javaField}">
         <template slot-scope="scope">
-          <dict-tag :options="sysDictMap.${dictType}" :value="scope.row.${javaField}"/>
+          <dict-tag :options="dictData('${dictType}')" :value="scope.row.${javaField}"/>
         </template>
       </el-table-column>
 #elseif($column.list && "" != $javaField)
