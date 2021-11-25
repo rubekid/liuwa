@@ -12,3 +12,9 @@ gen:
   frontTplPath: vue/vue2/
   # controller 分离路径
   controllerPath:
+  #模块名称
+  moduleName: api
+  #vue 目录
+  vuePath: vue2
+
+

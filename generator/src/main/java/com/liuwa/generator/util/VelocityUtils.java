@@ -15,22 +15,28 @@ import java.util.List;
 
 /**
  * 模板处理工具类
- * 
+ *
  * @author liuwa
  */
 public class VelocityUtils
 {
     /** 项目空间路径 */
-    private static final String PROJECT_PATH = "main/java";
+    private static final String PROJECT_PATH = "src/main/java";
 
     /** mybatis空间路径 */
-    private static final String MYBATIS_PATH = "main/resources/mapper";
+    private static final String MYBATIS_PATH = "src/main/resources/mapper";
 
     /** 默认上级菜单 顶级菜单 */
     private static final long DEFAULT_PARENT_MENU_ID = 0;
 
     /** 前端页面模板路劲 */
     private static String frontTplPath = GenConfig.getFrontTplPath();
+
+    /** 生成代码模块名称 */
+    private static String javaModuleName = GenConfig.getModuleName();
+
+    /** VUE 生成路径 */
+    private static String vuePath = GenConfig.getVuePath() + "/src";
 
     /**
      * 设置模板变量信息
@@ -256,13 +262,14 @@ public class VelocityUtils
         // 业务名称
         String businessName = genTable.getBusinessName();
 
-        String javaPath = PROJECT_PATH + "/" + StringUtils.replace(packageName, ".", "/");
+        String baseJavaPath =  PROJECT_PATH + "/" + StringUtils.replace(packageName, ".", "/");
+        String javaPath = javaModuleName + "/" + baseJavaPath;
         String controllerPath = javaPath;
         if(StringUtils.isNotEmpty(GenConfig.getControllerPath())){
-            controllerPath = GenConfig.getControllerPath() + "/" + javaPath;
+            controllerPath = GenConfig.getControllerPath() + "/" + baseJavaPath;
         }
-        String mybatisPath = MYBATIS_PATH + "/" + moduleName;
-        String vuePath = "vue";
+        String mybatisPath = javaModuleName + "/" + MYBATIS_PATH + "/" + moduleName;
+
 
         if (template.contains("domain.java.vm"))
         {
@@ -334,7 +341,7 @@ public class VelocityUtils
 
     /**
      * 根据列类型获取导入包
-     * 
+     *
      * @param genTable 业务表对象
      * @return 返回需要导入的包列表
      */

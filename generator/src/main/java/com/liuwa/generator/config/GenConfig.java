@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * 读取代码生成相关配置
- * 
+ *
  * @author liuwa
  */
 @Component
@@ -30,8 +30,14 @@ public class GenConfig
     /** 前端页面模板路径 如：vue/vue2/ */
     public static String frontTplPath;
 
+    /** 模块名称 */
+    public static String moduleName;
+
     /** Controller 分离路径 */
     public static String controllerPath;
+
+    /** Vue 路径 */
+    public static String vuePath;
 
     public static String getAuthor()
     {
@@ -93,5 +99,23 @@ public class GenConfig
     @Value("${controllerPath:}")
     public void setControllerPath(String controllerPath){
         GenConfig.controllerPath = controllerPath;
+    }
+
+    public static String getModuleName() {
+        return moduleName;
+    }
+
+    @Value("${moduleName:curd}")
+    public void setModuleName(String moduleName){
+        GenConfig.moduleName = moduleName;
+    }
+
+    public static String getVuePath() {
+        return vuePath;
+    }
+
+    @Value("${vuePath:vue}")
+    public void setVuePath(String vuePath){
+        GenConfig.vuePath = vuePath;
     }
 }
