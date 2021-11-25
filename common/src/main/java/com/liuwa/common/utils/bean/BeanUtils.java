@@ -1,6 +1,7 @@
 package com.liuwa.common.utils.bean;
 
 import com.liuwa.common.core.domain.BaseEntity;
+import com.liuwa.common.exception.ServiceException;
 import com.liuwa.common.utils.ClassUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
@@ -182,7 +183,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils
      * @throws NoSuchMethodException
      * copy
      */
-    public static void copyBeanNotNull2Bean(Object databean,Object tobean)throws Exception
+    public static void copyBeanNotNull2Bean(Object databean,Object tobean)
     {
         PropertyDescriptor origDescriptors[] = PropertyUtils.getPropertyDescriptors(databean);
         for (int i = 0; i < origDescriptors.length; i++) {
@@ -191,11 +192,17 @@ public class BeanUtils extends org.springframework.beans.BeanUtils
                 continue; // No point in trying to set an object's class
             }
             if (PropertyUtils.isReadable(databean, name) &&PropertyUtils.isWriteable(tobean, name)) {
-
-                Object value = PropertyUtils.getSimpleProperty(databean, name);
-                if(value!=null){
-                    org.apache.commons.beanutils.BeanUtils.copyProperty(tobean, name, value);
+                try{
+                    Object value = PropertyUtils.getSimpleProperty(databean, name);
+                    if(value!=null){
+                        org.apache.commons.beanutils.BeanUtils.copyProperty(tobean, name, value);
+                    }
                 }
+                catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex){
+                    logger.error(ex.getMessage(), ex);
+                    throw new ServiceException("对象拷贝失败");
+                }
+
             }
         }
     }

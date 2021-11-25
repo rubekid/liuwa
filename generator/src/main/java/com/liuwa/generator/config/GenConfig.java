@@ -90,7 +90,7 @@ public class GenConfig
         return controllerPath;
     }
 
-    @Value("${controllerPath}")
+    @Value("${controllerPath:}")
     public void setControllerPath(String controllerPath){
         GenConfig.controllerPath = controllerPath;
     }
