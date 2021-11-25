@@ -48,9 +48,16 @@ export function parseTime(time, pattern) {
 
 // 表单重置
 export function resetForm(refName) {
- if (this.$refs[refName]) {
-  this.$refs[refName].resetFields();
- }
+	if (this.$refs[refName]) {
+		let form = this.$refs[refName]
+		form.resetFields();
+		// 处理自定义组件resetField
+		form.$children.forEach(formItem => {
+			formItem.$children.forEach(item => {
+				item.resetField && item.resetField()
+			})
+		})
+	}
 }
 
 // 添加日期范围

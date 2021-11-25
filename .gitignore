@@ -10,3 +10,5 @@
 /vue2/src/api/test
 /vue2/src/views/test
 /api/src/main/resources/mapper/test
+/curd/target/curd-3.6.0.jar
+/curd/target/maven-archiver/pom.properties

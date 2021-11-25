@@ -50,7 +50,7 @@ public class SysDictData extends BaseEntity
 
     /** 状态（0正常 1停用） */
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
-    private String status;
+    private Integer status;
 
     public Long getDictCode()
     {
@@ -144,12 +144,12 @@ public class SysDictData extends BaseEntity
         this.isDefault = isDefault;
     }
 
-    public String getStatus()
+    public Integer getStatus()
     {
         return status;
     }
 
-    public void setStatus(String status)
+    public void setStatus(Integer status)
     {
         this.status = status;
     }

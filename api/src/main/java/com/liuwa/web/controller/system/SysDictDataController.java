@@ -1,18 +1,15 @@
 package com.liuwa.web.controller.system;
 
 import com.liuwa.common.annotation.Log;
-import com.liuwa.common.constant.SysConstants;
 import com.liuwa.common.core.controller.BaseController;
 import com.liuwa.common.core.domain.AjaxResult;
 import com.liuwa.common.core.domain.entity.SysDictData;
 import com.liuwa.common.core.domain.entity.SysDictType;
 import com.liuwa.common.core.domain.model.SysDictDataOption;
 import com.liuwa.common.core.page.TableDataInfo;
-import com.liuwa.common.core.service.CurdService;
 import com.liuwa.common.enums.BusinessType;
 import com.liuwa.common.utils.StringUtils;
 import com.liuwa.common.utils.poi.ExcelUtil;
-import com.liuwa.common.utils.spring.SpringUtils;
 import com.liuwa.system.service.SysDictDataService;
 import com.liuwa.system.service.SysDictTypeService;
 import org.springframework.beans.factory.annotation.Autowired;

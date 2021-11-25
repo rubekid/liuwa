@@ -125,6 +125,17 @@ export default {
 
 	},
 	methods:{
+		/**
+			* 重置字段
+			*/
+		resetField(){
+			this.regionValue = [];
+			this.handleChange(this.regionValue);
+		},
+		/**
+			* 监听变化
+			* @param e
+			*/
 		handleChange(e){
 			this.$emit("update:province", e[0]);
 			this.$emit("update:city", e[1]);
