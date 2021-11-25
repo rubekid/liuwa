@@ -12,7 +12,7 @@
 #else
 #set($comment=$column.columnComment)
 #end
-    <el-col :span="columnSpan">
+
 #if($column.htmlType == "input")
       <el-form-item label="${comment}" prop="${column.javaField}">
         <el-input
@@ -90,7 +90,7 @@
           ></region>
      </el-form-item>
 #end
-    </el-col>
+
 #end
 #end
       <el-form-item>
@@ -193,7 +193,6 @@
         </template>
       </el-table-column>
 
-
 #elseif($column.list && "" != $column.dictType)
       <el-table-column label="${comment}" align="center" prop="${javaField}" #if($column.sort)sortable="custom" :sort-orders="['descending', 'ascending']"#end>
         <template slot-scope="scope">
@@ -267,7 +266,6 @@ export default {
 #end
   data() {
     return {
-      columnSpan: 24,
       // 遮罩层
       loading: true,
       // 导出遮罩层
