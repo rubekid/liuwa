@@ -162,6 +162,14 @@ public interface SysUserService
     public boolean updateUserAvatar(String userName, String avatar);
 
     /**
+     * 修改昵称
+     * @param userId
+     * @param nickName
+     * @return
+     */
+    public int updateNickName(Long userId, String nickName);
+
+    /**
      * 重置用户密码
      * 
      * @param user 用户信息

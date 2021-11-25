@@ -77,6 +77,14 @@ public interface SysUserMapper
     public int updateUserAvatar(@Param("userName") String userName, @Param("avatar") String avatar);
 
     /**
+     * 修改昵称
+     * @param userId
+     * @param nickName
+     * @return
+     */
+    public int updateNickName(@Param("userId") Long userId, @Param("nickName") String nickName);
+
+    /**
      * 重置用户密码
      * 
      * @param userName 用户名
