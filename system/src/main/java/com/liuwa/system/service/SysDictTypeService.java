@@ -1,8 +1,9 @@
 package com.liuwa.system.service;
 
-import java.util.List;
-import com.liuwa.common.core.domain.entity.SysDictData;
 import com.liuwa.common.core.domain.entity.SysDictType;
+import com.liuwa.common.core.domain.model.SysDictDataOption;
+
+import java.util.List;
 
 /**
  * 字典 业务层
@@ -32,7 +33,7 @@ public interface SysDictTypeService
      * @param dictType 字典类型
      * @return 字典数据集合信息
      */
-    public List<SysDictData> selectDictDataByType(String dictType);
+    public List<SysDictDataOption> selectDictDataByType(String dictType);
 
     /**
      * 根据字典类型ID查询信息

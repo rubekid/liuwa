@@ -72,64 +72,35 @@ public class SysDictDataController extends BaseController
      */
     @GetMapping(value = "/type/{dictType}")
     public AjaxResult dictType(@PathVariable String dictType, @RequestParam(value="dataType", required = false) String dataType) {
+        List<SysDictDataOption> options = dictTypeService.selectDictDataByType(dictType);
+        String[] types = {SysDictType.DATA_TYPE_NUMBER, SysDictType.DATA_TYPE_BOOLEAN, SysDictType.DATA_TYPE_STRING};
+        if(!StringUtils.equalsAny(dataType, SysDictType.DATA_TYPE_NUMBER, SysDictType.DATA_TYPE_BOOLEAN, SysDictType.DATA_TYPE_STRING)){
+            return AjaxResult.success(options);
+        }
         List<SysDictDataOption> items = new ArrayList<SysDictDataOption>();
-        List<SysDictData> list = new ArrayList<SysDictData>();
-        if(dictType.startsWith(SysConstants.DICT_SYS_ENTITY)){
-            String serviceName = StringUtils.toCamelCase(dictType.substring(SysConstants.DICT_SYS_ENTITY.length())) + "Service";
-            CurdService curdService = SpringUtils.getBean(serviceName);
-            items = curdService.dicts();
-        }
-        else{
-            list = dictTypeService.selectDictDataByType(dictType);
-            if(list.size() >0){
-                if(dataType == null){
-                    SysDictType sysDictType = dictTypeService.selectDictTypeByType(dictType);
-                    dataType = sysDictType.getDataType();
-                }
 
+        for(SysDictDataOption dataItem : options){
+            String label = dataItem.getDictLabel();
+            String value = String.valueOf(dataItem.getDictValue());
+            if(SysDictType.DATA_TYPE_NUMBER.equals(dataType)){
+                SysDictDataOption<Double> option = new SysDictDataOption<Double>();
+                option.setDictValue(Double.valueOf(value));
+                option.setDictLabel(label);
+                items.add(option);
+            }
+            else if(SysDictType.DATA_TYPE_BOOLEAN.equals(dataType)){
+                SysDictDataOption<Boolean> option = new SysDictDataOption<Boolean>();
+                option.setDictValue(Boolean.valueOf(value));
+                option.setDictLabel(label);
+                items.add(option);
+            }
+            else{
+                SysDictDataOption<String> option = new SysDictDataOption<String>();
+                option.setDictValue(value);
+                option.setDictLabel(label);
+                items.add(option);
             }
         }
-
-        // 按数据类型调整
-        if(dataType != null){
-
-            // 实体字典数据
-            if(dictType.startsWith(SysConstants.DICT_SYS_ENTITY)){
-                for(SysDictDataOption option : items ){
-                    SysDictData dictData = new SysDictData();
-                    dictData.setDictLabel(option.getDictLabel());
-                    dictData.setDictValue(String.valueOf(option.getDictValue()));
-                    list.add(dictData);
-                }
-                items = new ArrayList<SysDictDataOption>();
-            }
-
-            for(SysDictData dataItem : list){
-                String label = dataItem.getDictLabel();
-                String value = dataItem.getDictValue();
-                if(SysDictType.DATA_TYPE_NUMBER.equals(dataType)){
-                    SysDictDataOption<Double> option = new SysDictDataOption<Double>();
-                    option.setDictValue(Double.valueOf(value));
-                    option.setDictLabel(label);
-                    items.add(option);
-                }
-                else if(SysDictType.DATA_TYPE_BOOLEAN.equals(dataType)){
-                    SysDictDataOption<Boolean> option = new SysDictDataOption<Boolean>();
-                    option.setDictValue(Boolean.valueOf(value));
-                    option.setDictLabel(label);
-                    items.add(option);
-                }
-                else{
-                    SysDictDataOption<String> option = new SysDictDataOption<String>();
-                    option.setDictValue(value);
-                    option.setDictLabel(label);
-                    items.add(option);
-                }
-            }
-        }
-
-
-
         return AjaxResult.success(items);
     }
 

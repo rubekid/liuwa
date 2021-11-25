@@ -4,9 +4,12 @@ import com.liuwa.common.constant.Constants;
 import com.liuwa.common.constant.SysConstants;
 import com.liuwa.common.core.domain.entity.SysDictData;
 import com.liuwa.common.core.domain.entity.SysDictType;
+import com.liuwa.common.core.domain.model.SysDictDataOption;
+import com.liuwa.common.core.service.CurdService;
 import com.liuwa.common.exception.ServiceException;
 import com.liuwa.common.utils.DictUtils;
 import com.liuwa.common.utils.StringUtils;
+import com.liuwa.common.utils.spring.SpringUtils;
 import com.liuwa.system.mapper.SysDictDataMapper;
 import com.liuwa.system.mapper.SysDictTypeMapper;
 import com.liuwa.system.service.SysDictTypeService;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -69,20 +73,23 @@ public class SysDictTypeServiceImpl implements SysDictTypeService
      * @return 字典数据集合信息
      */
     @Override
-    public List<SysDictData> selectDictDataByType(String dictType)
+    public List<SysDictDataOption> selectDictDataByType(String dictType)
     {
-        List<SysDictData> dictDatas = DictUtils.getDictCache(dictType);
-        if (StringUtils.isNotEmpty(dictDatas))
-        {
-            return dictDatas;
+        List<SysDictDataOption> dictDataOptions = DictUtils.getDictCache(dictType);
+        if (dictDataOptions!= null && dictDataOptions.size() > 0) {
+            return dictDataOptions;
         }
-        dictDatas = dictDataMapper.selectDictDataByType(dictType);
-        if (StringUtils.isNotEmpty(dictDatas))
-        {
-            DictUtils.setDictCache(dictType, dictDatas);
-            return dictDatas;
+
+        // 由于缓存需要在增改删时更新缓存，暂不做统一缓存处理
+        if(dictType.startsWith(SysConstants.DICT_SYS_ENTITY)){
+            String serviceName = StringUtils.toCamelCase(dictType.substring(SysConstants.DICT_SYS_ENTITY.length())) + "Service";
+            CurdService curdService = SpringUtils.getBean(serviceName);
+            return curdService.dicts();
         }
-        return null;
+
+        List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(dictType);
+        return DictUtils.setDictCache(dictType, dictDatas, selectDictTypeByType(dictType));
+
     }
 
     /**
@@ -140,7 +147,7 @@ public class SysDictTypeServiceImpl implements SysDictTypeService
         for (SysDictType dictType : dictTypeList)
         {
             List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(dictType.getDictType());
-            DictUtils.setDictCache(dictType.getDictType(), dictDatas);
+            DictUtils.setDictCache(dictType.getDictType(), dictDatas, dictType);
         }
     }
 
@@ -178,7 +185,7 @@ public class SysDictTypeServiceImpl implements SysDictTypeService
         int row = dictTypeMapper.insertDictType(dict);
         if (row > 0)
         {
-            DictUtils.setDictCache(dict.getDictType(), null);
+            DictUtils.setDictCache(dict.getDictType());
         }
         return row;
     }
@@ -186,23 +193,23 @@ public class SysDictTypeServiceImpl implements SysDictTypeService
     /**
      * 修改保存字典类型信息
      *
-     * @param dict 字典类型信息
+     * @param dictType 字典类型信息
      * @return 结果
      */
     @Override
     @Transactional
-    public int updateDictType(SysDictType dict)
+    public int updateDictType(SysDictType dictType)
     {
-        if(dict.getDictType().startsWith(SysConstants.DICT_SYS_ENTITY)){
+        if(dictType.getDictType().startsWith(SysConstants.DICT_SYS_ENTITY)){
             throw new ServiceException("类型不能以'"+ SysConstants.DICT_SYS_ENTITY +"'作为前缀");
         }
-        SysDictType oldDict = dictTypeMapper.selectDictTypeById(dict.getDictId());
-        dictDataMapper.updateDictDataType(oldDict.getDictType(), dict.getDictType());
-        int row = dictTypeMapper.updateDictType(dict);
+        SysDictType oldDict = dictTypeMapper.selectDictTypeById(dictType.getDictId());
+        dictDataMapper.updateDictDataType(oldDict.getDictType(), dictType.getDictType());
+        int row = dictTypeMapper.updateDictType(dictType);
         if (row > 0)
         {
-            List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(dict.getDictType());
-            DictUtils.setDictCache(dict.getDictType(), dictDatas);
+            List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(dictType.getDictType());
+            DictUtils.setDictCache(dictType.getDictType(), dictDatas, dictType);
         }
         return row;
     }

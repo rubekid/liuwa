@@ -1,7 +1,10 @@
 package com.liuwa.system.service.impl;
 
 import java.util.List;
+
+import com.liuwa.system.service.SysDictTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import com.liuwa.common.core.domain.entity.SysDictData;
 import com.liuwa.common.utils.DictUtils;
@@ -18,6 +21,10 @@ public class SysDictDataServiceImpl implements SysDictDataService
 {
     @Autowired
     private SysDictDataMapper dictDataMapper;
+
+    @Lazy
+    @Autowired
+    private SysDictTypeService dictTypeService;
 
     /**
      * 根据条件分页查询字典数据
@@ -70,7 +77,7 @@ public class SysDictDataServiceImpl implements SysDictDataService
             SysDictData data = selectDictDataById(dictCode);
             dictDataMapper.deleteDictDataById(dictCode);
             List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(data.getDictType());
-            DictUtils.setDictCache(data.getDictType(), dictDatas);
+            DictUtils.setDictCache(data.getDictType(), dictDatas, dictTypeService.selectDictTypeByType(data.getDictType()));
         }
     }
 
@@ -87,7 +94,7 @@ public class SysDictDataServiceImpl implements SysDictDataService
         if (row > 0)
         {
             List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(data.getDictType());
-            DictUtils.setDictCache(data.getDictType(), dictDatas);
+            DictUtils.setDictCache(data.getDictType(), dictDatas, dictTypeService.selectDictTypeByType(data.getDictType()));
         }
         return row;
     }
@@ -105,7 +112,7 @@ public class SysDictDataServiceImpl implements SysDictDataService
         if (row > 0)
         {
             List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(data.getDictType());
-            DictUtils.setDictCache(data.getDictType(), dictDatas);
+            DictUtils.setDictCache(data.getDictType(), dictDatas, dictTypeService.selectDictTypeByType(data.getDictType()));
         }
         return row;
     }

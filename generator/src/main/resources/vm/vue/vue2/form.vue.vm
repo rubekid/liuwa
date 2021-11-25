@@ -393,7 +393,7 @@ export default {
     this.open = true;
   },
   mounted(){
-    // 获取 from并加入loading，避免网络差造成假死现象
+    // 获取 form并加入loading，避免网络差造成假死现象
     this.$nextTick(() => {
       if(this.$refs.form){
         if(!this.dataInited){
@@ -543,7 +543,7 @@ export default {
             update${BusinessName}(form).then(response => {
               this.#[[$modal]]#.success("修改成功");
               this.open = false;
-              this.$emit('success', from);
+              this.$emit('success', form);
             }).catch(err => {
               console.log(err);
             }).finally(()=>{
@@ -553,7 +553,7 @@ export default {
             add${BusinessName}(form).then(response => {
               this.#[[$modal]]#.success("新增成功");
               this.open = false;
-              this.$emit('success', from);
+              this.$emit('success', form);
             }).catch(err => {
                console.log(err);
             }).finally(()=>{
