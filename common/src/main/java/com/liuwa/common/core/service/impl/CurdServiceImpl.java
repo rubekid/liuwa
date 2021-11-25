@@ -116,8 +116,8 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
                 SysDictDataOption<Pk> option = new SysDictDataOption<Pk>();
                 option.setDictValue((Pk)entity.getId());
                 option.setDictLabel(label);
-                option.setListClass("");
-                option.setCssClass("");
+                option.setListClass("primary");
+                option.setCssClass("success");
                 items.add(option);
             }
             catch (InvocationTargetException | IllegalAccessException ex){

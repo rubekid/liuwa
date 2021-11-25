@@ -50,6 +50,11 @@ public class GenUtils
             String htmlType = columnLength >= 500 || arraysContains(GenConstants.COLUMNTYPE_TEXT, dataType) ? GenConstants.HTML_TEXTAREA : GenConstants.HTML_INPUT;
             column.setHtmlType(htmlType);
         }
+        else if (arraysContains(GenConstants.COLUMNTYPE_DATE, dataType))
+        {
+            column.setJavaType(GenConstants.TYPE_DATE);
+            column.setHtmlType(GenConstants.HTML_DATE);
+        }
         else if (arraysContains(GenConstants.COLUMNTYPE_TIME, dataType))
         {
             column.setJavaType(GenConstants.TYPE_DATE);
@@ -127,7 +132,8 @@ public class GenUtils
         // 图片字段设置图片上传控件
         else if (StringUtils.endsWithIgnoreCase(columnName, "image")
         || StringUtils.endsWithIgnoreCase(columnName, "logo")
-        || StringUtils.endsWithIgnoreCase(columnName, "cover"))
+        || StringUtils.endsWithIgnoreCase(columnName, "cover")
+        || StringUtils.endsWithIgnoreCase(columnName, "license"))
         {
             column.setHtmlType(GenConstants.HTML_SINGLE_IMAGE);
         }
@@ -145,6 +151,21 @@ public class GenUtils
         else if (StringUtils.endsWithIgnoreCase(columnName, "content"))
         {
             column.setHtmlType(GenConstants.HTML_EDITOR);
+        }
+        // 省份
+        else if (StringUtils.endsWithIgnoreCase(columnName, "province"))
+        {
+            column.setHtmlType(GenConstants.HTML_PROVINCE);
+        }
+        // 城市
+        else if (StringUtils.endsWithIgnoreCase(columnName, "city"))
+        {
+            column.setHtmlType(GenConstants.HTML_CITY);
+        }
+        // 区县
+        else if (StringUtils.endsWithIgnoreCase(columnName, "district"))
+        {
+            column.setHtmlType(GenConstants.HTML_DISTRICT);
         }
     }
 

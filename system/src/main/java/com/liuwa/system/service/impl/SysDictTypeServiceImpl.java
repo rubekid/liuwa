@@ -75,17 +75,10 @@ public class SysDictTypeServiceImpl implements SysDictTypeService
     @Override
     public List<SysDictDataOption> selectDictDataByType(String dictType)
     {
-        List<SysDictDataOption> dictDataOptions = DictUtils.getDictCache(dictType);
-        if (dictDataOptions!= null && dictDataOptions.size() > 0) {
-            return dictDataOptions;
-        }
-
-        // 由于缓存需要在增改删时更新缓存，暂不做统一缓存处理
-        if(dictType.startsWith(SysConstants.DICT_SYS_ENTITY)){
-            String serviceName = StringUtils.toCamelCase(dictType.substring(SysConstants.DICT_SYS_ENTITY.length())) + "Service";
-            CurdService curdService = SpringUtils.getBean(serviceName);
-            return curdService.dicts();
-        }
+        List<SysDictDataOption> dictDataOptions = DictUtils.getDictDataOption(dictType);
+        if (dictDataOptions.size() > 0 || dictType.startsWith(SysConstants.DICT_SYS_ENTITY)){
+        return dictDataOptions;
+    }
 
         List<SysDictData> dictDatas = dictDataMapper.selectDictDataByType(dictType);
         return DictUtils.setDictCache(dictType, dictDatas, selectDictTypeByType(dictType));

@@ -10,3 +10,5 @@ gen:
   tablePrefix: sys_,p_
   # 前端模板
   frontTplPath: vue/vue2/
+  # controller 分离路径
+  controllerPath:

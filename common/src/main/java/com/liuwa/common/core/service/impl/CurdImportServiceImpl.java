@@ -4,7 +4,7 @@ import com.liuwa.common.core.dao.CurdDao;
 import com.liuwa.common.core.domain.BaseEntity;
 import com.liuwa.common.core.service.CurdImportService;
 import com.liuwa.common.exception.ServiceException;
-import com.liuwa.common.utils.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -15,6 +15,7 @@ public abstract class CurdImportServiceImpl<Pk, D extends CurdDao<Pk, T>, T exte
     private D curdDao;
 
     @Override
+    @Transactional
     public String importData(List<T> list, boolean overwrite) {
         if (list == null || list.size() == 0)
         {

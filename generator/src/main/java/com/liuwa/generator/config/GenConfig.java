@@ -30,6 +30,9 @@ public class GenConfig
     /** 前端页面模板路径 如：vue/vue2/ */
     public static String frontTplPath;
 
+    /** Controller 分离路径 */
+    public static String controllerPath;
+
     public static String getAuthor()
     {
         return author;
@@ -81,5 +84,14 @@ public class GenConfig
     @Value("${frontTplPath}")
     public void setFrontTplPath(String frontTplPath) {
         GenConfig.frontTplPath = frontTplPath;
+    }
+
+    public static String getControllerPath() {
+        return controllerPath;
+    }
+
+    @Value("${controllerPath}")
+    public void setControllerPath(String controllerPath){
+        GenConfig.controllerPath = controllerPath;
     }
 }

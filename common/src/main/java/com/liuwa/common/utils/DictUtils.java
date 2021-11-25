@@ -87,10 +87,7 @@ public class DictUtils
             }
         }
         return setDictCache(key, options);
-
     }
-
-
 
     /**
      * 获取字典缓存
@@ -106,8 +103,30 @@ public class DictUtils
             List<SysDictDataOption> dictDatas = (List<SysDictDataOption>)cacheObj;
             return dictDatas;
         }
-        return null;
+        return new ArrayList<SysDictDataOption>();
     }
+
+    /**
+     * 获取字典
+     *
+     * @param dictType 参数键
+     * @return dictDatas 字典数据列表
+     */
+    public static List<SysDictDataOption> getDictDataOption(String dictType) {
+        List<SysDictDataOption> dictDataOptions = getDictCache(dictType);
+        if (dictDataOptions.size() > 0) {
+            return dictDataOptions;
+        }
+
+        // 由于缓存需要在增改删时更新缓存，暂不做统一缓存处理
+        if(dictType.startsWith(SysConstants.DICT_SYS_ENTITY)){
+            String serviceName = StringUtils.toCamelCase(dictType.substring(SysConstants.DICT_SYS_ENTITY.length())) + "Service";
+            CurdService curdService = SpringUtils.getBean(serviceName);
+            return curdService.dicts();
+        }
+        return dictDataOptions;
+    }
+
 
     /**
      * 根据字典类型和字典值获取字典标签
@@ -144,7 +163,7 @@ public class DictUtils
     public static String getDictLabel(String dictType, String dictValue, String separator)
     {
         StringBuilder propertyString = new StringBuilder();
-        List<SysDictDataOption> datas = getDictCache(dictType);
+        List<SysDictDataOption> datas = getDictDataOption(dictType);
 
         if (StringUtils.containsAny(separator, dictValue) && StringUtils.isNotEmpty(datas))
         {
@@ -152,7 +171,7 @@ public class DictUtils
             {
                 for (String value : dictValue.split(separator))
                 {
-                    if (value.equals(dict.getDictValue()))
+                    if (value.equals(String.valueOf(dict.getDictValue())))
                     {
                         propertyString.append(dict.getDictLabel() + separator);
                         break;
@@ -184,7 +203,7 @@ public class DictUtils
     public static String getDictValue(String dictType, String dictLabel, String separator)
     {
         StringBuilder propertyString = new StringBuilder();
-        List<SysDictDataOption> datas = getDictCache(dictType);
+        List<SysDictDataOption> datas = getDictDataOption(dictType);
 
         if (StringUtils.containsAny(separator, dictLabel) && StringUtils.isNotEmpty(datas))
         {

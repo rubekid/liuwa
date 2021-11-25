@@ -257,6 +257,10 @@ public class VelocityUtils
         String businessName = genTable.getBusinessName();
 
         String javaPath = PROJECT_PATH + "/" + StringUtils.replace(packageName, ".", "/");
+        String controllerPath = javaPath;
+        if(StringUtils.isNotEmpty(GenConfig.getControllerPath())){
+            controllerPath = GenConfig.getControllerPath() + "/" + javaPath;
+        }
         String mybatisPath = MYBATIS_PATH + "/" + moduleName;
         String vuePath = "vue";
 
@@ -282,7 +286,7 @@ public class VelocityUtils
         }
         else if (template.contains("controller.java.vm"))
         {
-            fileName = StringUtils.format("{}/controller/{}Controller.java", javaPath, className);
+            fileName = StringUtils.format("{}/controller/{}Controller.java", controllerPath, className);
         }
         else if (template.contains("mapper.xml.vm"))
         {
