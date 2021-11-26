@@ -132,4 +132,7 @@ qiniu:
   bucket_name:
   region: 
 
-
+# 高德地图 接口KEY
+amap:
+  lbs:
+    key:

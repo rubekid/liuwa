@@ -92,6 +92,14 @@ public class SysConstants
     public static final int PASSWORD_MIN_LENGTH = 5;
     public static final int PASSWORD_MAX_LENGTH = 20;
 
+
+    /**
+     * 性别
+     */
+    public static final int GENDER_MALE = 1;
+    public static final int GENDER_FEMALE= 2;
+    public static final int GENDER_EMPTY = 0;
+
     /**
      * 系统实体字典前缀
      */

@@ -272,6 +272,7 @@ import {
 #if($column.htmlType == 'switch')
 #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
   change${AttrName},
+  batchChange${AttrName},
 #end
 #end
   export${BusinessName}

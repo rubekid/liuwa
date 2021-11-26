@@ -43,7 +43,7 @@ public class ${ClassName}ServiceImpl extends ${curdServiceImpl}<${pkColumn.javaT
             ${ClassName} ${className} = new ${ClassName}();
             ${className}.set${PkAttrName}(${pkColumn.javaField});
             ${className}.set${AttrName}(${column.javaField});
-            update${AttrName}(${ClassName} ${className});
+            update${AttrName}(${className});
         }
     }
 #end

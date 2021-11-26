@@ -183,7 +183,7 @@ public class DictUtils
         {
             for (SysDictDataOption dict : datas)
             {
-                if (dictValue.equals(dict.getDictValue()))
+                if (dictValue.equals(String.valueOf(dict.getDictValue())))
                 {
                     return dict.getDictLabel();
                 }

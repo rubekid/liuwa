@@ -1,24 +1,6 @@
 package com.liuwa.framework.web.service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.concurrent.TimeUnit;
-import javax.servlet.http.HttpServletRequest;
-
 import com.google.common.cache.Cache;
-import com.liuwa.framework.listener.RedisKeyDeletionListener;
-import com.liuwa.framework.listener.RedisKeyExpirationListener;
-import com.liuwa.framework.observable.RedisKeyDeletionObservable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
-import org.springframework.data.redis.core.RedisKeyDeletedEvent;
-import org.springframework.data.redis.core.RedisKeyExpiredEvent;
-import org.springframework.stereotype.Component;
 import com.liuwa.common.constant.Constants;
 import com.liuwa.common.core.domain.model.LoginUser;
 import com.liuwa.common.core.redis.RedisCache;
@@ -27,10 +9,28 @@ import com.liuwa.common.utils.StringUtils;
 import com.liuwa.common.utils.ip.AddressUtils;
 import com.liuwa.common.utils.ip.IpUtils;
 import com.liuwa.common.utils.uuid.IdUtils;
+import com.liuwa.framework.listener.RedisKeyDeletionListener;
+import com.liuwa.framework.listener.RedisKeyExpirationListener;
+import com.liuwa.framework.observable.RedisKeyDeletionObservable;
 import eu.bitwalker.useragentutils.UserAgent;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.event.EventListener;
+import org.springframework.data.redis.core.RedisKeyDeletedEvent;
+import org.springframework.data.redis.core.RedisKeyExpiredEvent;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.concurrent.TimeUnit;
 
 /**
  * token验证处理
@@ -76,6 +76,9 @@ public class TokenService implements Observer {
 
     @Autowired
     private RedisKeyDeletionListener deletionListener;
+
+    @Autowired
+    private SysUserCacheService sysUserCacheService;
 
 
 
@@ -223,6 +226,10 @@ public class TokenService implements Observer {
      */
     public void refreshToken(LoginUser loginUser)
     {
+        if(sysUserCacheService != null){
+            sysUserCacheService.beforeUpdateToken(loginUser.getUser());
+        }
+
         int expireTime = this.expireTime;
         if(loginUser.getUser().isDeveloper()){
             // 1周
