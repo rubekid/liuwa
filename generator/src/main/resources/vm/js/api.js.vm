@@ -1,6 +1,10 @@
 import request from '@/utils/request'
 
-// 查询${functionName}列表
+/**
+ * 查询${functionName}列表
+ * @param query
+ * @returns {*}
+ */
 export function list${BusinessName}(query) {
   return request({
     url: '/${moduleName}/${businessName}/list',
@@ -9,7 +13,11 @@ export function list${BusinessName}(query) {
   })
 }
 
-// 查询${functionName}详细
+/**
+ * 查询${functionName}详细
+ * @param
+ * @returns {*}
+ */
 export function get${BusinessName}(${pkColumn.javaField}) {
   return request({
     url: '/${moduleName}/${businessName}/' + ${pkColumn.javaField},
@@ -17,7 +25,11 @@ export function get${BusinessName}(${pkColumn.javaField}) {
   })
 }
 
-// 新增${functionName}
+/**
+ * 新增${functionName}
+ * @param data
+ * @returns {*}
+ */
 export function add${BusinessName}(data) {
   return request({
     url: '/${moduleName}/${businessName}',
@@ -26,7 +38,11 @@ export function add${BusinessName}(data) {
   })
 }
 
-// 修改${functionName}
+/**
+ * 修改${functionName}
+  * @param data
+ * @returns {*}
+ */
 export function update${BusinessName}(data) {
   return request({
     url: '/${moduleName}/${businessName}',
@@ -34,10 +50,16 @@ export function update${BusinessName}(data) {
     data: data
   })
 }
+
 #foreach($column in $columns)
 #if($column.htmlType == 'switch')
 #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
-// ${functionName}${column.columnComment}修改
+/**
+ * ${functionName}${column.columnComment}修改
+  * @param
+ * @param
+ * @returns {*}
+ */
 export function change${AttrName}(${pkColumn.javaField}, ${column.javaField}) {
   const data = {
     ${pkColumn.javaField},
@@ -49,11 +71,30 @@ export function change${AttrName}(${pkColumn.javaField}, ${column.javaField}) {
     data: data
   })
 }
+
+/**
+ * 批量更新${functionName}${column.columnComment}
+ * @param ids
+ * @param status
+ * @returns {AxiosPromise}
+ */
+export function batchChange${AttrName}(${pkColumn.javaField}s, ${column.javaField}) {
+  return request({
+    url: '/${moduleName}/${businessName}/batchChange${AttrName}?${pkColumn.javaField}s=' + ${pkColumn.javaField}s + "&${column.javaField}=" + ${column.javaField},
+    method: 'put'
+  })
+}
+
+
 #end
 #end
 
 
-// 删除${functionName}
+/**
+ * 删除${functionName}
+  * @param
+ * @returns {*}
+ */
 export function del${BusinessName}(${pkColumn.javaField}) {
   return request({
     url: '/${moduleName}/${businessName}/' + ${pkColumn.javaField},
@@ -61,7 +102,11 @@ export function del${BusinessName}(${pkColumn.javaField}) {
   })
 }
 
-// 导出${functionName}
+/**
+ * 导出${functionName}
+  * @param query
+ * @returns {*}
+ */
 export function export${BusinessName}(query) {
   return request({
     url: '/${moduleName}/${businessName}/export',

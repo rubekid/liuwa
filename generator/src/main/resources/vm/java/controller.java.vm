@@ -24,6 +24,9 @@ import com.liuwa.common.utils.poi.ExcelUtil;
 import com.liuwa.common.core.page.TableDataInfo;
 #elseif($table.tree)
 #end
+#if($supportImport)
+import org.springframework.web.multipart.MultipartFile;
+#end
 
 /**
  * ${functionName}Controller
@@ -79,7 +82,7 @@ public class ${ClassName}Controller extends BaseController{
     @GetMapping("/import/template")
     public AjaxResult importTemplate()
     {
-        ExcelUtil<${ClassName}> util = new ExcelUtil<${ClassName}>(Warehouse.class);
+        ExcelUtil<${ClassName}> util = new ExcelUtil<${ClassName}>(${ClassName}.class);
         return util.importTemplateExcel("${functionName}数据");
     }
 #end
@@ -153,6 +156,18 @@ public class ${ClassName}Controller extends BaseController{
         ${className}Service.update${AttrName}(${className});
         return AjaxResult.success();
     }
+
+    /**
+     * 批量变更${column.columnComment}
+     */
+    @PreAuthorize("@ss.hasPermi('${permissionPrefix}:edit')")
+    @Log(title = "${functionName}批量变更${column.columnComment}", businessType = BusinessType.UPDATE)
+    @PutMapping("/batchChange${AttrName}")
+    public AjaxResult batchChange${AttrName}(@RequestParam ${pkColumn.javaType}[] ${pkColumn.javaField}s, @RequestParam ${column.javaType} ${column.javaField}){
+        ${className}Service.batchUpdate${AttrName}(${pkColumn.javaField}s, ${column.javaField});
+        return AjaxResult.success();
+    }
+
 #end
 #end
 

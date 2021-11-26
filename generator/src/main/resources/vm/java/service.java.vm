@@ -26,6 +26,12 @@ public interface ${ClassName}Service extends ${curdService}<${pkColumn.javaType}
      * 变更${column.columnComment}
      */
     public void update${AttrName}(${ClassName} ${className});
+
+    /**
+     * 批量变更${column.columnComment}
+     */
+    public void batchUpdate${AttrName}(${pkColumn.javaType}[] ${pkColumn.javaField}s, ${column.javaType} status);
+
 #end
 #end
 }

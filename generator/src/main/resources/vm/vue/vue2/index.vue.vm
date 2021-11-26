@@ -122,6 +122,33 @@
           v-hasPermi="['${moduleName}:${businessName}:edit']"
         >修改</el-button>
       </el-col>
+#foreach($column in $columns)
+#if($column.htmlType == 'switch')
+#set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+      <el-col :span="1.5">
+        <el-button
+            type="primary"
+            plain
+            icon="el-icon-open"
+            size="mini"
+            :disabled="multiple"
+            @click="handleBatchChange${AttrName}(true)"
+            v-hasPermi="['${moduleName}:${businessName}:edit']"
+        >启用[${column.columnLabel}]</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+            type="warning"
+            plain
+            icon="el-icon-turn-off"
+            size="mini"
+            :disabled="multiple"
+            @click="handleBatchChange${AttrName}(false)"
+            v-hasPermi="['${moduleName}:${businessName}:edit']"
+        >禁用[${column.columnLabel}]</el-button>
+      </el-col>
+#end
+#end
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -383,20 +410,34 @@ export default {
 #foreach($column in $columns)
 #if($column.htmlType == 'switch')
 #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
-    /** 变更${column.columnComment}操作 */
+    /** 变更${column.columnLabel}操作 */
     handle${AttrName}Change(row) {
-      let text = row.${column.javaField} ? "启用" : "停用";
-      this.#[[$modal]]#.confirm('确认要"' + text + '""${functionName}编号为' + row.${pkColumn.javaField} + '"的${column.columnComment}吗？').then(() => {
-      return change${AttrName}(row.${pkColumn.javaField}, row.${column.javaField});
-      }).then(() => {
-        this.#[[$modal]]#.success(text + "成功");
-      }).catch(function() {
-        row.${column.javaField} = !row.${column.javaField};
-      });
+        let text = row.${column.javaField} ? "启用" : "停用";
+        this.#[[$modal]]#.confirm('确认要"' + text + '""${functionName}编号为' + row.${pkColumn.javaField} + '"的${column.columnComment}吗？').then(() => {
+            return change${AttrName}(row.${pkColumn.javaField}, row.${column.javaField});
+        }).then(() => {
+            this.#[[$modal]]#.success(text + "成功");
+        }).catch(function() {
+            row.${column.javaField} = !row.${column.javaField};
+        });
+    },
+
+    /**
+    * 批量变更${column.columnLabel}
+    * @param ${column.javaField}
+    */
+    handleBatchChange${AttrName}(${column.javaField}){
+        let text = ${column.javaField} ? "启用" : "停用";
+        const ${pkColumn.javaField}s = this.ids;
+        this.#[[$modal]]#.confirm('是否确认'+ text +'${functionName}编号为"' + ids + '"的[${column.columnLabel}]项?').then(function() {
+            return batchChange${AttrName}(${pkColumn.javaField}s, ${column.javaField});
+        }).then(() => {
+            this.getList();
+            this.#[[$modal]]#.success(text + "成功");
+        }).catch(() => {});
     },
 #end
 #end
-
 
     /** 提交成功 */
     onSubmitSuccess(form){

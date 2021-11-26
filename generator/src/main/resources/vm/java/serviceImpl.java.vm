@@ -31,9 +31,20 @@ public class ${ClassName}ServiceImpl extends ${curdServiceImpl}<${pkColumn.javaT
 #foreach($column in $columns)
 #if($column.htmlType == 'switch')
 #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
+#set($PkAttrName=$pkColumn.javaField.substring(0,1).toUpperCase() + ${pkColumn.javaField.substring(1)})
     @Override
     public void update${AttrName}(${ClassName} ${className}){
         super.updateSelective(${className});
+    }
+
+    @Override
+    public void batchUpdate${AttrName}(${pkColumn.javaType}[] ${pkColumn.javaField}s, ${column.javaType} ${column.javaField}){
+        for(${pkColumn.javaType} ${pkColumn.javaField}: ${pkColumn.javaField}s){
+            ${ClassName} ${className} = new ${ClassName}();
+            ${className}.set${PkAttrName}(${pkColumn.javaField});
+            ${className}.set${AttrName}(${column.javaField});
+            update${AttrName}(${ClassName} ${className});
+        }
     }
 #end
 #end

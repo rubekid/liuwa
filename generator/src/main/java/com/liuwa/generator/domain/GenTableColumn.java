@@ -123,6 +123,26 @@ public class GenTableColumn extends BaseEntity
 
     public String getColumnComment()
     {
+        if(columnComment== null){
+            columnComment = "";
+        }
+        return columnComment.replaceAll("\\(", "（").replaceAll("\\)", "）");
+    }
+
+    /**
+     * 获取字段Label
+     * @return
+     */
+    public String getColumnLabel(){
+        String columnComment = getColumnComment();
+        // 截取括号（前字符串
+        if(columnComment.contains("（")){
+            columnComment = columnComment.substring(0, columnComment.indexOf("（"));
+        }
+        // 截取空格前字符串
+        if(columnComment.contains(" ")){
+            columnComment = columnComment.substring(0, columnComment.indexOf(" "));
+        }
         return columnComment;
     }
 
