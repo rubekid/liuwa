@@ -76,7 +76,7 @@ public class ${ClassName}Controller extends BaseController{
     public AjaxResult importTemplate()
     {
         ExcelUtil<${ClassName}> util = new ExcelUtil<${ClassName}>(${ClassName}.class);
-        return util.importTemplateExcel("${functionName}数据");
+        return util.importTemplateExcel("${functionName}数据模板");
     }
 #end
 
