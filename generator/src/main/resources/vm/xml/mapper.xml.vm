@@ -80,22 +80,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM ${tableName} a
         LEFT JOIN ${subTableName} b ON b.${subTableFkName} = a.${pkColumn.columnName}
         WHERE
-            <choose>
+        <choose>
 #foreach ($column in $uniqueColumns)
 #set($javaField=$column.javaField)
 #set($javaType=$column.javaType)
 #set($columnName=$column.columnName)
-                <when test="$javaField != null #if($javaType == 'String' ) and $javaField.trim() != ''#end">
-                    a.$columnName = #{$javaField}
-                </when>
+            <when test="$javaField != null #if($javaType == 'String' ) and $javaField.trim() != ''#end">
+                a.$columnName = #{$javaField}
+            </when>
 #end
-                <otherwise>
-                    1!=1
-                </otherwise>
-            </choose>
+             <otherwise>
+                1!=1
+             </otherwise>
+        </choose>
 
 #end
-        </select>
+    </select>
 #end
 
     <!-- 获取$functionName 列表 -->

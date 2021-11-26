@@ -251,24 +251,29 @@ public class BaseEntity<Pk> implements Serializable
                     if(value == null){
 
                         String dv = defaultValue.value();
+                        String nv = "" == dv ? "0" : dv;
                         Class clazz = field.getType();
                         if(clazz.isAssignableFrom(Integer.class)){
-                            field.set(this, Integer.valueOf(dv));
+                            field.set(this, Integer.valueOf(nv));
                         }
                         else if(clazz.isAssignableFrom(Long.class)){
-                            field.set(this, Long.valueOf(dv));
+                            field.set(this, Long.valueOf(nv));
                         }
                         else if(clazz.isAssignableFrom(Float.class)){
-                            field.set(this, Float.valueOf(dv));
+                            field.set(this, Float.valueOf(nv));
                         }
                         else if(clazz.isAssignableFrom(Double.class)){
-                            field.set(this, Double.valueOf(dv));
+                            field.set(this, Double.valueOf(nv));
                         }
                         else if(clazz.isAssignableFrom(BigDecimal.class)){
-                            field.set(this, new BigDecimal(dv));
+                            field.set(this, new BigDecimal(nv));
                         }
                         else if(clazz.isAssignableFrom(String.class)){
                             field.set(this, dv);
+                        }
+                        else if(clazz.isAssignableFrom(Boolean.class)){
+
+                            field.set(this, ("".equals(dv) ? false : Boolean.parseBoolean(dv)));
                         }
                     }
                 }

@@ -134,7 +134,7 @@
             :disabled="multiple"
             @click="handleBatchChange${AttrName}(true)"
             v-hasPermi="['${moduleName}:${businessName}:edit']"
-        >启用[${column.columnLabel}]</el-button>
+        >启用#if($column.columnLabel != '状态')[${column.columnLabel}]#end</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -145,7 +145,7 @@
             :disabled="multiple"
             @click="handleBatchChange${AttrName}(false)"
             v-hasPermi="['${moduleName}:${businessName}:edit']"
-        >禁用[${column.columnLabel}]</el-button>
+        >禁用#if($column.columnLabel != '状态')[${column.columnLabel}]#end</el-button>
       </el-col>
 #end
 #end

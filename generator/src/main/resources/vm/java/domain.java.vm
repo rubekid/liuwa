@@ -6,8 +6,7 @@ import ${import};
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.liuwa.common.annotation.DefaultValue;
-import com.liuwa.common.annotation.Excel;
+import com.liuwa.common.annotation.*;
 import java.util.Date;
 #if($table.crud || $table.sub)
 import com.liuwa.common.core.domain.BaseEntity;
@@ -40,23 +39,28 @@ public class ${ClassName} extends ${Entity}<${pkColumn.javaType}>{
 #else
 #set($comment=$column.columnComment)
 #end
-#if($parentheseIndex != -1)
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()", sort=$columnIndex)
-#elseif($column.javaType == 'Date')
+#if($column.javaType == 'Date')
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "${comment}", width = 30, dateFormat = "yyyy-MM-dd", sort=$columnIndex)
-#elseif($column.htmlType == "switch")
-    @Excel(name = "${comment}", dictType = "sys_switch", sort=$columnIndex)
-#elseif($column.htmlType == "singleImage")
-    @Excel(name = "${comment}", cellType = Excel.ColumnType.IMAGE, sort=$columnIndex)
 #elseif($column.dictType != "")
     @Excel(name = "${comment}", dictType = "$column.dictType", sort=$columnIndex)
+#elseif($column.htmlType == "switch")
+    @Excel(name = "${comment}", dictType = "sys_switch", sort=$columnIndex, type = Excel.Type.EXPORT)
+#elseif($column.htmlType == "singleImage")
+    @Excel(name = "${comment}", cellType = Excel.ColumnType.IMAGE, sort=$columnIndex)
+#elseif($parentheseIndex != -1)
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()", sort=$columnIndex)
 #else
     @Excel(name = "${comment}", sort=$columnIndex)
 #end
 #end
 #if(!$column.required && !$column.pk && $column.insert)
     @DefaultValue
+#elseif($column.htmlType == "switch")
+    @DefaultValue("true")
+#end
+#if($column.unique)
+    @Unique(name = "${column.columnLabel}")
 #end
     private $column.javaType $column.javaField;
 

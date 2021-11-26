@@ -268,7 +268,11 @@ public class ExcelUtil<T>
                     Excel attr = (Excel) entry.getValue()[1];
                     // 取得类型,并根据对象类型设置值.
                     Class<?> fieldType = field.getType();
-                    if (String.class == fieldType)
+
+                    if(StringUtils.isNotEmpty(attr.dictType())){
+                        log.debug("字典不做类型转换处理");
+                    }
+                    else if (String.class == fieldType)
                     {
                         String s = Convert.toStr(val);
                         if (StringUtils.endsWith(s, ".0"))
