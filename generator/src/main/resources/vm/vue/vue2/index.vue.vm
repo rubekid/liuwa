@@ -25,7 +25,7 @@
       </el-form-item>
 #elseif(($column.htmlType == "select" || $column.htmlType == "radio" || $column.htmlType == "checkbox") && "" != $dictType)
       <el-form-item label="${comment}" prop="${column.javaField}">
-        <el-select v-model="queryParams.${column.javaField}" placeholder="请选择${comment}" clearable size="small">
+        <el-select v-model="queryParams.${column.javaField}" placeholder="请选择${comment}" clearable size="small" filterable>
           <el-option
             v-for="dict in dictData('${dictType}')"
             :key="dict.dictValue"
