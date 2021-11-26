@@ -7,7 +7,7 @@
 			size="mini"
 			@click="open = true"
 
-		>导入</el-button>
+		>{{buttonText}}</el-button>
 		<el-dialog :title="dialogTitle" :visible.sync="open" width="400px" append-to-body>
 			<el-upload
 				ref="upload"
@@ -24,7 +24,7 @@
 				<i class="el-icon-upload"></i>
 				<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
 				<div class="el-upload__tip text-center" slot="tip">
-					<div class="el-upload__tip" slot="tip">
+					<div class="el-upload__tip" slot="tip" v-if="showOverwrite">
 						<el-checkbox v-model="overwrite" /> 是否更新已经存在的{{title}}}数据
 					</div>
 					<span>仅允许导入xls、xlsx格式文件。</span>
@@ -64,6 +64,14 @@ export default {
 		visible: {
 			type: Boolean,
 			default: false
+		},
+		showOverwrite:{
+			type: Boolean,
+			default: true
+		},
+		buttonText: {
+			type: String,
+			default: '导入'
 		}
 	},
 	data() {
