@@ -81,7 +81,7 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
                     T condition = (T) getEntityClass().newInstance();
                     field.set(condition, field.get(entity));
                     T exist = findByUniqueKey(condition);
-                    if(exist != null){
+                    if(exist != null && !exist.getId().equals(entity.getId())){
                         throw new ExistException("该'" + field.getAnnotation(Unique.class).name() + "'已存在");
                     }
                 }
