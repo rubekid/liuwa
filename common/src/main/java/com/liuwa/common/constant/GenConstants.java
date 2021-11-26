@@ -71,6 +71,12 @@ public class GenConstants {
     /** 页面不需要查询字段 */
     public static final String[] COLUMNNAME_NOT_QUERY = { "id", "create_by", "create_time", "del_flag", "update_by", "update_time", "remark" };
 
+    /** 不需要更新的字段 */
+    public static final String[] COLUMNNAME_NOT_UPDATE = { "create_by", "create_time", "del_flag", "create_date" };
+
+    /** 需要更新的字段 */
+    public static final String[] COLUMNNAME_UPDATE = { "update_by", "update_time", "update_date" };
+
     /** Entity基类字段 */
     public static final String[] BASE_ENTITY = { "id", "createBy", "createTime", "updateBy", "updateTime", "remark", "delFlag" };
 

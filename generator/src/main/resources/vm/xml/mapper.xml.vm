@@ -107,7 +107,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
 #foreach($column in $columns)
 #if($column.javaField == "delFlag")
-                a.$column.columnName = #{DEL_FLAG_NORMAL}
+            a.$column.columnName = #{DEL_FLAG_NORMAL}
 #break
 #end
 #end
@@ -182,13 +182,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!-- 更新$functionName  -->
     <update id="update" parameterType="${ClassName}">
-        UPDATE ${tableName} SET
-#foreach($column in $columns)
-#if($column.columnName != $pkColumn.columnName and $column.edit  and $column.javaField != "delFlag" and $column.javaField != "createBy" and $column.javaField != "createTime")
+        UPDATE ${tableName}
+        <set>
+#foreach($column in $updateColumns)
             $column.columnName = #{$column.javaField}#if($foreach.hasNext),#end
 
 #end
-#end
+        </set>
         WHERE
             ${pkColumn.columnName} = #{${pkColumn.javaField}}
     </update>
@@ -198,9 +198,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         UPDATE ${tableName}
         <trim prefix="SET" suffixOverrides=",">
 #foreach($column in $columns)
-#if($column.columnName != $pkColumn.columnName and $column.edit and $column.javaField != "delFlag" and $column.javaField != "createBy" and $column.javaField != "createTime")
+#if($column.columnName != $pkColumn.columnName and $column.javaField != "delFlag" and $column.javaField != "createBy" and $column.javaField != "createTime")
             <if test="$column.javaField != null#if($column.javaType == 'String' && $column.required) and $column.javaField != ''#end">
-                $column.columnName = #{$column.javaField},
+                $column.columnName = #{$column.javaField}#if($foreach.hasNext),#end
             </if>
 #end
 #end

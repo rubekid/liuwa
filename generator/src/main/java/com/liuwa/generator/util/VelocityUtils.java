@@ -52,12 +52,17 @@ public class VelocityUtils
         String functionName = genTable.getFunctionName();
 
         List<GenTableColumn> columns = genTable.getColumns();
+        List<GenTableColumn> updateColumns = new ArrayList<GenTableColumn>();
         GenTableColumn delFlagColumn = null;
         for(GenTableColumn column : columns){
             if("delFlag".equals(column.getJavaField())){
                 delFlagColumn = column;
-                break;
             }
+            else if((!column.equals(genTable.getPkColumn()) && column.isEdit() && !GenUtils.arraysContains(GenConstants.COLUMNNAME_NOT_UPDATE, column.getColumnName()))
+            || GenUtils.arraysContains(GenConstants.COLUMNNAME_UPDATE, column.getColumnName())){
+                updateColumns.add(column);
+            }
+
         }
 
 
@@ -78,6 +83,7 @@ public class VelocityUtils
         velocityContext.put("importList", getImportList(genTable));
         velocityContext.put("permissionPrefix", getPermissionPrefix(moduleName, businessName));
         velocityContext.put("columns", columns);
+        velocityContext.put("updateColumns", updateColumns);
         velocityContext.put("delFlagColumn", delFlagColumn);
         velocityContext.put("table", genTable);
         velocityContext.put("dicts", getDicts(genTable));
