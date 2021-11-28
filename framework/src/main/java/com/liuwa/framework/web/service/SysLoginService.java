@@ -1,6 +1,8 @@
 package com.liuwa.framework.web.service;
 
 import javax.annotation.Resource;
+
+import com.liuwa.common.utils.RequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -59,8 +61,15 @@ public class SysLoginService
     public String login(String username, String password, String code, String uuid)
     {
         boolean captchaOnOff = configService.selectCaptchaOnOff();
+        boolean ignoreCaptcha = RequestUtils.isMiniProgram();
+
+        // 使用api 方式
+        if(username.length() == 16 && password.length() == 32){
+            ignoreCaptcha = true;
+        }
+
         // 验证码开关
-        if (captchaOnOff)
+        if (captchaOnOff && !ignoreCaptcha)
         {
             validateCaptcha(username, code, uuid);
         }
@@ -88,6 +97,9 @@ public class SysLoginService
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         recordLoginInfo(loginUser.getUserId());
+        if(ignoreCaptcha && captchaOnOff && !loginUser.getUser().ignoreCaptcha()){
+            validateCaptcha(username, code, uuid);
+        }
         // 生成token
         return tokenService.createToken(loginUser);
     }

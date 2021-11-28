@@ -330,6 +330,15 @@ public class SysUser extends BaseEntity
         return false;
     }
 
+    /**
+     * 忽略验证码（）
+     * @return
+     */
+    public boolean ignoreCaptcha(){
+        // TODO
+        return false;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
