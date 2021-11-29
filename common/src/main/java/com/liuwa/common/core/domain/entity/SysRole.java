@@ -15,31 +15,6 @@ import com.liuwa.common.core.domain.BaseEntity;
  */
 public class SysRole extends BaseEntity
 {
-    /**
-     * 加工中心管理员
-     */
-    public static final String ROLE_MC_ADMIN = "mc_admin";
-
-    /**
-     * 代理商
-     */
-    public static final String ROLE_AGENT= "agent";
-
-    /**
-     * 代理商助理
-     */
-    public static final String ROLE_AGENT_ASSISTANT = "agent_assistant";
-
-    /**
-     * 店长
-     */
-    public static final String ROLE_SHOP_KEEPER = "shop_keeper";
-
-    /**
-     * 店员
-     */
-    public static final String ROLE_SHOP_ASSISTANT = "shop_assistant";
-
     private static final long serialVersionUID = 1L;
 
     /** 角色ID */

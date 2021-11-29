@@ -5,9 +5,6 @@ import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
-import com.liuwa.common.annotation.Dict;
-import com.liuwa.common.constant.SysConstants;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -95,9 +92,6 @@ public class SysUser extends BaseEntity
     /** 角色ID */
     private Long roleId;
 
-    /** 门店ID */
-    private Long shopId;
-
     public SysUser()
     {
 
@@ -141,40 +135,6 @@ public class SysUser extends BaseEntity
         return userId != null && 1L == userId;
     }
 
-    /**
-     * 店长
-     * @return
-     */
-    public boolean isShopKeeper(){
-        return hasRole(SysRole.ROLE_SHOP_KEEPER);
-    }
-
-    /**
-     * 店员
-     * @return
-     */
-    public boolean isShopAssistant(){
-        return hasRole(SysRole.ROLE_SHOP_ASSISTANT);
-    }
-
-    /**
-     * 代理商
-     * @return
-     */
-    public boolean isAgent(){
-        return hasRole(SysRole.ROLE_AGENT);
-    }
-
-    /**
-     * 代理商助理
-     * @return
-     */
-    public boolean isAgentAssistant(){
-        return hasRole(SysRole.ROLE_AGENT_ASSISTANT);
-    }
-
-
-
     public Long getDeptId()
     {
         return deptId;
@@ -183,14 +143,6 @@ public class SysUser extends BaseEntity
     public void setDeptId(Long deptId)
     {
         this.deptId = deptId;
-    }
-
-    public Long getShopId() {
-        return shopId;
-    }
-
-    public void setShopId(Long shopId) {
-        this.shopId = shopId;
     }
 
     @Size(min = 0, max = 30, message = "用户昵称长度不能超过30个字符")
@@ -367,6 +319,9 @@ public class SysUser extends BaseEntity
      * @return
      */
     public boolean hasRole(String roleKey){
+        if(roles== null){
+            return false;
+        }
         for(SysRole role :roles){
             if(role.getRoleKey().equals(roleKey)){
                 return true;
