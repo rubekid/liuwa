@@ -1,14 +1,5 @@
 package com.liuwa.framework.web.service;
 
-import javax.annotation.Resource;
-
-import com.liuwa.common.utils.RequestUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
 import com.liuwa.common.constant.Constants;
 import com.liuwa.common.core.domain.entity.SysUser;
 import com.liuwa.common.core.domain.model.LoginUser;
@@ -19,12 +10,21 @@ import com.liuwa.common.exception.user.CaptchaExpireException;
 import com.liuwa.common.exception.user.UserPasswordNotMatchException;
 import com.liuwa.common.utils.DateUtils;
 import com.liuwa.common.utils.MessageUtils;
+import com.liuwa.common.utils.RequestUtils;
 import com.liuwa.common.utils.ServletUtils;
 import com.liuwa.common.utils.ip.IpUtils;
 import com.liuwa.framework.manager.AsyncManager;
 import com.liuwa.framework.manager.factory.AsyncFactory;
 import com.liuwa.system.service.SysConfigService;
 import com.liuwa.system.service.SysUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * 登录校验方法
@@ -64,7 +64,7 @@ public class SysLoginService
         boolean ignoreCaptcha = RequestUtils.isMiniProgram();
 
         // 使用api 方式
-        if(username.length() == 16 && password.length() == 32){
+        if(username.length() == 16 && password != null && password.length() == 32){
             ignoreCaptcha = true;
         }
 

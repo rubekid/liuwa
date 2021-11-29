@@ -2,6 +2,9 @@ package com.liuwa.framework.config;
 
 import com.liuwa.common.utils.spring.SpringUtils;
 import com.liuwa.framework.security.annotation.AnonymousAccess;
+import com.liuwa.framework.security.filter.JwtAuthenticationTokenFilter;
+import com.liuwa.framework.security.handle.AuthenticationEntryPointImpl;
+import com.liuwa.framework.security.handle.LogoutSuccessHandlerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +21,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.filter.CorsFilter;
-import com.liuwa.framework.security.filter.JwtAuthenticationTokenFilter;
-import com.liuwa.framework.security.handle.AuthenticationEntryPointImpl;
-import com.liuwa.framework.security.handle.LogoutSuccessHandlerImpl;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -63,6 +63,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
      */
     @Autowired
     private JwtAuthenticationTokenFilter authenticationTokenFilter;
+
+    @Autowired
+    private SmsAuthenticationSecurityConfig smsAuthenticationSecurityConfig;
     
     /**
      * 跨域过滤器
@@ -119,6 +122,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 
 
         httpSecurity
+                .apply(smsAuthenticationSecurityConfig).and()
                 // CSRF禁用，因为不使用session
                 .csrf().disable()
                 // 认证失败处理类
@@ -128,7 +132,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 // 过滤请求
                 .authorizeRequests()
                 // 对于登录login 注册register 验证码captchaImage 允许匿名访问
-                .antMatchers("/login", "/register", "/captchaImage").anonymous()
+                .antMatchers("/**/login", "/**/register", "/login", "/register", "/captchaImage").anonymous()
                 .antMatchers(
                         HttpMethod.GET,
                         "/",

@@ -27,23 +27,6 @@ public class PermissionService
     private static final String PERMISSION_DELIMETER = ",";
 
     /**
-     * 验证码是否登录用户
-     * @return
-     */
-    public boolean isUser(){
-        SecurityUtils.getLoginUser();
-        return true;
-    }
-
-    /**
-     * 匿名
-     * @return
-     */
-    public boolean anonymousAccess(){
-        return true;
-    }
-
-    /**
      * 验证用户是否具备某权限
      * 
      * @param permission 权限字符串

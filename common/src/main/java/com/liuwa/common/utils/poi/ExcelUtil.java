@@ -264,11 +264,10 @@ public class ExcelUtil<T>
                         log.error("不是Field {}", obj);
                         continue;
                     }
-                    Field field = (Field) obj;
+                    Field field = (Field)obj ;
                     Excel attr = (Excel) entry.getValue()[1];
                     // 取得类型,并根据对象类型设置值.
                     Class<?> fieldType = field.getType();
-
                     if(StringUtils.isNotEmpty(attr.dictType())){
                         log.debug("字典不做类型转换处理");
                     }
@@ -327,6 +326,7 @@ public class ExcelUtil<T>
                     {
                         val = Convert.toBool(val, false);
                     }
+
                     if (StringUtils.isNotNull(fieldType))
                     {
                         String propertyName = field.getName();

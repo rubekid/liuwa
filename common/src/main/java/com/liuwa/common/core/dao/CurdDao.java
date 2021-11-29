@@ -12,7 +12,7 @@ import java.util.List;
 public interface CurdDao<Pk, T extends BaseEntity> {
 
     /**
-     * 获取单条数据
+     * 获取数据
      * @param id
      * @return
      */

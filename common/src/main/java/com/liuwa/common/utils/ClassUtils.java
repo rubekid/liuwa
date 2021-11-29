@@ -1,15 +1,19 @@
 package com.liuwa.common.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.*;
+
+import com.liuwa.common.annotation.DictLabel;
+import com.liuwa.common.core.domain.BaseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 类的相关实现
@@ -219,11 +223,11 @@ public class ClassUtils {
 	}
 
 	/**
-     * 扫描包名，根据注解获取类列表
+	 * 扫描包名，根据注解获取类列表
 	 * @param packageName
-     * @param annotation
-     * @return
-     */
+	 * @param annotation
+	 * @return
+	 */
 	public static List<Class> findClassesByAnnotation(String packageName, Class<? extends Annotation> annotation ){
 		List<Class> classes = new ArrayList<Class>();
 		try{

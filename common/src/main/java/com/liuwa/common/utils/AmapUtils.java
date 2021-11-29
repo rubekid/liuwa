@@ -6,6 +6,7 @@ import com.liuwa.common.bean.Coords;
 import com.liuwa.common.bean.Location;
 import com.liuwa.common.config.GlobalProperties;
 import com.liuwa.common.utils.http.HttpUtils;
+import com.liuwa.common.utils.ip.IpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,7 +98,7 @@ public class AmapUtils {
 	 * @throws IOException 
 	 */
 	public static Location getLocation(HttpServletRequest request) {
-		return getLocation(IpAddressUtils.getIpAddress(request));
+		return getLocation(IpUtils.getIpAddr(request));
 	}
 	
 	/**

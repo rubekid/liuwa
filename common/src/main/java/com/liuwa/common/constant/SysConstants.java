@@ -2,7 +2,7 @@ package com.liuwa.common.constant;
 
 /**
  * 系统常量
- * 
+ *
  * @author liuwa
  */
 public class SysConstants
@@ -69,7 +69,7 @@ public class SysConstants
 
     /** Layout组件标识 */
     public final static String LAYOUT = "Layout";
-    
+
     /** ParentView组件标识 */
     public final static String PARENT_VIEW = "ParentView";
 
@@ -91,7 +91,6 @@ public class SysConstants
      */
     public static final int PASSWORD_MIN_LENGTH = 5;
     public static final int PASSWORD_MAX_LENGTH = 20;
-
 
     /**
      * 性别

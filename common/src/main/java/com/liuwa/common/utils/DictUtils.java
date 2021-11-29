@@ -202,6 +202,9 @@ public class DictUtils
      */
     public static String getDictValue(String dictType, String dictLabel, String separator)
     {
+        if(StringUtils.isEmpty(dictLabel)){
+            return "";
+        }
         StringBuilder propertyString = new StringBuilder();
         List<SysDictDataOption> datas = getDictDataOption(dictType);
 

@@ -29,7 +29,7 @@ public abstract class CurdImportServiceImpl<Pk, D extends CurdDao<Pk, T>, T exte
         {
             try
             {
-                // 验证是否存在
+                // 验证是否存在这个用户
                 T existItem = this.findByUniqueKey(item);
                 if (existItem == null)
                 {

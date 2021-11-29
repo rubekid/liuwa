@@ -1,4 +1,4 @@
-package com.liuwa.common.utils;
+package com.liuwa.framework.manager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

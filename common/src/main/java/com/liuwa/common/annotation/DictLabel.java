@@ -8,8 +8,8 @@ import java.lang.annotation.Target;
 /**
  * 字典label字段
  */
-@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD})
 public @interface DictLabel {
 
 }

@@ -301,14 +301,4 @@ public class BaseEntity<Pk> implements Serializable
     public String getObjectName(){
         return this.getClass().getSimpleName() + "@Id_" + getId();
     }
-
-    /**
-     * 是否需要检测唯一值
-     * @return
-     */
-    @JsonIgnore
-    public boolean needCheckUnique(){
-        return false;
-    }
-
 }
