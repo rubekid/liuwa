@@ -15,27 +15,27 @@ public class CaptchaManager {
 	/**
 	 * 注册
 	 */
-	public static final int TYPE_REGISTER = 0;
+	public static final String TYPE_REGISTER = "REGISTER";
 
 	/**
 	 * 登录
 	 */
-	public static final int TYPE_LOGIN = 1;
+	public static final String TYPE_LOGIN = "LOGIN";
 	
 	/**
 	 * 绑定
 	 */
-	public static final int TYPE_BIND = 2;
+	public static final String TYPE_BIND = "BIND";
 	
 	/**
 	 * 修改手机号
 	 */
-	public static final int TYPE_CHANGE_PHONE = 3;
+	public static final String TYPE_CHANGE_PHONE = "MODIFY";
 	
 	/**
 	 * 重置密码
 	 */
-	public static final int TYPE_RESET_PASSWORD = 4;
+	public static final String TYPE_RESET_PASSWORD = "RESET_PWD";
 	
 
 	/**
@@ -54,7 +54,7 @@ public class CaptchaManager {
 	 * @param phone
 	 * @return
 	 */
-	public static String generate(Integer type, String phone){
+	public static String generate(String type, String phone){
 		String code = StringUtils.getRandomNumString(4);
 		RedisManager.set(key(type, phone), code, EXPIRE_TIME);
 		return code;
@@ -67,7 +67,7 @@ public class CaptchaManager {
 	 * @param code
 	 * @return
 	 */
-	public static void verify(Integer type, String phone, String code){
+	public static void verify(String type, String phone, String code){
 		if(!simpleVerify(type, phone, code)){
 			throw new SimpleException("验证码错误，请重试");
 		}
@@ -80,7 +80,7 @@ public class CaptchaManager {
 	 * @param code
 	 * @return
 	 */
-	public static boolean simpleVerify(Integer type, String phone, String code){
+	public static boolean simpleVerify(String type, String phone, String code){
 		String lastCode = RedisManager.get(key(type, phone), "");
 		if(!code.equals(lastCode) && !code.equals("502")){
 			return false;
@@ -94,7 +94,7 @@ public class CaptchaManager {
 	 * @param phone
 	 * @return
 	 */
-	public static String getLastCode(Integer type, String phone){
+	public static String getLastCode(String type, String phone){
 		return RedisManager.get(key(type, phone), "");
 	}
 	
@@ -104,7 +104,7 @@ public class CaptchaManager {
 	 * @param phone
 	 * @return
 	 */
-	private static String key(Integer type, String phone){
+	private static String key(String type, String phone){
 		return String.format(CACHE_KEY, type, phone);
 	}
 }

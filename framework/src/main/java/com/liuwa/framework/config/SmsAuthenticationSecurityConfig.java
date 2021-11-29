@@ -1,11 +1,10 @@
 package com.liuwa.framework.config;
 
-import com.liuwa.framework.manager.RedisManager;
+import com.liuwa.framework.security.result.CustomAuthenticationFailureHandler;
+import com.liuwa.framework.security.result.CustomAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.SmsAuthenticationProvider;
-import com.liuwa.framework.security.result.CustomAuthenticationFailureHandler;
-import com.liuwa.framework.security.result.CustomAuthenticationSuccessHandler;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.SmsCodeLoginService;
@@ -15,6 +14,9 @@ import org.springframework.security.web.authentication.SmsAuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 
+/**
+ * 短信验证码登录鉴权配置
+ */
 @Component
 public class SmsAuthenticationSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
@@ -41,9 +43,7 @@ public class SmsAuthenticationSecurityConfig extends SecurityConfigurerAdapter<D
         smsCodeAuthenticationProvider.setUserDetailsService(userDetailsService);
         smsCodeAuthenticationProvider.setSmsCodeService(smsCodeLoginService);
 
-        RedisManager.remove("");
-
-        http.authenticationProvider(smsCodeAuthenticationProvider)
-                .addFilterAfter(smsCodeAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.authenticationProvider(smsCodeAuthenticationProvider);
+        //.addFilterBefore(smsCodeAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);  // 加过滤自动校验
     }
 }

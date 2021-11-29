@@ -121,8 +121,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 
 
 
+
         httpSecurity
-                .apply(smsAuthenticationSecurityConfig).and()
                 // CSRF禁用，因为不使用session
                 .csrf().disable()
                 // 认证失败处理类
@@ -132,7 +132,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 // 过滤请求
                 .authorizeRequests()
                 // 对于登录login 注册register 验证码captchaImage 允许匿名访问
-                .antMatchers("/**/login", "/**/register", "/login", "/register", "/captchaImage").anonymous()
+                .antMatchers("/**/login", "/**/register", "/login", "/register", "/captchaImage", "captcha/sendSms").anonymous()
                 .antMatchers(
                         HttpMethod.GET,
                         "/",
@@ -152,13 +152,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .anyRequest().authenticated()
                 .and()
                 .headers().frameOptions().disable();
+
         httpSecurity.logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler);
         // 添加JWT filter
         httpSecurity.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
         // 添加CORS filter
         httpSecurity.addFilterBefore(corsFilter, JwtAuthenticationTokenFilter.class);
         httpSecurity.addFilterBefore(corsFilter, LogoutFilter.class);
+
+        // 短信验证码登录 配置
+        httpSecurity.apply(smsAuthenticationSecurityConfig);
     }
+
+
 
     /**
      * 强散列哈希加密实现

@@ -8,6 +8,7 @@ import com.liuwa.common.exception.ServiceException;
 import com.liuwa.common.exception.user.CaptchaException;
 import com.liuwa.common.exception.user.CaptchaExpireException;
 import com.liuwa.common.exception.user.UserPasswordNotMatchException;
+import com.liuwa.common.exception.user.UserSmsCodeNotMatchException;
 import com.liuwa.common.utils.DateUtils;
 import com.liuwa.common.utils.MessageUtils;
 import com.liuwa.common.utils.RequestUtils;
@@ -22,6 +23,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.SmsAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -100,6 +102,45 @@ public class SysLoginService
         if(ignoreCaptcha && captchaOnOff && !loginUser.getUser().ignoreCaptcha()){
             validateCaptcha(username, code, uuid);
         }
+        // 生成token
+        return tokenService.createToken(loginUser);
+    }
+
+
+    /**
+     * 登录验证
+     *
+     * @param username 用户名
+     * @param code 验证码
+     * @return 结果
+     */
+    public String smsLogin(String username,String code)
+    {
+        // 用户验证
+        Authentication authentication = null;
+        try
+        {
+            // 该方法会去调用UserDetailsServiceImpl.loadUserByUsername
+            authentication = authenticationManager
+                    .authenticate(new SmsAuthenticationToken(username, code));
+        }
+        catch (Exception e)
+        {
+            if (e instanceof BadCredentialsException)
+            {
+                AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.password.not.match")));
+                throw new UserSmsCodeNotMatchException();
+            }
+            else
+            {
+                AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, e.getMessage()));
+                throw new ServiceException(e.getMessage());
+            }
+        }
+        AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        recordLoginInfo(loginUser.getUserId());
+
         // 生成token
         return tokenService.createToken(loginUser);
     }
