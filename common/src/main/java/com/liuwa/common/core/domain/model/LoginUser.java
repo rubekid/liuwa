@@ -39,6 +39,11 @@ public class LoginUser implements UserDetails
     private Long loginTime;
 
     /**
+     * Token 刷新时间
+     */
+    private Long refreshTime;
+
+    /**
      * 过期时间
      */
     private Long expireTime;
@@ -233,6 +238,14 @@ public class LoginUser implements UserDetails
     public void setOs(String os)
     {
         this.os = os;
+    }
+
+    public Long getRefreshTime() {
+        return refreshTime;
+    }
+
+    public void setRefreshTime(Long refreshTime) {
+        this.refreshTime = refreshTime;
     }
 
     public Long getExpireTime()

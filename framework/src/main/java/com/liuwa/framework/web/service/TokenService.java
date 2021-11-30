@@ -89,7 +89,10 @@ public class TokenService implements Observer {
 
     protected static final long MILLIS_MINUTE = 60 * MILLIS_SECOND;
 
-    private static final Long MILLIS_MINUTE_TEN = 20 * 60 * 1000L;
+    /**
+     * Token 刷新间隔
+     */
+    private static final long REFRESH_INTERVAL = 5 * MILLIS_MINUTE;
 
 
     @Autowired
@@ -108,6 +111,8 @@ public class TokenService implements Observer {
     private SysUserCacheService sysUserCacheService;
 
 
+
+
     @Autowired
     private void initObserver(){
         expirationListener.attach(this);
@@ -117,13 +122,13 @@ public class TokenService implements Observer {
     @Override
     public void update(Observable observable, Object arg) {
         if(observable instanceof RedisKeyDeletionObservable){
-           String key = (String)arg;
-           key = redisCache.clearKeyPrefix(key);
-           if(key.startsWith(Constants.LOGIN_TOKEN_KEY)){
-               // LoginUser user = guavaCache.getIfPresent(key);
-               guavaCache.invalidate(key);
-               logger.info("清理登录 key {}", key);
-           }
+            String key = (String)arg;
+            key = redisCache.clearKeyPrefix(key);
+            if(key.startsWith(Constants.LOGIN_TOKEN_KEY)){
+                // LoginUser user = guavaCache.getIfPresent(key);
+                guavaCache.invalidate(key);
+                logger.info("清理登录 key {}", key);
+            }
         }
     }
 
@@ -238,9 +243,9 @@ public class TokenService implements Observer {
     public void verifyToken(LoginUser loginUser)
     {
         long expireTime = loginUser.getExpireTime();
+        long refreshTime = loginUser.getRefreshTime();
         long currentTime = System.currentTimeMillis();
-        if (expireTime - currentTime <= MILLIS_MINUTE_TEN)
-        {
+        if (expireTime - currentTime > 0 && currentTime - refreshTime > REFRESH_INTERVAL ) {
             refreshToken(loginUser);
         }
     }
@@ -260,7 +265,11 @@ public class TokenService implements Observer {
             // 1周
             expireTime = 7 * 24 * 60;
         }
-        loginUser.setLoginTime(System.currentTimeMillis());
+        // 小程序 token 有效时长为30天
+        if(RequestUtils.isMiniProgram()){
+            expireTime = 30 * 24 * 60;
+        }
+        loginUser.setRefreshTime(System.currentTimeMillis());
         loginUser.setExpireTime(loginUser.getLoginTime() + expireTime * MILLIS_MINUTE);
         // 根据uuid将loginUser缓存
         String userKey = getTokenKey(loginUser.getToken());
@@ -406,7 +415,7 @@ public class TokenService implements Observer {
                 try {
                     host = InetAddress.getLocalHost().getHostAddress();
                 } catch (UnknownHostException e) {
-                   throw new InsufficientAuthenticationException("Host 获取失败");
+                    throw new InsufficientAuthenticationException("Host 获取失败");
                 }
             }
 
