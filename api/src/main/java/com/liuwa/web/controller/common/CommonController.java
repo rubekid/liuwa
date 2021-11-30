@@ -3,11 +3,16 @@ package com.liuwa.web.controller.common;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSONArray;
+import com.liuwa.common.core.domain.Result;
 import com.liuwa.common.utils.DateUtils;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +26,9 @@ import com.liuwa.common.utils.file.FileUploadUtils;
 import com.liuwa.common.utils.file.FileUtils;
 import com.liuwa.framework.config.ServerConfig;
 
+import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -36,6 +43,21 @@ public class CommonController
 
     @Autowired
     private ServerConfig serverConfig;
+
+    @Value("classpath:/region.json")
+    private Resource regionJson;
+
+    /**
+     * 区域数据
+     * @return
+     * @throws IOException
+     */
+    @GetMapping("common/regions")
+    public Result.ItemsVo regions() throws IOException {
+        String content = IOUtils.toString(regionJson.getInputStream(), Charset.forName("UTF-8"));
+        JSONArray items = JSONArray.parseArray(content);
+        return Result.items(items);
+    }
 
     /**
      * 通用下载请求
@@ -53,7 +75,6 @@ public class CommonController
                 throw new Exception(StringUtils.format("文件名称({})非法，不允许下载。 ", fileName));
             }
             String ext = fileName.substring(fileName.lastIndexOf("."));
-
             String base64String = fileName.substring(0, fileName.indexOf("_"));
             try{
                 base64String = URLDecoder.decode(base64String, StandardCharsets.UTF_8.toString());
@@ -61,7 +82,6 @@ public class CommonController
             catch (UnsupportedOperationException ex){
                 log.error(ex.getMessage(), ex);
             }
-
             String realFileName = new String(Base64.decodeBase64(base64String), StandardCharsets.UTF_8) + "_" + DateUtils.dateTimeNow() + ext;
             String filePath = SysConfig.getDownloadPath() + fileName;
 

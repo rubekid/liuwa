@@ -1,5 +1,6 @@
 package com.liuwa.common.constant;
 
+import com.liuwa.common.config.GlobalProperties;
 import io.jsonwebtoken.Claims;
 
 /**
@@ -93,6 +94,20 @@ public class Constants
      * 令牌前缀
      */
     public static final String TOKEN_PREFIX = "Bearer ";
+
+
+    /**
+     * MAC令牌前缀
+     */
+    public static final String MAC_TOKEN_PREFIX = "MAC ";
+
+
+    public static final String PROXY_PARAM = "$proxy";
+
+    /**
+     * 域名替换
+     */
+    public static final String HOST_REPLACE = GlobalProperties.getProperty("token.host_replace", "");
 
     /**
      * 令牌前缀
