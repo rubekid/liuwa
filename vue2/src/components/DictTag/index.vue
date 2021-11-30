@@ -35,7 +35,7 @@ export default {
 			type: Array,
 			default: null,
 		},
-		value: [Number, String, Array],
+		value: [Number, String, Boolean, Array],
 		dictLabel: {
 			type: String,
 			default: 'dictLabel'

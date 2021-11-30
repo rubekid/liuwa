@@ -269,8 +269,11 @@ public class TokenService implements Observer {
         if(RequestUtils.isMiniProgram()){
             expireTime = 30 * 24 * 60;
         }
+        if(loginUser.getLoginTime() == null){
+            loginUser.setLoginTime(System.currentTimeMillis());
+        }
         loginUser.setRefreshTime(System.currentTimeMillis());
-        loginUser.setExpireTime(loginUser.getLoginTime() + expireTime * MILLIS_MINUTE);
+        loginUser.setExpireTime(loginUser.getRefreshTime() + expireTime * MILLIS_MINUTE);
         // 根据uuid将loginUser缓存
         String userKey = getTokenKey(loginUser.getToken());
         redisCache.setCacheObject(userKey, loginUser, expireTime, TimeUnit.MINUTES);
