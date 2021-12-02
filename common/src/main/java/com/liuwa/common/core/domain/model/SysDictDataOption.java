@@ -1,8 +1,11 @@
 package com.liuwa.common.core.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * 字典数据项
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysDictDataOption<T> {
 
     /** 字典标签 */
@@ -16,6 +19,9 @@ public class SysDictDataOption<T> {
 
     /** 表格字典样式 */
     private String listClass;
+
+    /** 值对象 */
+    private Object item;
 
     public String getDictLabel() {
         return dictLabel;
@@ -47,5 +53,13 @@ public class SysDictDataOption<T> {
 
     public void setListClass(String listClass) {
         this.listClass = listClass;
+    }
+
+    public Object getItem() {
+        return item;
+    }
+
+    public void setItem(Object item) {
+        this.item = item;
     }
 }

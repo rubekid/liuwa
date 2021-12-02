@@ -1,6 +1,9 @@
 package com.liuwa.common.core.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.liuwa.common.annotation.DictLabel;
+import com.liuwa.common.annotation.DictProperty;
 import com.liuwa.common.annotation.Unique;
 import com.liuwa.common.core.dao.CurdDao;
 import com.liuwa.common.core.domain.BaseEntity;
@@ -107,17 +110,35 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
         if(methods.length == 0){
             throw new ServiceException("请先配置DictLabel字段");
         }
+
         Method method = methods[0];
         method.setAccessible(true);
 
         for(T entity : list){
             try{
                 String label = String.valueOf(method.invoke(entity));
+
                 SysDictDataOption<Pk> option = new SysDictDataOption<Pk>();
                 option.setDictValue((Pk)entity.getId());
                 option.setDictLabel(label);
                 option.setListClass("primary");
                 option.setCssClass("success");
+
+                Field[] fields = ClassUtils.getDeclaredFields(getEntityClass(), DictProperty.class);
+                if(fields.length > 0){
+                    JSONObject item = new JSONObject();
+                    for(Field field :fields){
+                        String name = field.getName();
+                        if(field.isAnnotationPresent(JsonProperty.class)){
+                            JsonProperty property = field.getAnnotation(JsonProperty.class);
+                            name = property.value();
+                        }
+                        field.setAccessible(true);
+                        item.put(name, field.get(entity));
+                    }
+                    option.setItem(item);
+                }
+
                 items.add(option);
             }
             catch (InvocationTargetException | IllegalAccessException ex){

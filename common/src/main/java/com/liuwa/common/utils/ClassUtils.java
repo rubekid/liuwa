@@ -187,6 +187,23 @@ public class ClassUtils {
 	}
 
 	/**
+	 * 根据注解获取字段数组
+	 * @param clazz
+	 * @param annotation
+	 * @return
+	 */
+	public static Field[] getDeclaredFields(Class<?> clazz, Class<? extends Annotation> annotation) {
+		Field[] fields = clazz.getDeclaredFields();
+		List<Field> result = new ArrayList<Field>();
+		for(Field field : fields){
+			if(field.isAnnotationPresent(annotation)){
+				result.add(field);
+			}
+		}
+		return result.toArray(new Field[result.size()]);
+	}
+
+	/**
 	 * 根据注解获取方法数组
 	 * @param clazz
 	 * @param annotation
@@ -202,6 +219,20 @@ public class ClassUtils {
 		}
     	return result.toArray(new Method[result.size()]);
     }
+
+	/**
+	 * 根据注解获取方法
+	 * @param clazz
+	 * @param annotation
+	 * @return
+	 */
+	public static Method getDeclaredMethod(Class<?> clazz, Class<? extends Annotation> annotation) {
+		Method[] methods = getDeclaredMethods(clazz, annotation);
+		if(methods.length > 0){
+			return methods[0];
+		}
+		return null;
+	}
 
 	/**
 	 * 根据方法名获取方法数组
