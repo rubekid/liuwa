@@ -109,7 +109,7 @@ public class ${ClassName}Controller extends BaseController{
      * 新增${functionName}
      */
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:add')")
-    @Log(title = "${functionName}", businessType = BusinessType.INSERT)
+    @Log(title = "新增${functionName}", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ${ClassName} ${className})
     {
@@ -121,7 +121,7 @@ public class ${ClassName}Controller extends BaseController{
      * 修改${functionName}
      */
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:edit')")
-    @Log(title = "${functionName}", businessType = BusinessType.UPDATE)
+    @Log(title = "修改${functionName}", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ${ClassName} ${className})
     {
