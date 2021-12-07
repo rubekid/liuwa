@@ -201,6 +201,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 #if($column.columnName != $pkColumn.columnName and $column.javaField != "delFlag" and $column.javaField != "createBy" and $column.javaField != "createTime")
             <if test="$column.javaField != null#if($column.javaType == 'String' && $column.required) and $column.javaField != ''#end">
                 $column.columnName = #{$column.javaField}#if($foreach.hasNext),#end
+
             </if>
 #end
 #end

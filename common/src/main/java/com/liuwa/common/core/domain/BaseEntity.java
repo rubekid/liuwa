@@ -251,7 +251,7 @@ public class BaseEntity<Pk> implements Serializable
                     if(value == null){
 
                         String dv = defaultValue.value();
-                        String nv = "" == dv ? "0" : dv;
+                        String nv = "".equals(dv) ? "0" : dv;
                         Class clazz = field.getType();
                         if(clazz.isAssignableFrom(Integer.class)){
                             field.set(this, Integer.valueOf(nv));

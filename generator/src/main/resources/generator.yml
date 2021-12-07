@@ -11,9 +11,9 @@ gen:
   # 前端模板
   frontTplPath: vue/vue2/
   # controller 分离路径
-  controllerPath:
+  controllerPath: api
   #模块名称
-  moduleName: api
+  moduleName: curd
   #vue 目录
   vuePath: vue2
 

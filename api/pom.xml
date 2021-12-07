@@ -49,6 +49,12 @@
             <artifactId>framework</artifactId>
         </dependency>
 
+        <!-- CURD-->
+        <dependency>
+            <groupId>com.liuwa</groupId>
+            <artifactId>curd</artifactId>
+        </dependency>
+
         <!-- 定时任务-->
         <dependency>
             <groupId>com.liuwa</groupId>
@@ -60,6 +66,8 @@
             <groupId>com.liuwa</groupId>
             <artifactId>generator</artifactId>
         </dependency>
+
+
         
     </dependencies>
 

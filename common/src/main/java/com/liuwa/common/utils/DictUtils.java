@@ -64,27 +64,27 @@ public class DictUtils
     public static List<SysDictDataOption> setDictCache(String key, List<SysDictData> dictDatas, SysDictType dictType) {
         List<SysDictDataOption> options = new ArrayList<SysDictDataOption>();
         String dataType = StringUtils.isEmpty(dictType.getDataType()) ? SysDictType.DATA_TYPE_STRING : dictType.getDataType();
+        SysDictDataOption option = null;
         for(SysDictData dataItem : dictDatas){
             String label = dataItem.getDictLabel();
             String value = dataItem.getDictValue();
             if(SysDictType.DATA_TYPE_NUMBER.equals(dataType)){
-                SysDictDataOption<Double> option = new SysDictDataOption<Double>();
+                option = new SysDictDataOption<Double>();
                 option.setDictValue(Double.valueOf(value));
-                option.setDictLabel(label);
-                options.add(option);
             }
             else if(SysDictType.DATA_TYPE_BOOLEAN.equals(dataType)){
-                SysDictDataOption<Boolean> option = new SysDictDataOption<Boolean>();
+                option = new SysDictDataOption<Boolean>();
                 option.setDictValue(Boolean.valueOf(value));
-                option.setDictLabel(label);
-                options.add(option);
+
             }
             else{
-                SysDictDataOption<String> option = new SysDictDataOption<String>();
+                option = new SysDictDataOption<String>();
                 option.setDictValue(value);
-                option.setDictLabel(label);
-                options.add(option);
             }
+            option.setDictLabel(label);
+            option.setCssClass(dataItem.getCssClass());
+            option.setListClass(dataItem.getListClass());
+            options.add(option);
         }
         return setDictCache(key, options);
     }

@@ -115,7 +115,7 @@ export default {
       getCodeImg().then(res => {
         this.captchaOnOff = res.captchaOnOff === undefined ? true : res.captchaOnOff;
         if (this.captchaOnOff) {
-          this.codeUrl = "data:image/gif;base64," + res.img;
+          this.codeUrl = res.img;
           this.registerForm.uuid = res.uuid;
         }
       });
@@ -126,7 +126,7 @@ export default {
           this.loading = true;
           register(this.registerForm).then(res => {
             const username = this.registerForm.username;
-            this.$alert("<font color='red'>恭喜你，您的账号 " + username + " 注册成功！</font>", '系统提示', {
+            this.$alert("<text class='text-danger'>恭喜你，您的账号 " + username + " 注册成功！</text>", '系统提示', {
               dangerouslyUseHTMLString: true
             }).then(() => {
               this.$router.push("/login");
