@@ -2,25 +2,25 @@
 	<div>
 
 		<template v-for="(item, index) in options">
-			<template v-if="values.includes(item[dictValue] + '')">
+			<template v-if="values.includes(item[valueKey] + '')">
 				<span
 					v-if="item.listClass == 'default' || !item.listClass"
-					:key="item[dictValue] + ''"
+					:key="item[valueKey] + ''"
 					:index="index"
 					:class="item.cssClass"
-					:title="item[dictLabel]"
-				>{{ item[dictLabel] }}</span
+					:title="item[labelKey]"
+				>{{ item[labelKey] }}</span
 				>
 				<el-tag
 					v-else
-					:title="item[dictLabel]"
+					:title="item[labelKey]"
 					:disable-transitions="true"
-					:key="item[dictValue] + ''"
+					:key="item[valueKey] + ''"
 					:index="index"
 					:type="item.listClass == 'primary' ? '' : item.listClass"
 					:class="item.cssClass"
 				>
-					{{ item[dictLabel] }}
+					{{ item[labelKey] }}
 				</el-tag>
 			</template>
 		</template>
@@ -35,12 +35,14 @@ export default {
 			type: Array,
 			default: null,
 		},
-		value: [Number, String, Boolean, Array],
-		dictLabel: {
+		value: [Number, String, Array, Boolean],
+		// label 字段key
+		labelKey: {
 			type: String,
 			default: 'dictLabel'
 		},
-		dictValue: {
+		// value 字段key
+		valueKey: {
 			type: String,
 			default: 'dictValue'
 		}

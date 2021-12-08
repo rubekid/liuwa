@@ -27,9 +27,9 @@ export default {
 				})
 			},
 			computed:{
-				// 字段数据
+				// 字典数据
 				dictData(){
-					return (dictType, dataType) =>{
+					return (dictType, dataType, ... ignore) =>{
 						let data = this.sysDictMap[dictType];
 						if(!data){
 							return [];
@@ -54,7 +54,27 @@ export default {
 								}
 							})
 						}
+						// 忽略某些值
+						if(ignore && ignore.length > 0){
+							data = data.filter( item => {
+									return !ignore.some(i=> item.dictValue == i);
+							})
+
+						}
 						return data;
+					}
+				},
+				/**
+					* 字典标签
+					* @returns {any}
+					*/
+				dictLabel(){
+					return (dictType, value, dataType, ... ignore) =>{
+							let data = this.dictData(dictType, dataType, ignore);
+							let ret = data.find(item => {
+								return item.dictValue == value;
+							});
+							return ret ? ret.dictLabel : '';
 					}
 				}
 			}
