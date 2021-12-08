@@ -38,6 +38,9 @@ public interface CurdService <Pk, D extends CurdDao<Pk, T>, T extends BaseEntity
     /** 字典 */
     List<SysDictDataOption> dicts();
 
+    /** 字典 */
+    List<SysDictDataOption> dicts(T condition);
+
     /**
      * 查询列表
      * @param condition

@@ -151,7 +151,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="genPath != null and genPath != ''">gen_path,</if>
 			<if test="remark != null and remark != ''">remark,</if>
  			<if test="createBy != null and createBy != ''">create_by,</if>
-			create_time
+			create_time,
+			update_time
          )values(
 			<if test="tableName != null">#{tableName},</if>
 			<if test="tableComment != null and tableComment != ''">#{tableComment},</if>
@@ -166,7 +167,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="genPath != null and genPath != ''">#{genPath},</if>
 			<if test="remark != null and remark != ''">#{remark},</if>
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
-			sysdate()
+			sysdate(),
+        	sysdate()
          )
     </insert>
     

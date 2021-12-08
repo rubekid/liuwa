@@ -97,8 +97,13 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
 
     @Override
     public List<SysDictDataOption> dicts() {
+        return dicts(null);
+    }
+
+    @Override
+    public List<SysDictDataOption> dicts(T condition) {
         List<SysDictDataOption> items = new ArrayList<SysDictDataOption>();
-        List<T> list = findAll();
+        List<T> list = condition == null  ? findAll() : findList(condition);
         if(list.size() == 0){
             return  items;
         }
