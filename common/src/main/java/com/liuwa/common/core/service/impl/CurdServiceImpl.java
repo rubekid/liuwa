@@ -152,11 +152,25 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
 
     /**
      * 查询列表
-     * @param entity
+     * @param condition
      * @return
      */
-    public List<T> findList(T entity){
-        return curdDao.findList(entity);
+    public List<T> findList(T condition){
+        return curdDao.findList(condition);
+    }
+
+    /**
+     * 获取一条记录
+     * @param condition
+     * @return
+     */
+    @Override
+    public T findOne(T condition) {
+        List<T> items = findList(condition);
+        if(items.size() > 0){
+            return items.get(0);
+        }
+        return null;
     }
 
     /**

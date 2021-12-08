@@ -40,10 +40,17 @@ public interface CurdService <Pk, D extends CurdDao<Pk, T>, T extends BaseEntity
 
     /**
      * 查询列表
-     * @param entity
+     * @param condition
      * @return
      */
-    public List<T> findList(T entity);
+    public List<T> findList(T condition);
+
+    /**
+     * 获取一条记录
+     * @param condition
+     * @return
+     */
+    public T findOne(T condition);
 
     /**
      * 获取全部列表
