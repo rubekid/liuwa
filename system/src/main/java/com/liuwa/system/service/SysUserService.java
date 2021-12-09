@@ -195,6 +195,14 @@ public interface SysUserService
     public int deleteUserById(Long userId);
 
     /**
+     * 物理删除用户
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    public int delete(Long userId);
+
+    /**
      * 批量删除用户信息
      * 
      * @param userIds 需要删除的用户ID

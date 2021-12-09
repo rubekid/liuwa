@@ -115,4 +115,12 @@ public interface SysDeptMapper
      * @return 结果
      */
     public int deleteDeptById(Long deptId);
+
+    /**
+     * 物理删除，并删除子孙部门
+     *
+     * @param deptId 部门ID
+     * @return 结果
+     */
+    public int delete(Long deptId);
 }

@@ -113,4 +113,12 @@ public interface SysDeptService
      * @return 结果
      */
     public int deleteDeptById(Long deptId);
+
+    /**
+     * 物理删除部门管理信息并删除子孙部门
+     *
+     * @param deptId 部门ID
+     * @return 结果
+     */
+    public int delete(Long deptId);
 }

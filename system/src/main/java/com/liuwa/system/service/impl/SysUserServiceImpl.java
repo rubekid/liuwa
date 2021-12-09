@@ -485,6 +485,16 @@ public class SysUserServiceImpl implements SysUserService
         return userMapper.deleteUserById(userId);
     }
 
+    @Override
+    @Transactional
+    public int delete(Long userId) {
+        // 删除用户与角色关联
+        userRoleMapper.deleteUserRoleByUserId(userId);
+        // 删除用户与岗位表
+        userPostMapper.deleteUserPostByUserId(userId);
+        return userMapper.delete(userId);
+    }
+
     /**
      * 批量删除用户信息
      * 
