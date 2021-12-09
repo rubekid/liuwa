@@ -139,7 +139,7 @@
 
 
 										<el-button
-											:disabled="scope.row.isPrivate"
+											:disabled="scope.row.isPrivate && user_id != -1"
 											size="mini"
 											type="text"
 											icon="el-icon-delete"
@@ -147,7 +147,7 @@
 											v-hasPermi="['system:role:remove']"
 										>删除</el-button>
 
-										<el-dropdown :disabled="scope.row.isPrivate" size="mini" @command="(command) => handleCommand(command, scope.row)" v-hasPermi="['system:role:edit']">
+										<el-dropdown :disabled="scope.row.isPrivate && user_id != -1" size="mini" @command="(command) => handleCommand(command, scope.row)" v-hasPermi="['system:role:edit']">
               <span class="el-dropdown-link">
                 <i class="el-icon-d-arrow-right el-icon--right"></i>更多
               </span>
