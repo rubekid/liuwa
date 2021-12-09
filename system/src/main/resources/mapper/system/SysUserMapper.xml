@@ -222,7 +222,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach> 
  	</update>
 
-	<delete id="deleteUserById" parameterType="Long">
+	<delete id="delete" parameterType="Long">
 		delete from sys_user where user_id = #{userId}
 	</delete>
 	
