@@ -53,7 +53,7 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
     public void onMessage(Message message, byte[] pattern) {
         super.onMessage(message, pattern);
         String key = message.toString(); // 获取key
-        logger.info("redis key过期：{}", key);
+        logger.debug("redis key过期：{}", key);
         observable.notifyObservers(key);
     }
  
