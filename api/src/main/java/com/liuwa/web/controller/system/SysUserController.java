@@ -99,6 +99,8 @@ public class SysUserController extends BaseController
         userService.checkUserDataScope(userId);
         AjaxResult ajax = AjaxResult.success();
         List<SysRole> roles = roleService.selectRoleAll();
+        // 去掉私有角色（除了admin）
+        roles = roles.stream().filter(r -> r.isAdmin() || !r.checkIsPrivate()).collect(Collectors.toList());
         ajax.put("roles", SysUser.isDeveloper(userId) ? roles : roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
         ajax.put("posts", postService.selectPostAll());
         if (StringUtils.isNotNull(userId))

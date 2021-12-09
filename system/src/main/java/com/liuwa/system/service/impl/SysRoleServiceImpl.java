@@ -201,7 +201,7 @@ public class SysRoleServiceImpl implements SysRoleService
         {
             throw new ServiceException("不允许操作超级管理员角色");
         }
-        else if(role.isSys() && !UserUtils.getSysUser().isDeveloper()){
+        else if(role.checkIsPrivate() && !UserUtils.getSysUser().isDeveloper()){
             throw new ServiceException("不允许操作系统配置的角色");
         }
     }

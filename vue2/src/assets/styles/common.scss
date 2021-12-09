@@ -188,6 +188,10 @@
      cursor: pointer;
      color: #409EFF;
      margin-left: 5px;
+					&[disabled]{
+						color:#bbbbbb;
+						cursor:not-allowed ;
+					}
  }
 
  .el-table .el-dropdown,

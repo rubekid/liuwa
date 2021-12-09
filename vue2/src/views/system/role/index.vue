@@ -127,37 +127,40 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
 
         <template slot-scope="scope">
-           <template v-if="scope.row.roleId !== 1 || user_id == -1">
+									<el-button
+										:disabled="(scope.row.roleId !== 1 && scope.row.isPrivate) || user_id == -1"
+										size="mini"
+										type="text"
+										icon="el-icon-edit"
+										@click="handleUpdate(scope.row)"
+										v-hasPermi="['system:role:edit']"
+									>修改</el-button>
 
-            <el-button
-              size="mini"
-              type="text"
-              icon="el-icon-edit"
-              @click="handleUpdate(scope.row)"
-              v-hasPermi="['system:role:edit']"
-            >修改</el-button>
-           </template>
 
-          <template v-if="!scope.row.sys">
-            <el-button
-              size="mini"
-              type="text"
-              icon="el-icon-delete"
-              @click="handleDelete(scope.row)"
-              v-hasPermi="['system:role:remove']"
-            >删除</el-button>
-            <el-dropdown size="mini" @command="(command) => handleCommand(command, scope.row)" v-hasPermi="['system:role:edit']">
+
+										<el-button
+											:disabled="scope.row.isPrivate"
+											size="mini"
+											type="text"
+											icon="el-icon-delete"
+											@click="handleDelete(scope.row)"
+											v-hasPermi="['system:role:remove']"
+										>删除</el-button>
+
+										<el-dropdown :disabled="scope.row.isPrivate" size="mini" @command="(command) => handleCommand(command, scope.row)" v-hasPermi="['system:role:edit']">
               <span class="el-dropdown-link">
                 <i class="el-icon-d-arrow-right el-icon--right"></i>更多
               </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="handleDataScope" icon="el-icon-circle-check"
-                  v-hasPermi="['system:role:edit']">数据权限</el-dropdown-item>
-                <el-dropdown-item command="handleAuthUser" icon="el-icon-user"
-                  v-hasPermi="['system:role:edit']">分配用户</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </template>
+											<el-dropdown-menu slot="dropdown">
+
+												<el-dropdown-item command="handleDataScope" icon="el-icon-circle-check"
+																														v-hasPermi="['system:role:edit']">数据权限</el-dropdown-item>
+												<el-dropdown-item command="handleAuthUser" icon="el-icon-user"
+																														v-hasPermi="['system:role:edit']">分配用户</el-dropdown-item>
+
+											</el-dropdown-menu>
+										</el-dropdown>
+
         </template>
 
       </el-table-column>

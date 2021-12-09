@@ -1,13 +1,14 @@
 package com.liuwa.common.core.domain.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.liuwa.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import com.liuwa.common.core.domain.BaseEntity;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 部门表 sys_dept
@@ -31,7 +32,7 @@ public class SysDept extends BaseEntity
     private String deptName;
 
     /** 显示顺序 */
-    private String orderNum;
+    private Long orderNum;
 
     /** 负责人 */
     private String leader;
@@ -93,13 +94,12 @@ public class SysDept extends BaseEntity
         this.deptName = deptName;
     }
 
-    @NotBlank(message = "显示顺序不能为空")
-    public String getOrderNum()
+    public Long getOrderNum()
     {
         return orderNum;
     }
 
-    public void setOrderNum(String orderNum)
+    public void setOrderNum(Long orderNum)
     {
         this.orderNum = orderNum;
     }

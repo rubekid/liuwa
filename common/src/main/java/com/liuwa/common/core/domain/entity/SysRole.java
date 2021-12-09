@@ -48,7 +48,7 @@ public class SysRole extends BaseEntity
     private Integer status;
 
     /** 是否是系统角色（不可删除） */
-    private boolean isSys;
+    private Boolean isPrivate;
 
     /** 用户是否存在此角色标识 默认不存在 */
     private boolean flag = false;
@@ -164,12 +164,20 @@ public class SysRole extends BaseEntity
         this.status = status;
     }
 
-    public boolean isSys() {
-        return isSys;
+    /**
+     * 检测是否是私有系统生成
+     * @return
+     */
+    public boolean checkIsPrivate(){
+        return isPrivate != null && isPrivate;
     }
 
-    public void setSys(boolean sys) {
-        isSys = sys;
+    public Boolean getIsPrivate() {
+        return isPrivate;
+    }
+
+    public void setIsPrivate(Boolean sys) {
+        isPrivate = sys;
     }
 
     public boolean isFlag()
