@@ -128,7 +128,7 @@
 
         <template slot-scope="scope">
 									<el-button
-										:disabled="(scope.row.roleId !== 1 && scope.row.isPrivate) || user_id == -1"
+										:disabled="(scope.row.roleId == 1 || scope.row.isPrivate) && user_id != -1"
 										size="mini"
 										type="text"
 										icon="el-icon-edit"
