@@ -50,7 +50,7 @@ public class SysUser extends BaseEntity
 
     /** 用户性别 */
     @Excel(name = "用户性别", readConverterExp = "1=男,2=女,0=未知")
-    private String sex;
+    private Integer sex;
 
     /** 用户头像 */
     private String avatar;
@@ -191,12 +191,12 @@ public class SysUser extends BaseEntity
         this.phonenumber = phonenumber;
     }
 
-    public String getSex()
+    public Integer getSex()
     {
         return sex;
     }
 
-    public void setSex(String sex)
+    public void setSex(Integer sex)
     {
         this.sex = sex;
     }

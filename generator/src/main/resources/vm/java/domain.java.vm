@@ -13,6 +13,8 @@ import com.liuwa.common.core.domain.BaseEntity;
 #elseif($table.tree)
 import com.liuwa.common.core.domain.TreeEntity;
 #end
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * ${functionName}对象 ${tableName}
@@ -25,6 +27,7 @@ import com.liuwa.common.core.domain.TreeEntity;
 #elseif($table.tree)
 #set($Entity="TreeEntity")
 #end
+@ApiModel(description = "${functionName}对象")
 public class ${ClassName} extends ${Entity}<${pkColumn.javaType}>{
     private static final long serialVersionUID = 1L;
 
@@ -62,6 +65,7 @@ public class ${ClassName} extends ${Entity}<${pkColumn.javaType}>{
 #if($column.unique)
     @Unique(name = "${column.columnLabel}")
 #end
+    @ApiModelProperty(value="${comment}")
     private $column.javaType $column.javaField;
 
 #set($columnIndex = $columnIndex + 10)
@@ -69,6 +73,7 @@ public class ${ClassName} extends ${Entity}<${pkColumn.javaType}>{
 #end
 #if($table.sub)
     /** $table.subTable.functionName信息 */
+    @ApiModelProperty(value="${table.subTable.functionName}信息")
     private List<${subClassName}> ${subclassName}List;
 
 #end
