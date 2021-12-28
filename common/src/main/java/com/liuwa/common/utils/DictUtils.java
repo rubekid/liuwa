@@ -12,6 +12,7 @@ import com.liuwa.common.core.service.CurdService;
 import com.liuwa.common.utils.spring.SpringUtils;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -70,7 +71,7 @@ public class DictUtils
             String value = dataItem.getDictValue();
             if(SysDictType.DATA_TYPE_NUMBER.equals(dataType)){
                 option = new SysDictDataOption<Double>();
-                option.setDictValue(Double.valueOf(value));
+                option.setDictValue(new BigDecimal(value));
             }
             else if(SysDictType.DATA_TYPE_BOOLEAN.equals(dataType)){
                 option = new SysDictDataOption<Boolean>();
