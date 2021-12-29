@@ -7,6 +7,7 @@
 					v-if="item.listClass == 'default' || !item.listClass"
 					:key="item[valueKey] + ''"
 					:index="index"
+					:type="item.listClass == 'primary' ? '' : item.listClass"
 					:class="item.cssClass"
 					:title="item[labelKey]"
 				>{{ item[labelKey] }}</span

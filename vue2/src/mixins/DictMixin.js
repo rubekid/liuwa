@@ -54,10 +54,14 @@ export default {
 								}
 							})
 						}
+						if(ignore){
+							ignore = ignore.filter(item=> item === undefined);
+						}
+
 						// 忽略某些值
 						if(ignore && ignore.length > 0){
 							data = data.filter( item => {
-									return !ignore.some(i=> item.dictValue == i);
+								return !ignore.some(i=> item.dictValue === i);
 							})
 
 						}

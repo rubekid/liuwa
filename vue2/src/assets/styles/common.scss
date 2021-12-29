@@ -292,6 +292,36 @@
  .text-muted {
      color: #888888;
  }
+
+
+	span[type='navy'] {
+		color: #1ab394;
+	}
+
+	span[type='primary'] {
+		color: inherit;
+	}
+
+	span[type='success'] {
+		color: #1c84c6;
+	}
+
+	span[type='info'] {
+		color: #23c6c8;
+	}
+
+	span[type='warning']{
+		color: #f8ac59;
+	}
+
+	span[type='danger'] {
+		color: #ed5565;
+	}
+
+	span[type='muted'] {
+		color: #888888;
+	}
+
  /* image */
 
  .img-circle {
