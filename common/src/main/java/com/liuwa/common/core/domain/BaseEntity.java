@@ -234,7 +234,6 @@ public class BaseEntity<Pk> implements Serializable
         }
 
         this.setUpdateTime(new Date());
-        this.preSave();
     }
 
     /**
