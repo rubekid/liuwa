@@ -84,6 +84,12 @@ public class TokenService implements Observer {
     @Value("${token.localCache:false}")
     private boolean localCache;
 
+    /**
+     * 键名前缀
+     */
+    @Value("${spring.redis.prefix:}")
+    private String keyPrefix;
+
 
     protected static final long MILLIS_SECOND = 1000;
 
@@ -139,7 +145,9 @@ public class TokenService implements Observer {
      */
     @EventListener
     public void handleKeyDeleted(RedisKeyDeletedEvent event){
-        logger.info("{}", new String(event.getId()));
+        if(event.getId().toString().startsWith(keyPrefix)){
+            logger.info("{}", new String(event.getId()));
+        }
     }
 
     /**
@@ -149,7 +157,9 @@ public class TokenService implements Observer {
      */
     @EventListener
     public void handleKeyExpired(RedisKeyExpiredEvent event){
-        logger.info("{}", new String(event.getId()));
+        if(event.getId().toString().startsWith(keyPrefix)){
+            logger.info("{}", new String(event.getId()));
+        }
     }
 
     /**

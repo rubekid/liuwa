@@ -1,36 +1,32 @@
 package com.liuwa.framework.aspectj;
 
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.alibaba.fastjson.JSON;
+import com.liuwa.common.annotation.Log;
+import com.liuwa.common.core.domain.model.LoginUser;
+import com.liuwa.common.enums.BusinessStatus;
+import com.liuwa.common.enums.HttpMethod;
+import com.liuwa.common.utils.SecurityUtils;
+import com.liuwa.common.utils.ServletUtils;
+import com.liuwa.common.utils.StringUtils;
+import com.liuwa.common.utils.ip.IpUtils;
+import com.liuwa.framework.manager.AsyncManager;
+import com.liuwa.framework.manager.factory.AsyncFactory;
+import com.liuwa.system.domain.SysOperLog;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.HandlerMapping;
-import com.alibaba.fastjson.JSON;
-import com.liuwa.common.annotation.Log;
-import com.liuwa.common.core.domain.model.LoginUser;
-import com.liuwa.common.enums.BusinessStatus;
-import com.liuwa.common.enums.HttpMethod;
-import com.liuwa.common.utils.ServletUtils;
-import com.liuwa.common.utils.StringUtils;
-import com.liuwa.common.utils.ip.IpUtils;
-import com.liuwa.common.utils.SecurityUtils;
-import com.liuwa.framework.manager.AsyncManager;
-import com.liuwa.framework.manager.factory.AsyncFactory;
-import com.liuwa.system.domain.SysOperLog;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * 操作日志记录处理
