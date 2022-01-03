@@ -1,9 +1,8 @@
 package com.liuwa.web.controller.system;
 
 import com.liuwa.common.core.controller.BaseController;
-import com.liuwa.common.core.domain.AjaxResult;
 import com.liuwa.common.core.domain.model.RegisterBody;
-import com.liuwa.common.utils.StringUtils;
+import com.liuwa.common.exception.ServiceException;
 import com.liuwa.framework.web.service.SysRegisterService;
 import com.liuwa.system.service.SysConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +25,12 @@ public class SysRegisterController extends BaseController
     private SysConfigService configService;
 
     @PostMapping("/register")
-    public AjaxResult register(@RequestBody RegisterBody user)
+    public void register(@RequestBody RegisterBody user)
     {
         if (!("true".equals(configService.selectConfigByKey("sys.account.registerUser"))))
         {
-            return error("当前系统没有开启注册功能！");
+            throw new ServiceException("当前系统没有开启注册功能！");
         }
-        String msg = registerService.register(user);
-        return StringUtils.isEmpty(msg) ? success() : error(msg);
+        registerService.register(user);
     }
 }

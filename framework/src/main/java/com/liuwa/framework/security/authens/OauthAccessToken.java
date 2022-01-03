@@ -28,6 +28,7 @@ public class OauthAccessToken implements Serializable {
 	 * 过期刷新用的token
 	 */
 	@JsonProperty("refresh_token")
+	@JsonIgnore
 	private String refreshToken;
 
 	/**

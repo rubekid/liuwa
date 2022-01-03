@@ -1,11 +1,15 @@
 package com.liuwa.web.controller.common;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.alibaba.fastjson.JSONArray;
+import com.liuwa.common.config.SysConfig;
+import com.liuwa.common.constant.Constants;
 import com.liuwa.common.core.domain.Result;
+import com.liuwa.common.core.domain.UploadResult;
 import com.liuwa.common.utils.DateUtils;
+import com.liuwa.common.utils.StringUtils;
+import com.liuwa.common.utils.file.FileUploadUtils;
+import com.liuwa.common.utils.file.FileUtils;
+import com.liuwa.framework.config.ServerConfig;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -18,14 +22,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import com.liuwa.common.config.SysConfig;
-import com.liuwa.common.constant.Constants;
-import com.liuwa.common.core.domain.AjaxResult;
-import com.liuwa.common.utils.StringUtils;
-import com.liuwa.common.utils.file.FileUploadUtils;
-import com.liuwa.common.utils.file.FileUtils;
-import com.liuwa.framework.config.ServerConfig;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -103,24 +102,19 @@ public class CommonController
      * 通用上传请求
      */
     @PostMapping("/common/upload")
-    public AjaxResult uploadFile(MultipartFile file) throws Exception
+    public UploadResult uploadFile(MultipartFile file) throws Exception
     {
-        try
-        {
-            // 上传文件路径
-            String filePath = SysConfig.getUploadPath();
-            // 上传并返回新文件名称
-            String fileName = FileUploadUtils.upload(filePath, file);
-            String url = serverConfig.getUrl() + fileName;
-            AjaxResult ajax = AjaxResult.success();
-            ajax.put("fileName", fileName);
-            ajax.put("url", url);
-            return ajax;
-        }
-        catch (Exception e)
-        {
-            return AjaxResult.error(e.getMessage());
-        }
+
+        // 上传文件路径
+        String filePath = SysConfig.getUploadPath();
+        // 上传并返回新文件名称
+        String fileName = FileUploadUtils.upload(filePath, file);
+        String url = serverConfig.getUrl() + fileName;
+        UploadResult result = new UploadResult();
+        result.setUrl(url);
+        result.setFileName(fileName);
+        return result;
+
     }
 
     /**

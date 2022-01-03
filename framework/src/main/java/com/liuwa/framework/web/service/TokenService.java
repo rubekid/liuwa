@@ -84,12 +84,6 @@ public class TokenService implements Observer {
     @Value("${token.localCache:false}")
     private boolean localCache;
 
-    /**
-     * 键名前缀
-     */
-    @Value("${spring.redis.prefix:}")
-    private String keyPrefix;
-
 
     protected static final long MILLIS_SECOND = 1000;
 
@@ -145,9 +139,7 @@ public class TokenService implements Observer {
      */
     @EventListener
     public void handleKeyDeleted(RedisKeyDeletedEvent event){
-        if(event.getId().toString().startsWith(keyPrefix)){
-            logger.info("{}", new String(event.getId()));
-        }
+        logger.info("{}", new String(event.getId()));
     }
 
     /**
@@ -157,9 +149,7 @@ public class TokenService implements Observer {
      */
     @EventListener
     public void handleKeyExpired(RedisKeyExpiredEvent event){
-        if(event.getId().toString().startsWith(keyPrefix)){
-            logger.info("{}", new String(event.getId()));
-        }
+        logger.info("{}", new String(event.getId()));
     }
 
     /**
@@ -320,7 +310,7 @@ public class TokenService implements Observer {
             accessToken.setServerTime(new Date());
             accessToken.setExpiresAt(new Date(loginUser.getExpireTime()));
             accessToken.setUserId(loginUser.getUserId());
-            accessToken.setRefreshToken(token);
+            //accessToken.setRefreshToken(token);
             String macKey = generateMacKey(token, uuid);
             accessToken.setMacKey(macKey);
             return accessToken;

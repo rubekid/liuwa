@@ -1,21 +1,24 @@
 package com.liuwa.web.controller.system;
 
-import java.util.List;
-import java.util.Set;
+import com.liuwa.common.core.domain.Result;
+import com.liuwa.common.core.domain.entity.SysMenu;
+import com.liuwa.common.core.domain.entity.SysUser;
+import com.liuwa.common.core.domain.model.LoginBody;
+import com.liuwa.common.utils.SecurityUtils;
+import com.liuwa.framework.security.authens.OauthAccessToken;
+import com.liuwa.framework.web.service.SysLoginService;
+import com.liuwa.framework.web.service.SysPermissionService;
+import com.liuwa.framework.web.service.TokenService;
+import com.liuwa.system.service.SysMenuService;
+import com.liuwa.web.vo.UserInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.liuwa.common.constant.Constants;
-import com.liuwa.common.core.domain.AjaxResult;
-import com.liuwa.common.core.domain.entity.SysMenu;
-import com.liuwa.common.core.domain.entity.SysUser;
-import com.liuwa.common.core.domain.model.LoginBody;
-import com.liuwa.common.utils.SecurityUtils;
-import com.liuwa.framework.web.service.SysLoginService;
-import com.liuwa.framework.web.service.SysPermissionService;
-import com.liuwa.system.service.SysMenuService;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * 登录验证
@@ -34,6 +37,9 @@ public class SysLoginController
     @Autowired
     private SysPermissionService permissionService;
 
+    @Autowired
+    private TokenService tokenService;
+
     /**
      * 登录方法
      * 
@@ -41,14 +47,13 @@ public class SysLoginController
      * @return 结果
      */
     @PostMapping("/login")
-    public AjaxResult login(@RequestBody LoginBody loginBody)
+    public OauthAccessToken login(@RequestBody LoginBody loginBody)
     {
-        AjaxResult ajax = AjaxResult.success();
         // 生成令牌
         String token = loginService.login(loginBody.getUsername(), loginBody.getPassword(), loginBody.getCode(),
                 loginBody.getUuid());
-        ajax.put(Constants.TOKEN, token);
-        return ajax;
+        OauthAccessToken accessToken = (OauthAccessToken)tokenService.wrapper(token);
+        return accessToken;
     }
 
     /**
@@ -57,18 +62,18 @@ public class SysLoginController
      * @return 用户信息
      */
     @GetMapping("getInfo")
-    public AjaxResult getInfo()
+    public UserInfoVo getInfo()
     {
         SysUser user = SecurityUtils.getLoginUser().getUser();
         // 角色集合
         Set<String> roles = permissionService.getRolePermission(user);
         // 权限集合
         Set<String> permissions = permissionService.getMenuPermission(user);
-        AjaxResult ajax = AjaxResult.success();
-        ajax.put("user", user);
-        ajax.put("roles", roles);
-        ajax.put("permissions", permissions);
-        return ajax;
+        UserInfoVo userInfo = new UserInfoVo();
+        userInfo.setUser(user);
+        userInfo.setRoles(roles);
+        userInfo.setPermissions(permissions);
+        return userInfo;
     }
 
     /**
@@ -77,10 +82,10 @@ public class SysLoginController
      * @return 路由信息
      */
     @GetMapping("getRouters")
-    public AjaxResult getRouters()
+    public Result.ItemsVo getRouters()
     {
         Long userId = SecurityUtils.getUserId();
         List<SysMenu> menus = menuService.selectMenuTreeByUserId(userId);
-        return AjaxResult.success(menuService.buildMenus(menus));
+        return Result.items(menuService.buildMenus(menus));
     }
 }

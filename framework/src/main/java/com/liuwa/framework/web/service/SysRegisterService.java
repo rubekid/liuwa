@@ -1,5 +1,6 @@
 package com.liuwa.framework.web.service;
 
+import com.liuwa.common.exception.ServiceException;
 import com.liuwa.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,7 @@ public class SysRegisterService
     /**
      * 注册
      */
-    public String register(RegisterBody registerBody)
+    public void register(RegisterBody registerBody)
     {
         String msg = "", username = registerBody.getUsername(), password = registerBody.getPassword();
 
@@ -87,7 +88,9 @@ public class SysRegisterService
                         MessageUtils.message("user.register.success")));
             }
         }
-        return msg;
+        if(StringUtils.isNotEmpty(msg)){
+            throw new ServiceException(msg);
+        }
     }
 
     /**
