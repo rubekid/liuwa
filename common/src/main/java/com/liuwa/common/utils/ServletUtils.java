@@ -105,7 +105,9 @@ public class ServletUtils
     {
         try
         {
-            response.setStatus(200);
+            if(response.getStatus() == 0){
+                response.setStatus(200);
+            }
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             response.getWriter().print(string);

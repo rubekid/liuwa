@@ -1,6 +1,8 @@
 package com.liuwa.framework.security.handle;
 
 import com.liuwa.common.constant.Constants;
+
+import com.liuwa.common.constant.HttpStatus;
 import com.liuwa.common.core.domain.model.LoginUser;
 import com.liuwa.common.utils.ServletUtils;
 import com.liuwa.common.utils.StringUtils;
@@ -46,6 +48,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler
             // 记录用户退出日志
             AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, Constants.LOGOUT, "退出成功"));
         }
+        response.setStatus(HttpStatus.SUCCESS);
         ServletUtils.renderString(response, "");
     }
 }
