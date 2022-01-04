@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.liuwa.common.annotation.Log;
 import com.liuwa.common.constant.Constants;
 import com.liuwa.common.core.controller.BaseController;
-import com.liuwa.common.core.domain.AjaxResult;
 import com.liuwa.common.core.domain.model.LoginUser;
-import com.liuwa.common.core.page.TableDataInfo;
+import com.liuwa.common.core.page.PageData;
 import com.liuwa.common.core.redis.RedisCache;
 import com.liuwa.common.enums.BusinessType;
 import com.liuwa.common.utils.StringUtils;
@@ -40,7 +39,7 @@ public class SysUserOnlineController extends BaseController
 
     @PreAuthorize("@ss.hasPermi('monitor:online:list')")
     @GetMapping("/list")
-    public TableDataInfo list(String ipaddr, String userName)
+    public PageData list(String ipaddr, String userName)
     {
         Collection<String> keys = redisCache.keys(Constants.LOGIN_TOKEN_KEY + "*");
         List<SysUserOnline> userOnlineList = new ArrayList<SysUserOnline>();
@@ -75,7 +74,7 @@ public class SysUserOnlineController extends BaseController
         }
         Collections.reverse(userOnlineList);
         userOnlineList.removeAll(Collections.singleton(null));
-        return getDataTable(userOnlineList);
+        return getPageData(userOnlineList);
     }
 
     /**
@@ -84,9 +83,8 @@ public class SysUserOnlineController extends BaseController
     @PreAuthorize("@ss.hasPermi('monitor:online:forceLogout')")
     @Log(title = "在线用户", businessType = BusinessType.FORCE)
     @DeleteMapping("/{tokenId}")
-    public AjaxResult forceLogout(@PathVariable String tokenId)
+    public void forceLogout(@PathVariable String tokenId)
     {
         redisCache.deleteObject(Constants.LOGIN_TOKEN_KEY + tokenId);
-        return AjaxResult.success();
     }
 }

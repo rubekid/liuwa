@@ -1,10 +1,8 @@
 package com.liuwa.web.controller.monitor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import com.liuwa.common.utils.StringUtils;
+import com.liuwa.web.vo.CacheInfoVo;
+import com.liuwa.web.vo.CacheItemVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -12,8 +10,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.liuwa.common.core.domain.AjaxResult;
-import com.liuwa.common.utils.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * 缓存监控
@@ -29,25 +29,25 @@ public class CacheController
 
     @PreAuthorize("@ss.hasPermi('monitor:cache:list')")
     @GetMapping()
-    public AjaxResult getInfo() throws Exception
+    public CacheInfoVo getInfo() throws Exception
     {
         Properties info = (Properties) redisTemplate.execute((RedisCallback<Object>) connection -> connection.info());
         Properties commandStats = (Properties) redisTemplate.execute((RedisCallback<Object>) connection -> connection.info("commandstats"));
-        Object dbSize = redisTemplate.execute((RedisCallback<Object>) connection -> connection.dbSize());
+        Long dbSize = (Long) redisTemplate.execute((RedisCallback<Object>) connection -> connection.dbSize());
 
-        Map<String, Object> result = new HashMap<>(3);
-        result.put("info", info);
-        result.put("dbSize", dbSize);
+        CacheInfoVo result = new CacheInfoVo();
+        result.setInfo(info);
+        result.setDbSize(dbSize);
 
-        List<Map<String, String>> pieList = new ArrayList<>();
+        List<CacheItemVo> pieList = new ArrayList<CacheItemVo>();
         commandStats.stringPropertyNames().forEach(key -> {
-            Map<String, String> data = new HashMap<>(2);
+            CacheItemVo item = new CacheItemVo();
             String property = commandStats.getProperty(key);
-            data.put("name", StringUtils.removeStart(key, "cmdstat_"));
-            data.put("value", StringUtils.substringBetween(property, "calls=", ",usec"));
-            pieList.add(data);
+            item.setName(StringUtils.removeStart(key, "cmdstat_"));
+            item.setValue(StringUtils.substringBetween(property, "calls=", ",usec"));
+            pieList.add(item);
         });
-        result.put("commandStats", pieList);
-        return AjaxResult.success(result);
+        result.setCommandStats(pieList);
+        return result;
     }
 }

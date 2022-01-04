@@ -2,8 +2,10 @@ package com.liuwa.framework.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.liuwa.common.annotation.RepeatSubmit;
-import com.liuwa.common.core.domain.AjaxResult;
+import com.liuwa.common.exception.code.ErrorCode;
+import com.liuwa.common.exception.message.ErrorMessage;
 import com.liuwa.common.utils.ServletUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -32,8 +34,9 @@ public abstract class RepeatSubmitInterceptor implements HandlerInterceptor
             {
                 if (this.isRepeatSubmit(request, annotation))
                 {
-                    AjaxResult ajaxResult = AjaxResult.error(annotation.message());
-                    ServletUtils.renderString(response, JSONObject.toJSONString(ajaxResult));
+                    ErrorMessage errorMessage = new ErrorMessage(ErrorCode.REPEAT, annotation.message());
+                    response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                    ServletUtils.renderString(response, JSONObject.toJSONString(errorMessage));
                     return false;
                 }
             }

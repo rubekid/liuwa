@@ -1,17 +1,19 @@
 package com.liuwa.framework.security.handle;
 
-import java.io.IOException;
-import java.io.Serializable;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.alibaba.fastjson.JSON;
+import com.liuwa.common.constant.HttpStatus;
+import com.liuwa.common.exception.code.ErrorCode;
+import com.liuwa.common.exception.message.ErrorMessage;
+import com.liuwa.common.utils.ServletUtils;
+import com.liuwa.common.utils.StringUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import com.alibaba.fastjson.JSON;
-import com.liuwa.common.constant.HttpStatus;
-import com.liuwa.common.core.domain.AjaxResult;
-import com.liuwa.common.utils.ServletUtils;
-import com.liuwa.common.utils.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * 认证失败处理类 返回未授权
@@ -29,6 +31,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint, S
     {
         int code = HttpStatus.UNAUTHORIZED;
         String msg = StringUtils.format("请求访问：{}，认证失败，无法访问系统资源", request.getRequestURI());
-        ServletUtils.renderString(response, JSON.toJSONString(AjaxResult.error(code, msg)));
+        response.setStatus(code);
+        ServletUtils.renderString(response, JSON.toJSONString(new ErrorMessage(ErrorCode.UNAUTHORIZED, msg)));
     }
 }

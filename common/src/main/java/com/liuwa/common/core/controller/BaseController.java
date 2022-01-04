@@ -1,24 +1,23 @@
 package com.liuwa.common.core.controller;
 
-import java.beans.PropertyEditorSupport;
-import java.util.Date;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.liuwa.common.constant.HttpStatus;
-import com.liuwa.common.core.domain.AjaxResult;
 import com.liuwa.common.core.domain.model.LoginUser;
 import com.liuwa.common.core.page.PageDomain;
-import com.liuwa.common.core.page.TableDataInfo;
+import com.liuwa.common.core.page.PageData;
 import com.liuwa.common.core.page.TableSupport;
 import com.liuwa.common.utils.DateUtils;
 import com.liuwa.common.utils.SecurityUtils;
 import com.liuwa.common.utils.StringUtils;
 import com.liuwa.common.utils.sql.SqlUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+
+import java.beans.PropertyEditorSupport;
+import java.util.Date;
+import java.util.List;
 
 /**
  * web层通用数据处理
@@ -79,69 +78,15 @@ public class BaseController
      * 响应请求分页数据
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected TableDataInfo getDataTable(List<?> list)
+    protected PageData getPageData(List<?> list)
     {
-        TableDataInfo rspData = new TableDataInfo();
-        rspData.setCode(HttpStatus.SUCCESS);
-        rspData.setMsg("查询成功");
-        rspData.setRows(list);
+        PageData rspData = new PageData();
+        rspData.setItems(list);
         rspData.setTotal(new PageInfo(list).getTotal());
         return rspData;
     }
 
-    /**
-     * 返回成功
-     */
-    public AjaxResult success()
-    {
-        return AjaxResult.success();
-    }
 
-    /**
-     * 返回失败消息
-     */
-    public AjaxResult error()
-    {
-        return AjaxResult.error();
-    }
-
-    /**
-     * 返回成功消息
-     */
-    public AjaxResult success(String message)
-    {
-        return AjaxResult.success(message);
-    }
-
-    /**
-     * 返回失败消息
-     */
-    public AjaxResult error(String message)
-    {
-        return AjaxResult.error(message);
-    }
-
-    /**
-     * 响应返回结果
-     * 
-     * @param rows 影响行数
-     * @return 操作结果
-     */
-    protected AjaxResult toAjax(int rows)
-    {
-        return rows > 0 ? AjaxResult.success() : AjaxResult.error();
-    }
-
-    /**
-     * 响应返回结果
-     * 
-     * @param result 结果
-     * @return 操作结果
-     */
-    protected AjaxResult toAjax(boolean result)
-    {
-        return result ? success() : error();
-    }
 
     /**
      * 页面跳转

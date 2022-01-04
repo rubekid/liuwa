@@ -1,24 +1,17 @@
 package com.liuwa.web.controller.system;
 
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import com.liuwa.common.annotation.Log;
 import com.liuwa.common.core.controller.BaseController;
-import com.liuwa.common.core.domain.AjaxResult;
-import com.liuwa.common.core.page.TableDataInfo;
+import com.liuwa.common.core.page.PageData;
 import com.liuwa.common.enums.BusinessType;
 import com.liuwa.system.domain.SysNotice;
 import com.liuwa.system.service.SysNoticeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 公告 信息操作处理
@@ -37,11 +30,11 @@ public class SysNoticeController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:notice:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysNotice notice)
+    public PageData list(SysNotice notice)
     {
         startPage();
         List<SysNotice> list = noticeService.selectNoticeList(notice);
-        return getDataTable(list);
+        return getPageData(list);
     }
 
     /**
@@ -49,9 +42,9 @@ public class SysNoticeController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:notice:query')")
     @GetMapping(value = "/{noticeId}")
-    public AjaxResult getInfo(@PathVariable Long noticeId)
+    public SysNotice getInfo(@PathVariable Long noticeId)
     {
-        return AjaxResult.success(noticeService.selectNoticeById(noticeId));
+        return noticeService.selectNoticeById(noticeId);
     }
 
     /**
@@ -60,10 +53,10 @@ public class SysNoticeController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:notice:add')")
     @Log(title = "通知公告", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@Validated @RequestBody SysNotice notice)
+    public void add(@Validated @RequestBody SysNotice notice)
     {
         notice.setCreateBy(getUserId());
-        return toAjax(noticeService.insertNotice(notice));
+        noticeService.insertNotice(notice);
     }
 
     /**
@@ -72,10 +65,10 @@ public class SysNoticeController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:notice:edit')")
     @Log(title = "通知公告", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@Validated @RequestBody SysNotice notice)
+    public void edit(@Validated @RequestBody SysNotice notice)
     {
         notice.setUpdateBy(getUserId());
-        return toAjax(noticeService.updateNotice(notice));
+        noticeService.updateNotice(notice);
     }
 
     /**
@@ -84,8 +77,8 @@ public class SysNoticeController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:notice:remove')")
     @Log(title = "通知公告", businessType = BusinessType.DELETE)
     @DeleteMapping("/{noticeIds}")
-    public AjaxResult remove(@PathVariable Long[] noticeIds)
+    public void remove(@PathVariable Long[] noticeIds)
     {
-        return toAjax(noticeService.deleteNoticeByIds(noticeIds));
+        noticeService.deleteNoticeByIds(noticeIds);
     }
 }

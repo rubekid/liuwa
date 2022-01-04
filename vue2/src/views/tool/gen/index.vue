@@ -248,9 +248,9 @@ export default {
     /** 查询表集合 */
     getList() {
       this.loading = true;
-      listTable(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-          this.tableList = response.rows;
-          this.total = response.total;
+      listTable(this.addDateRange(this.queryParams, this.dateRange)).then(res => {
+          this.tableList = res.items;
+          this.total = res.total;
           this.loading = false;
         }
       );
@@ -268,7 +268,7 @@ export default {
         return;
       }
       if(row.genType === "1") {
-        genCode(row.tableName).then(response => {
+        genCode(row.tableName).then(() => {
           this.$modal.success("成功生成到自定义路径：" + row.genPath);
         });
       } else {
@@ -296,8 +296,8 @@ export default {
     },
     /** 预览按钮 */
     handlePreview(row) {
-      previewTable(row.tableId).then(response => {
-        this.preview.data = response.data;
+      previewTable(row.tableId).then(res => {
+        this.preview.data = res;
         this.preview.open = true;
 							 this.preview.activeName = "domain.java";
       });

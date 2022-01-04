@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.liuwa.common.utils.UserUtils;
+import com.liuwa.common.utils.poi.ImportResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -524,7 +525,7 @@ public class SysUserServiceImpl implements SysUserService
      * @return 结果
      */
     @Override
-    public String importUser(List<SysUser> userList, Boolean isUpdateSupport)
+    public ImportResult importUser(List<SysUser> userList, Boolean isUpdateSupport)
     {
         if (StringUtils.isNull(userList) || userList.size() == 0)
         {
@@ -580,6 +581,9 @@ public class SysUserServiceImpl implements SysUserService
         {
             successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
         }
-        return successMsg.toString();
+        String message = successMsg.toString();
+        ImportResult result = new ImportResult();
+        result.setMessage(message);
+        return result;
     }
 }

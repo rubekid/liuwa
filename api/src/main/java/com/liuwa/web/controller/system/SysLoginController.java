@@ -10,7 +10,7 @@ import com.liuwa.framework.web.service.SysLoginService;
 import com.liuwa.framework.web.service.SysPermissionService;
 import com.liuwa.framework.web.service.TokenService;
 import com.liuwa.system.service.SysMenuService;
-import com.liuwa.web.vo.UserInfoVo;
+import com.liuwa.web.vo.SelfInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,7 +52,7 @@ public class SysLoginController
         // 生成令牌
         String token = loginService.login(loginBody.getUsername(), loginBody.getPassword(), loginBody.getCode(),
                 loginBody.getUuid());
-        OauthAccessToken accessToken = (OauthAccessToken)tokenService.wrapper(token);
+        OauthAccessToken accessToken = tokenService.wrapper(token);
         return accessToken;
     }
 
@@ -62,18 +62,18 @@ public class SysLoginController
      * @return 用户信息
      */
     @GetMapping("getInfo")
-    public UserInfoVo getInfo()
+    public SelfInfoVo getInfo()
     {
         SysUser user = SecurityUtils.getLoginUser().getUser();
         // 角色集合
         Set<String> roles = permissionService.getRolePermission(user);
         // 权限集合
         Set<String> permissions = permissionService.getMenuPermission(user);
-        UserInfoVo userInfo = new UserInfoVo();
-        userInfo.setUser(user);
-        userInfo.setRoles(roles);
-        userInfo.setPermissions(permissions);
-        return userInfo;
+        SelfInfoVo selfInfo = new SelfInfoVo();
+        selfInfo.setUser(user);
+        selfInfo.setRoles(roles);
+        selfInfo.setPermissions(permissions);
+        return selfInfo;
     }
 
     /**

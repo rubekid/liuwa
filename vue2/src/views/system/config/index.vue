@@ -241,17 +241,17 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_yes_no").then(response => {
-      this.typeOptions = response.data;
+    this.getDicts("sys_yes_no").then(res => {
+      this.typeOptions = res.items;
     });
   },
   methods: {
     /** 查询参数列表 */
     getList() {
       this.loading = true;
-      listConfig(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-          this.configList = response.rows;
-          this.total = response.total;
+      listConfig(this.addDateRange(this.queryParams, this.dateRange)).then(res => {
+          this.configList = res.items;
+          this.total = res.total;
           this.loading = false;
         }
       );
@@ -300,8 +300,8 @@ export default {
     handleUpdate(row) {
       this.reset();
       const configId = row.configId || this.ids
-      getConfig(configId).then(response => {
-        this.form = response.data;
+      getConfig(configId).then(res => {
+        this.form = res;
         this.open = true;
         this.title = "修改参数";
       });
@@ -311,13 +311,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.configId != undefined) {
-            updateConfig(this.form).then(response => {
+            updateConfig(this.form).then(() => {
               this.$modal.success("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addConfig(this.form).then(response => {
+            addConfig(this.form).then(() => {
               this.$modal.success("新增成功");
               this.open = false;
               this.getList();
@@ -342,8 +342,8 @@ export default {
       this.$modal.confirm('是否确认导出所有参数数据项?').then(() => {
           this.exportLoading = true;
           return exportConfig(queryParams);
-        }).then(response => {
-          this.$downloader.download(response.data);
+        }).then(res => {
+          this.$downloader.download(res);
           this.exportLoading = false;
         }).catch(() => {});
     },

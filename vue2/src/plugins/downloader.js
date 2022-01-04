@@ -8,11 +8,12 @@ const baseURL = process.env.VUE_APP_BASE_API
 export default {
 	/**
 		* 通过服务的生成的文件名下载
-		* @param name
+		* @param fileData
 		* @param isDelete
 		*/
-  download(name, isDelete = true) {
-    let url = baseURL + "/common/download?fileName=" + encodeURI(name) + "&delete=" + isDelete
+  download(fileData, isDelete = true) {
+    let name = fileData.fileName;
+				let url = baseURL + "/common/download?fileName=" + encodeURI(name) + "&delete=" + isDelete
     axios({
       method: 'get',
       url: url,

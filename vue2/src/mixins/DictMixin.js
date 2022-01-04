@@ -22,7 +22,7 @@ export default {
 				}
 				this.$options.dicts.forEach(item => {
 					this.getDicts(item).then(res => {
-						this.$set(this.sysDictMap, item, res.data);
+						this.$set(this.sysDictMap, item, res.items);
 					});
 				})
 			},

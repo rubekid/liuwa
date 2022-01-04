@@ -2,14 +2,15 @@ package com.liuwa.web.controller.system;
 
 import com.liuwa.common.annotation.Log;
 import com.liuwa.common.core.controller.BaseController;
-import com.liuwa.common.core.domain.AjaxResult;
+import com.liuwa.common.core.domain.Result;
 import com.liuwa.common.core.domain.entity.SysDictData;
 import com.liuwa.common.core.domain.entity.SysDictType;
 import com.liuwa.common.core.domain.model.SysDictDataOption;
-import com.liuwa.common.core.page.TableDataInfo;
+import com.liuwa.common.core.page.PageData;
 import com.liuwa.common.enums.BusinessType;
 import com.liuwa.common.utils.StringUtils;
 import com.liuwa.common.utils.poi.ExcelUtil;
+import com.liuwa.common.utils.poi.ExportResult;
 import com.liuwa.system.service.SysDictDataService;
 import com.liuwa.system.service.SysDictTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,17 +38,17 @@ public class SysDictDataController extends BaseController
 
     @PreAuthorize("@ss.hasPermi('system:dict:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysDictData dictData)
+    public PageData list(SysDictData dictData)
     {
         startPage();
         List<SysDictData> list = dictDataService.selectDictDataList(dictData);
-        return getDataTable(list);
+        return getPageData(list);
     }
 
     @Log(title = "字典数据", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('system:dict:export')")
     @GetMapping("/export")
-    public AjaxResult export(SysDictData dictData)
+    public ExportResult export(SysDictData dictData)
     {
         List<SysDictData> list = dictDataService.selectDictDataList(dictData);
         ExcelUtil<SysDictData> util = new ExcelUtil<SysDictData>(SysDictData.class);
@@ -59,20 +60,20 @@ public class SysDictDataController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:dict:query')")
     @GetMapping(value = "/{dictCode}")
-    public AjaxResult getInfo(@PathVariable Long dictCode)
+    public SysDictData getInfo(@PathVariable Long dictCode)
     {
-        return AjaxResult.success(dictDataService.selectDictDataById(dictCode));
+        return dictDataService.selectDictDataById(dictCode);
     }
 
     /**
      * 根据字典类型查询字典数据信息
      */
     @GetMapping(value = "/type/{dictType}")
-    public AjaxResult dictType(@PathVariable String dictType, @RequestParam(value="dataType", required = false) String dataType) {
+    public Result.ItemsVo dictType(@PathVariable String dictType, @RequestParam(value="dataType", required = false) String dataType) {
         List<SysDictDataOption> options = dictTypeService.selectDictDataByType(dictType);
         String[] types = {SysDictType.DATA_TYPE_NUMBER, SysDictType.DATA_TYPE_BOOLEAN, SysDictType.DATA_TYPE_STRING};
         if(!StringUtils.equalsAny(dataType, SysDictType.DATA_TYPE_NUMBER, SysDictType.DATA_TYPE_BOOLEAN, SysDictType.DATA_TYPE_STRING)){
-            return AjaxResult.success(options);
+            return Result.items(options);
         }
         List<SysDictDataOption> items = new ArrayList<SysDictDataOption>();
 
@@ -98,7 +99,7 @@ public class SysDictDataController extends BaseController
                 items.add(option);
             }
         }
-        return AjaxResult.success(items);
+        return Result.items(items);
     }
 
     /**
@@ -107,10 +108,10 @@ public class SysDictDataController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:dict:add')")
     @Log(title = "字典数据", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@Validated @RequestBody SysDictData dict)
+    public void add(@Validated @RequestBody SysDictData dict)
     {
         dict.setCreateBy(getUserId());
-        return toAjax(dictDataService.insertDictData(dict));
+        dictDataService.insertDictData(dict);
     }
 
     /**
@@ -119,10 +120,10 @@ public class SysDictDataController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:dict:edit')")
     @Log(title = "字典数据", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@Validated @RequestBody SysDictData dict)
+    public void edit(@Validated @RequestBody SysDictData dict)
     {
         dict.setUpdateBy(getUserId());
-        return toAjax(dictDataService.updateDictData(dict));
+        dictDataService.updateDictData(dict);
     }
 
     /**
@@ -131,9 +132,8 @@ public class SysDictDataController extends BaseController
     @PreAuthorize("@ss.hasPermi('system:dict:remove')")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictCodes}")
-    public AjaxResult remove(@PathVariable Long[] dictCodes)
+    public void remove(@PathVariable Long[] dictCodes)
     {
         dictDataService.deleteDictDataByIds(dictCodes);
-        return success();
     }
 }

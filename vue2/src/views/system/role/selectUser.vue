@@ -90,8 +90,8 @@ export default {
     };
   },
   created() {
-    this.getDicts("sys_on_off").then(response => {
-      this.statusOptions = response.data;
+    this.getDicts("sys_on_off").then(res => {
+      this.statusOptions = res.items;
     });
   },
   methods: {
@@ -111,7 +111,7 @@ export default {
     // 查询表数据
     getList() {
       unallocatedUserList(this.queryParams).then(res => {
-        this.userList = res.rows;
+        this.userList = res.items;
         this.total = res.total;
       });
     },

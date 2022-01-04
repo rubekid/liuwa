@@ -5,9 +5,7 @@ import com.liuwa.common.annotation.Excel.ColumnType;
 import com.liuwa.common.annotation.Excel.Type;
 import com.liuwa.common.annotation.Excels;
 import com.liuwa.common.config.SysConfig;
-import com.liuwa.common.core.domain.AjaxResult;
 import com.liuwa.common.core.text.Convert;
-import com.liuwa.common.exception.ServiceException;
 import com.liuwa.common.exception.UtilException;
 import com.liuwa.common.utils.DateUtils;
 import com.liuwa.common.utils.DictUtils;
@@ -375,7 +373,7 @@ public class ExcelUtil<T>
      * @param sheetName 工作表的名称
      * @return 结果
      */
-    public AjaxResult exportExcel(List<T> list, String sheetName)
+    public ExportResult exportExcel(List<T> list, String sheetName)
     {
         return exportExcel(list, sheetName, StringUtils.EMPTY);
     }
@@ -388,7 +386,7 @@ public class ExcelUtil<T>
      * @param title 标题
      * @return 结果
      */
-    public AjaxResult exportExcel(List<T> list, String sheetName, String title)
+    public ExportResult exportExcel(List<T> list, String sheetName, String title)
     {
         this.init(list, sheetName, title, Type.EXPORT);
         return exportExcel();
@@ -432,7 +430,7 @@ public class ExcelUtil<T>
      * @param sheetName 工作表的名称
      * @return 结果
      */
-    public AjaxResult importTemplateExcel(String sheetName)
+    public ExportResult importTemplateExcel(String sheetName)
     {
         return importTemplateExcel(sheetName, StringUtils.EMPTY);
     }
@@ -444,7 +442,7 @@ public class ExcelUtil<T>
      * @param title 标题
      * @return 结果
      */
-    public AjaxResult importTemplateExcel(String sheetName, String title)
+    public ExportResult importTemplateExcel(String sheetName, String title)
     {
         this.init(null, sheetName, title, Type.IMPORT);
         return exportExcel();
@@ -504,7 +502,7 @@ public class ExcelUtil<T>
      * 
      * @return 结果
      */
-    public AjaxResult exportExcel()
+    public ExportResult exportExcel()
     {
         OutputStream out = null;
         try
@@ -513,7 +511,9 @@ public class ExcelUtil<T>
             String filename = encodingFilename(sheetName);
             out = new FileOutputStream(getAbsoluteFile(filename));
             wb.write(out);
-            return AjaxResult.success("生成成功", filename);
+            ExportResult result = new ExportResult();
+            result.setFileName(filename);
+            return result;
         }
         catch (Exception e)
         {

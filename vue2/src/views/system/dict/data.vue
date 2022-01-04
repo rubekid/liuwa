@@ -271,31 +271,31 @@ export default {
     const dictId = this.$route.params && this.$route.params.dictId;
     this.getType(dictId);
     this.getTypeList();
-    this.getDicts("sys_on_off").then(response => {
-      this.statusOptions = response.data;
+    this.getDicts("sys_on_off").then(res => {
+      this.statusOptions = res.items;
     });
   },
   methods: {
     /** 查询字典类型详细 */
     getType(dictId) {
-      getType(dictId).then(response => {
-        this.queryParams.dictType = response.data.dictType;
-        this.defaultDictType = response.data.dictType;
+      getType(dictId).then(res => {
+        this.queryParams.dictType = res.dictType;
+        this.defaultDictType = res.dictType;
         this.getList();
       });
     },
     /** 查询字典类型列表 */
     getTypeList() {
-      listType().then(response => {
-        this.typeOptions = response.rows;
+      listType().then(res => {
+        this.typeOptions = res.items;
       });
     },
     /** 查询字典数据列表 */
     getList() {
       this.loading = true;
-      listData(this.queryParams).then(response => {
-        this.dataList = response.rows;
-        this.total = response.total;
+      listData(this.queryParams).then(res => {
+        this.dataList = res.items;
+        this.total = res.total;
         this.loading = false;
       });
     },
@@ -346,8 +346,8 @@ export default {
     handleUpdate(row) {
       this.reset();
       const dictCode = row.dictCode || this.ids
-      getData(dictCode).then(response => {
-        this.form = response.data;
+      getData(dictCode).then(res => {
+        this.form = res;
         this.open = true;
         this.title = "修改字典数据";
       });
@@ -357,13 +357,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.dictCode != undefined) {
-            updateData(this.form).then(response => {
+            updateData(this.form).then(() => {
               this.$modal.success("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addData(this.form).then(response => {
+            addData(this.form).then(() => {
               this.$modal.success("新增成功");
               this.open = false;
               this.getList();
@@ -388,8 +388,8 @@ export default {
       this.$modal.confirm('是否确认导出所有数据项?').then(() => {
           this.exportLoading = true;
           return exportData(queryParams);
-        }).then(response => {
-          this.$downloader.download(response.data);
+        }).then(res => {
+          this.$downloader.download(res);
           this.exportLoading = false;
         }).catch(() => {});
     }

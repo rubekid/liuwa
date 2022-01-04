@@ -139,8 +139,8 @@ export default {
     if (roleId) {
       this.queryParams.roleId = roleId;
       this.getList();
-      this.getDicts("sys_on_off").then(response => {
-        this.statusOptions = response.data;
+      this.getDicts("sys_on_off").then(res => {
+        this.statusOptions = res.items;
       });
     }
   },
@@ -148,9 +148,9 @@ export default {
     /** 查询授权用户列表 */
     getList() {
       this.loading = true;
-      allocatedUserList(this.queryParams).then(response => {
-          this.userList = response.rows;
-          this.total = response.total;
+      allocatedUserList(this.queryParams).then(res => {
+          this.userList = res.items;
+          this.total = res.total;
           this.loading = false;
         }
       );

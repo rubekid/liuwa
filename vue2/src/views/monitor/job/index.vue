@@ -359,20 +359,20 @@ export default {
  },
  created() {
   this.getList();
-  this.getDicts("sys_job_group").then(response => {
-   this.jobGroupOptions = response.data;
+  this.getDicts("sys_job_group").then(res => {
+   this.jobGroupOptions = res.items;
   });
-  this.getDicts("sys_job_status").then(response => {
-   this.statusOptions = response.data;
+  this.getDicts("sys_job_status").then(res => {
+   this.statusOptions = res.data;
   });
  },
  methods: {
   /** 查询定时任务列表 */
   getList() {
    this.loading = true;
-   listJob(this.queryParams).then(response => {
-    this.jobList = response.rows;
-    this.total = response.total;
+   listJob(this.queryParams).then(res => {
+    this.jobList = res.items;
+    this.total = res.total;
     this.loading = false;
    });
   },
@@ -452,8 +452,8 @@ export default {
   },
   /** 任务详细信息 */
   handleView(row) {
-   getJob(row.jobId).then(response => {
-    this.form = response.data;
+   getJob(row.jobId).then(res => {
+    this.form = res;
     this.openView = true;
    });
   },
@@ -481,8 +481,8 @@ export default {
   handleUpdate(row) {
    this.reset();
    const jobId = row.jobId || this.ids;
-   getJob(jobId).then(response => {
-    this.form = response.data;
+   getJob(jobId).then(res => {
+    this.form = res;
     this.open = true;
     this.title = "修改任务";
    });
@@ -492,13 +492,13 @@ export default {
    this.$refs["form"].validate(valid => {
     if (valid) {
      if (this.form.jobId != undefined) {
-      updateJob(this.form).then(response => {
+      updateJob(this.form).then(() => {
        this.$modal.success("修改成功");
        this.open = false;
        this.getList();
       });
      } else {
-      addJob(this.form).then(response => {
+      addJob(this.form).then(() => {
        this.$modal.success("新增成功");
        this.open = false;
        this.getList();
@@ -523,9 +523,9 @@ export default {
     this.$modal.confirm("是否确认导出所有定时任务数据项?").then(() => {
     this.exportLoading = true;
     return exportJob(queryParams);
-   }).then(response => {
+   }).then(res => {
 
-    this.$downloader.download(response.data);
+    this.$downloader.download(res);
     this.exportLoading = false;
    }).catch(() => {});
   }

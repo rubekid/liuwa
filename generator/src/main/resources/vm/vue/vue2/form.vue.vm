@@ -476,15 +476,15 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(${pkColumn.javaField}) {
       this.reset();
-      get${BusinessName}(${pkColumn.javaField}).then(response => {
-        this.form = response.data;
+      get${BusinessName}(${pkColumn.javaField}).then(res => {
+        this.form = res;
 #foreach ($column in $columns)
 #if($column.htmlType == "checkbox" || $column.htmlType == "regions")
         this.form.$column.javaField = this.form.${column.javaField}.split(",");
 #end
 #end
 #if($table.sub)
-        this.${subclassName}List = response.data.${subclassName}List || [];
+        this.${subclassName}List = res.${subclassName}List || [];
 #end
       }).finally(()=>{
         this.formInited = true;

@@ -249,8 +249,8 @@ export default {
       }
 #end
 #end
-      list${BusinessName}(this.queryParams).then(response => {
-        this.${businessName}List = this.handleTree(response.data, "${treeCode}", "${treeParentCode}");
+      list${BusinessName}(this.queryParams).then(res => {
+        this.${businessName}List = this.handleTree(res.items, "${treeCode}", "${treeParentCode}");
         this.loading = false;
       });
     },

@@ -229,28 +229,28 @@ export default {
   created() {
     const jobId = this.$route.query.jobId;
     if (jobId !== undefined && jobId != 0) {
-      getJob(jobId).then(response => {
-        this.queryParams.jobName = response.data.jobName;
-        this.queryParams.jobGroup = response.data.jobGroup;
+      getJob(jobId).then(res => {
+        this.queryParams.jobName = res.jobName;
+        this.queryParams.jobGroup = res.jobGroup;
         this.getList();
       });
     } else {
       this.getList();
     }
-    this.getDicts("sys_common_status").then(response => {
-      this.statusOptions = response.data;
+    this.getDicts("sys_common_status").then(res => {
+      this.statusOptions = res.items;
     });
-    this.getDicts("sys_job_group").then(response => {
-      this.jobGroupOptions = response.data;
+    this.getDicts("sys_job_group").then(res => {
+      this.jobGroupOptions = res.items;
     });
   },
   methods: {
     /** 查询调度日志列表 */
     getList() {
       this.loading = true;
-      listJobLog(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-          this.jobLogList = response.rows;
-          this.total = response.total;
+      listJobLog(this.addDateRange(this.queryParams, this.dateRange)).then(res => {
+          this.jobLogList = res.items;
+          this.total = res.total;
           this.loading = false;
         }
       );
@@ -306,8 +306,8 @@ export default {
       this.$modal.confirm("是否确认导出所有调度日志数据项?").then(() => {
           this.exportLoading = true;
           return exportJobLog(queryParams);
-        }).then(response => {
-          this.$downloader.download(response.data);
+        }).then(res => {
+          this.$downloader.download(res);
           this.exportLoading = false;
         }).catch(() => {});
     }

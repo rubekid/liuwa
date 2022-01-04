@@ -329,11 +329,11 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_show_hide").then(response => {
-      this.visibleOptions = response.data;
+    this.getDicts("sys_show_hide").then(res => {
+      this.visibleOptions = res.items;
     });
-    this.getDicts("sys_on_off").then(response => {
-      this.statusOptions = response.data;
+    this.getDicts("sys_on_off").then(res => {
+      this.statusOptions = res.items;
     });
   },
   methods: {
@@ -344,8 +344,8 @@ export default {
     /** 查询菜单列表 */
     getList() {
       this.loading = true;
-      listMenu(this.queryParams).then(response => {
-        this.menuList = this.handleTree(response.data, "menuId");
+      listMenu(this.queryParams).then(res => {
+        this.menuList = this.handleTree(res.items, "menuId");
         this.loading = false;
       });
     },
@@ -362,10 +362,10 @@ export default {
     },
     /** 查询菜单下拉树结构 */
     getTreeselect() {
-      listMenu().then(response => {
+      listMenu().then(res => {
         this.menuOptions = [];
         const menu = { menuId: 0, menuName: '主类目', children: [] };
-        menu.children = this.handleTree(response.data, "menuId");
+        menu.children = this.handleTree(res.items, "menuId");
         this.menuOptions.push(menu);
       });
     },
@@ -423,8 +423,8 @@ export default {
     handleUpdate(row) {
       this.reset();
       this.getTreeselect();
-      getMenu(row.menuId).then(response => {
-        this.form = response.data;
+      getMenu(row.menuId).then(res => {
+        this.form = res;
         this.open = true;
         this.title = "修改菜单";
       });
@@ -434,13 +434,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.menuId != undefined) {
-            updateMenu(this.form).then(response => {
+            updateMenu(this.form).then(() => {
               this.$modal.success("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addMenu(this.form).then(response => {
+            addMenu(this.form).then(() => {
               this.$modal.success("新增成功");
               this.open = false;
               this.getList();

@@ -304,8 +304,8 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(${pkColumn.javaField}) {
       this.reset();
-      get${BusinessName}(${pkColumn.javaField}).then(response => {
-        this.form = response.data;
+      get${BusinessName}(${pkColumn.javaField}).then(res => {
+        this.form = res;
 #foreach ($column in $columns)
 #if($column.htmlType == "checkbox")
         this.form.$column.javaField = this.form.${column.javaField}.split(",");
@@ -330,10 +330,10 @@ export default {
     /** 查询${functionName}下拉树结构 */
     getTreeselect() {
         return new Promise((resolve, reject) => {
-          list${BusinessName}().then(response => {
+          list${BusinessName}().then(res => {
             this.${businessName}Options = [];
             const data = { ${treeCode}: 0, ${treeName}: '顶级节点', children: [] };
-            data.children = this.handleTree(response.data, "${treeCode}", "${treeParentCode}", null, this.item.${pkColumn.javaField});
+            data.children = this.handleTree(res.items, "${treeCode}", "${treeParentCode}", null, this.item.${pkColumn.javaField});
             this.${businessName}Options.push(data);
             resolve();
           }).catch(err=>{

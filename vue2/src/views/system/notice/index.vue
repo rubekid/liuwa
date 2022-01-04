@@ -223,20 +223,20 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_notice_status").then(response => {
-      this.statusOptions = response.data;
+    this.getDicts("sys_notice_status").then(res => {
+      this.statusOptions = res.items;
     });
-    this.getDicts("sys_notice_type").then(response => {
-      this.typeOptions = response.data;
+    this.getDicts("sys_notice_type").then(res => {
+      this.typeOptions = res.items;
     });
   },
   methods: {
     /** 查询公告列表 */
     getList() {
       this.loading = true;
-      listNotice(this.queryParams).then(response => {
-        this.noticeList = response.rows;
-        this.total = response.total;
+      listNotice(this.queryParams).then(res => {
+        this.noticeList = res.items;
+        this.total = res.total;
         this.loading = false;
       });
     },
@@ -282,8 +282,8 @@ export default {
     handleUpdate(row) {
       this.reset();
       const noticeId = row.noticeId || this.ids
-      getNotice(noticeId).then(response => {
-        this.form = response.data;
+      getNotice(noticeId).then(res => {
+        this.form = res;
         this.open = true;
         this.title = "修改公告";
       });
@@ -293,13 +293,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.noticeId != undefined) {
-            updateNotice(this.form).then(response => {
+            updateNotice(this.form).then(() => {
               this.$modal.success("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addNotice(this.form).then(response => {
+            addNotice(this.form).then(() => {
               this.$modal.success("新增成功");
               this.open = false;
               this.getList();

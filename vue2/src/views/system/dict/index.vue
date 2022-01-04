@@ -271,17 +271,17 @@ export default {
  },
  created() {
   this.getList();
-  this.getDicts("sys_on_off").then(response => {
-   this.statusOptions = response.data;
+  this.getDicts("sys_on_off").then(res => {
+   this.statusOptions = res.items;
   });
  },
  methods: {
   /** 查询字典类型列表 */
   getList() {
    this.loading = true;
-   listType(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-     this.typeList = response.rows;
-     this.total = response.total;
+   listType(this.addDateRange(this.queryParams, this.dateRange)).then(res => {
+     this.typeList = res.items;
+     this.total = res.total;
      this.loading = false;
     }
    );
@@ -330,8 +330,8 @@ export default {
   handleUpdate(row) {
    this.reset();
    const dictId = row.dictId || this.ids
-   getType(dictId).then(response => {
-    this.form = response.data;
+   getType(dictId).then(res => {
+    this.form = res;
     this.open = true;
     this.title = "修改字典类型";
    });
@@ -341,13 +341,13 @@ export default {
    this.$refs["form"].validate(valid => {
     if (valid) {
      if (this.form.dictId != undefined) {
-      updateType(this.form).then(response => {
+      updateType(this.form).then(() => {
        this.$modal.success("修改成功");
        this.open = false;
        this.getList();
       });
      } else {
-      addType(this.form).then(response => {
+      addType(this.form).then(() => {
        this.$modal.success("新增成功");
        this.open = false;
        this.getList();
@@ -372,8 +372,8 @@ export default {
    this.$modal.confirm('是否确认导出所有类型数据项?').then(() => {
     this.exportLoading = true;
     return exportType(queryParams);
-   }).then(response => {
-    this.$downloader.download(response.data);
+   }).then(res => {
+    this.$downloader.download(res);
     this.exportLoading = false;
    }).catch(() => {});
   },

@@ -93,9 +93,9 @@ export default {
     /** 查询登录日志列表 */
     getList() {
       this.loading = true;
-      list(this.queryParams).then(response => {
-        this.list = response.rows;
-        this.total = response.total;
+      list(this.queryParams).then(res => {
+        this.list = res.items;
+        this.total = res.total;
         this.loading = false;
       });
     },

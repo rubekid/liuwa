@@ -117,11 +117,11 @@ export default {
 			this.disabled = true;
 		},
 		// 文件上传成功处理
-		handleFileSuccess(response, file, fileList) {
+		handleFileSuccess(res, file, fileList) {
 			this.open = false;
 			this.disabled = false;
 			this.$refs.upload.clearFiles();
-			this.$alert(response.msg, "导入结果", { dangerouslyUseHTMLString: true });
+			this.$alert(res.message, "导入结果", { dangerouslyUseHTMLString: true });
 			this.$emit("complete")
 		},
 		// 提交上传文件
@@ -134,8 +134,8 @@ export default {
 			request({
 				url: this.templateUrl,
 				method: 'get'
-			}).then(response => {
-				this.$downloader.download(response.data);
+			}).then(res => {
+				this.$downloader.download(res);
 			});
 		}
 	}

@@ -91,8 +91,8 @@ export default {
   methods: {
     /** 查缓存询信息 */
     getList() {
-      getCache().then((response) => {
-        this.cache = response.data;
+      getCache().then((res) => {
+        this.cache = res;
         this.loading.close();
 
         this.commandstats = echarts.init(this.$refs.commandstats, "macarons");
@@ -108,7 +108,7 @@ export default {
               roseType: "radius",
               radius: [15, 95],
               center: ["50%", "38%"],
-              data: response.data.commandStats,
+              data: res.commandStats,
               animationEasing: "cubicInOut",
               animationDuration: 1000,
             },

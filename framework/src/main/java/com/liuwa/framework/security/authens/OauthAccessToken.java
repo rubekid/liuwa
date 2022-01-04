@@ -2,6 +2,7 @@ package com.liuwa.framework.security.authens;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.util.Date;
 /**
  * Oauth Access Token
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OauthAccessToken implements Serializable {
 
 	/**

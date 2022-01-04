@@ -367,8 +367,8 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_on_off").then(response => {
-      this.statusOptions = response.data;
+    this.getDicts("sys_on_off").then(res => {
+      this.statusOptions = res.items;
     });
   },
   computed: {
@@ -381,23 +381,23 @@ export default {
     getList() {
       this.loading = true;
       listRole(this.addDateRange(this.queryParams, this.dateRange)).then(
-        response => {
-          this.roleList = response.rows;
-          this.total = response.total;
+							res => {
+          this.roleList = res.items;
+          this.total = res.total;
           this.loading = false;
         }
       );
     },
     /** 查询菜单树结构 */
     getMenuTreeselect() {
-      menuTreeselect().then(response => {
-        this.menuOptions = response.data;
+      menuTreeselect().then(res => {
+        this.menuOptions = res.items;
       });
     },
     /** 查询部门树结构 */
     getDeptTreeselect() {
-      deptTreeselect().then(response => {
-        this.deptOptions = response.data;
+      deptTreeselect().then(res => {
+        this.deptOptions = res.items;
       });
     },
     // 所有菜单节点数据
@@ -420,16 +420,16 @@ export default {
     },
     /** 根据角色ID查询菜单树结构 */
     getRoleMenuTreeselect(roleId) {
-      return roleMenuTreeselect(roleId).then(response => {
-        this.menuOptions = response.menus;
-        return response;
+      return roleMenuTreeselect(roleId).then(res => {
+        this.menuOptions = res.menus;
+        return res;
       });
     },
     /** 根据角色ID查询部门树结构 */
     getRoleDeptTreeselect(roleId) {
-      return roleDeptTreeselect(roleId).then(response => {
-        this.deptOptions = response.depts;
-        return response;
+      return roleDeptTreeselect(roleId).then(res => {
+        this.deptOptions = res.depts;
+        return res;
       });
     },
     // 角色状态修改
@@ -548,8 +548,8 @@ export default {
       this.reset();
       const roleId = row.roleId || this.ids
       const roleMenu = this.getRoleMenuTreeselect(roleId);
-      getRole(roleId).then(response => {
-        this.form = response.data;
+      getRole(roleId).then(res => {
+        this.form = res;
         this.open = true;
         this.$nextTick(() => {
           roleMenu.then(res => {
@@ -574,8 +574,8 @@ export default {
     handleDataScope(row) {
       this.reset();
       const roleDeptTreeselect = this.getRoleDeptTreeselect(row.roleId);
-      getRole(row.roleId).then(response => {
-        this.form = response.data;
+      getRole(row.roleId).then(res => {
+        this.form = res;
         this.openDataScope = true;
         this.$nextTick(() => {
           roleDeptTreeselect.then(res => {
@@ -596,14 +596,14 @@ export default {
         if (valid) {
           if (this.form.roleId != undefined) {
             this.form.menuIds = this.getMenuAllCheckedKeys();
-            updateRole(this.form).then(response => {
+            updateRole(this.form).then(() => {
               this.$modal.success("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
             this.form.menuIds = this.getMenuAllCheckedKeys();
-            addRole(this.form).then(response => {
+            addRole(this.form).then(() => {
               this.$modal.success("新增成功");
               this.open = false;
               this.getList();
@@ -616,7 +616,7 @@ export default {
     submitDataScope: function() {
       if (this.form.roleId != undefined) {
         this.form.deptIds = this.getDeptAllCheckedKeys();
-        dataScope(this.form).then(response => {
+        dataScope(this.form).then(() => {
           this.$modal.success("修改成功");
           this.openDataScope = false;
           this.getList();
@@ -639,8 +639,8 @@ export default {
       this.$modal.confirm('是否确认导出所有角色数据项?').then(() => {
           this.exportLoading = true;
           return exportRole(queryParams);
-        }).then(response => {
-          this.$downloader.download(response.data);
+        }).then(res => {
+          this.$downloader.download(res);
           this.exportLoading = false;
         }).catch(() => {});
     }

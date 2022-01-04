@@ -3,18 +3,20 @@ package ${packageName}.controller;
 import java.util.List;
 
 import com.liuwa.common.utils.bean.BeanUtils;
+import com.liuwa.common.utils.poi.ExportResult;
+import com.liuwa.common.utils.poi.ImportResult;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.liuwa.common.annotation.Log;
 import com.liuwa.common.core.controller.BaseController;
-import com.liuwa.common.core.domain.AjaxResult;
+import com.liuwa.common.core.domain.Result;
 import com.liuwa.common.enums.BusinessType;
 import ${packageName}.domain.${ClassName};
 import ${packageName}.service.${ClassName}Service;
 import com.liuwa.common.utils.poi.ExcelUtil;
 #if($table.crud || $table.sub)
-import com.liuwa.common.core.page.TableDataInfo;
+import com.liuwa.common.core.page.PageData;
 #elseif($table.tree)
 #end
 #if($supportImport)
@@ -42,17 +44,17 @@ public class ${ClassName}Controller extends BaseController{
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:list')")
     @GetMapping("/list")
 #if($table.crud || $table.sub)
-    public TableDataInfo list(${ClassName} ${className})
+    public PageData list(${ClassName} ${className})
     {
         startPage();
         List<${ClassName}> list = ${className}Service.findList(${className});
-        return getDataTable(list);
+        return getPageData(list);
     }
 #elseif($table.tree)
-    public AjaxResult list(${ClassName} ${className})
+    public Result.ItemsVo list(${ClassName} ${className})
     {
         List<${ClassName}> list = ${className}Service.findList(${className});
-        return AjaxResult.success(list);
+        return Result.items(list);
     }
 #end
 
@@ -61,12 +63,12 @@ public class ${ClassName}Controller extends BaseController{
     @Log(title = "导入${functionName}", businessType = BusinessType.IMPORT)
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:import')")
     @PostMapping("/import")
-    public AjaxResult importData(MultipartFile file, boolean overwrite) throws Exception
+    public ImportResult importData(MultipartFile file, boolean overwrite) throws Exception
     {
         ExcelUtil<${ClassName}> util = new ExcelUtil<${ClassName}>(${ClassName}.class);
         List<${ClassName}> list = util.importExcel(file.getInputStream());
-        String message = ${className}Service.importData(list, overwrite);
-        return AjaxResult.success(message);
+        return ${className}Service.importData(list, overwrite);
+
     }
 
 
@@ -77,7 +79,7 @@ public class ${ClassName}Controller extends BaseController{
     @ApiOperation("导入${functionName}模板")
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:import')")
     @GetMapping("/import/template")
-    public AjaxResult importTemplate()
+    public ExportResult importTemplate()
     {
         ExcelUtil<${ClassName}> util = new ExcelUtil<${ClassName}>(${ClassName}.class);
         return util.importTemplateExcel("${functionName}数据模板");
@@ -92,7 +94,7 @@ public class ${ClassName}Controller extends BaseController{
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:export')")
     @Log(title = "导出${functionName}", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
-    public AjaxResult export(${ClassName} ${className})
+    public ExportResult export(${ClassName} ${className})
     {
         List<${ClassName}> list = ${className}Service.findList(${className});
         ExcelUtil<${ClassName}> util = new ExcelUtil<${ClassName}>(${ClassName}.class);
@@ -106,9 +108,9 @@ public class ${ClassName}Controller extends BaseController{
     @ApiOperation("获取${functionName}详细信息")
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:query')")
     @GetMapping(value = "/{${pkColumn.javaField}}")
-    public AjaxResult getInfo(@PathVariable("${pkColumn.javaField}") ${pkColumn.javaType} ${pkColumn.javaField})
+    public ${ClassName} get(@PathVariable("${pkColumn.javaField}") ${pkColumn.javaType} ${pkColumn.javaField})
     {
-        return AjaxResult.success(${className}Service.get(${pkColumn.javaField}));
+        return ${className}Service.get(${pkColumn.javaField});
     }
 
     /**
@@ -118,10 +120,9 @@ public class ${ClassName}Controller extends BaseController{
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:add')")
     @Log(title = "新增${functionName}", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody ${ClassName} ${className})
+    public void add(@RequestBody ${ClassName} ${className})
     {
         ${className}Service.insert(${className});
-        return AjaxResult.success();
     }
 
     /**
@@ -131,7 +132,7 @@ public class ${ClassName}Controller extends BaseController{
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:edit')")
     @Log(title = "修改${functionName}", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody ${ClassName} ${className})
+    public void edit(@RequestBody ${ClassName} ${className})
     {
 #if($pkColumn.javaField.length() > 2 && $pkColumn.javaField.substring(1,2).matches("[A-Z]"))
 #set($AttrName=$pkColumn.javaField)
@@ -141,7 +142,6 @@ public class ${ClassName}Controller extends BaseController{
         ${ClassName} old${ClassName} = ${className}Service.get(${className}.get${AttrName}());
         BeanUtils.copyBeanNotNull2Bean(${className}, old${ClassName});
         ${className}Service.update(old${ClassName});
-        return AjaxResult.success();
     }
 
 #foreach($column in $columns)
@@ -154,9 +154,8 @@ public class ${ClassName}Controller extends BaseController{
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:edit')")
     @Log(title = "${functionName}变更${column.columnComment}", businessType = BusinessType.UPDATE)
     @PutMapping("/change${AttrName}")
-    public AjaxResult change${AttrName}(@RequestBody ${ClassName} ${className}){
+    public void change${AttrName}(@RequestBody ${ClassName} ${className}){
         ${className}Service.update${AttrName}(${className});
-        return AjaxResult.success();
     }
 
     /**
@@ -166,9 +165,8 @@ public class ${ClassName}Controller extends BaseController{
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:edit')")
     @Log(title = "${functionName}批量变更${column.columnComment}", businessType = BusinessType.UPDATE)
     @PutMapping("/batchChange${AttrName}")
-    public AjaxResult batchChange${AttrName}(@RequestParam ${pkColumn.javaType}[] ${pkColumn.javaField}s, @RequestParam ${column.javaType} ${column.javaField}){
+    public void batchChange${AttrName}(@RequestParam ${pkColumn.javaType}[] ${pkColumn.javaField}s, @RequestParam ${column.javaType} ${column.javaField}){
         ${className}Service.batchUpdate${AttrName}(${pkColumn.javaField}s, ${column.javaField});
-        return AjaxResult.success();
     }
 
 #end
@@ -182,9 +180,8 @@ public class ${ClassName}Controller extends BaseController{
     @PreAuthorize("@ss.hasPermi('${permissionPrefix}:remove')")
     @Log(title = "${functionName}", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{${pkColumn.javaField}s}")
-    public AjaxResult remove(@PathVariable ${pkColumn.javaType}[] ${pkColumn.javaField}s)
+    public void remove(@PathVariable ${pkColumn.javaType}[] ${pkColumn.javaField}s)
     {
         ${className}Service.batchDelete(${pkColumn.javaField}s);
-        return AjaxResult.success();
     }
 }

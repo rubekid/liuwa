@@ -161,17 +161,17 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_common_status").then(response => {
-      this.statusOptions = response.data;
+    this.getDicts("sys_common_status").then(res => {
+      this.statusOptions = res.items;
     });
   },
   methods: {
     /** 查询登录日志列表 */
     getList() {
       this.loading = true;
-      list(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-          this.list = response.rows;
-          this.total = response.total;
+      list(this.addDateRange(this.queryParams, this.dateRange)).then(res => {
+          this.list = res.items;
+          this.total = res.total;
           this.loading = false;
         }
       );
@@ -224,8 +224,8 @@ export default {
       this.$modal.confirm('是否确认导出所有操作日志数据项?').then(() => {
           this.exportLoading = true;
           return exportLogininfor(queryParams);
-        }).then(response => {
-          this.$downloader.download(response.data);
+        }).then(res => {
+          this.$downloader.download(res);
           this.exportLoading = false;
         }).catch(() => {});
     }

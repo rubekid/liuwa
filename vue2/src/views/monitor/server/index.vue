@@ -189,8 +189,8 @@ export default {
   methods: {
     /** 查询服务器信息 */
     getList() {
-      getServer().then(response => {
-        this.server = response.data;
+      getServer().then(res => {
+        this.server = res;
         this.$modal.closeLoading();
       });
     },

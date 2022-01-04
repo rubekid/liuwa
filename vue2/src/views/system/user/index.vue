@@ -472,31 +472,31 @@ export default {
   created() {
     this.getList();
     this.getTreeselect();
-    this.getDicts("sys_on_off").then(response => {
-      this.statusOptions = response.data;
+    this.getDicts("sys_on_off").then(res => {
+      this.statusOptions = res.items;
     });
-    this.getDicts("sys_user_sex").then(response => {
-      this.sexOptions = response.data;
+    this.getDicts("sys_user_sex").then(res => {
+      this.sexOptions = res.items;
     });
-    this.getConfigKey("sys.user.initPassword").then(response => {
-      this.initPassword = response.msg;
+    this.getConfigKey("sys.user.initPassword").then(res => {
+      this.initPassword = res.value;
     });
   },
   methods: {
     /** 查询用户列表 */
     getList() {
       this.loading = true;
-      listUser(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-          this.userList = response.rows;
-          this.total = response.total;
+      listUser(this.addDateRange(this.queryParams, this.dateRange)).then(res => {
+          this.userList = res.items;
+          this.total = res.total;
           this.loading = false;
         }
       );
     },
     /** 查询部门下拉树结构 */
     getTreeselect() {
-      treeselect().then(response => {
-        this.deptOptions = response.data;
+      treeselect().then(res => {
+        this.deptOptions = res.items;
       });
     },
     // 筛选节点
@@ -577,9 +577,9 @@ export default {
     handleAdd() {
       this.reset();
       this.getTreeselect();
-      getUser().then(response => {
-        this.postOptions = response.posts;
-        this.roleOptions = response.roles;
+      getUser().then(res => {
+        this.postOptions = res.posts;
+        this.roleOptions = res.roles;
         this.open = true;
         this.title = "添加用户";
         this.form.password = this.initPassword;
@@ -590,12 +590,12 @@ export default {
       this.reset();
       this.getTreeselect();
       const userId = row.userId || this.ids;
-      getUser(userId).then(response => {
-        this.form = response.data;
-        this.postOptions = response.posts;
-        this.roleOptions = response.roles;
-        this.form.postIds = response.postIds;
-        this.form.roleIds = response.roleIds;
+      getUser(userId).then(res => {
+        this.form = res.user;
+        this.postOptions = res.posts;
+        this.roleOptions = res.roles;
+        this.form.postIds = res.postIds;
+        this.form.roleIds = res.roleIds;
         this.open = true;
         this.title = "修改用户";
         this.form.password = "";
@@ -610,7 +610,7 @@ export default {
         inputPattern: /^.{5,20}$/,
         inputErrorMessage: "用户密码长度必须介于 5 和 20 之间",
       }).then(({ value }) => {
-          resetUserPwd(row.userId, value).then(response => {
+          resetUserPwd(row.userId, value).then(() => {
             this.$modal.success("修改成功，新密码是：" + value);
           });
         }).catch(() => {});
@@ -625,13 +625,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.userId != undefined) {
-            updateUser(this.form).then(response => {
+            updateUser(this.form).then(() => {
               this.$modal.success("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addUser(this.form).then(response => {
+            addUser(this.form).then(() => {
               this.$modal.success("新增成功");
               this.open = false;
               this.getList();
@@ -656,8 +656,8 @@ export default {
       this.$modal.confirm('是否确认导出所有用户数据项?').then(() => {
           this.exportLoading = true;
           return exportUser(queryParams);
-        }).then(response => {
-          this.$downloader.download(response.data);
+        }).then(res => {
+          this.$downloader.download(res);
           this.exportLoading = false;
         }).catch(() => {});
     },
@@ -668,8 +668,8 @@ export default {
     },
     /** 下载模板操作 */
     importTemplate() {
-      importTemplate().then(response => {
-        this.$downloader.download(response.data);
+      importTemplate().then(res => {
+        this.$downloader.download(res);
       });
     },
     // 文件上传中处理
@@ -677,11 +677,11 @@ export default {
       this.upload.isUploading = true;
     },
     // 文件上传成功处理
-    handleFileSuccess(response, file, fileList) {
+    handleFileSuccess(res, file, fileList) {
       this.upload.open = false;
       this.upload.isUploading = false;
       this.$refs.upload.clearFiles();
-      this.$alert(response.msg, "导入结果", { dangerouslyUseHTMLString: true });
+      this.$alert(res.message, "导入结果", { dangerouslyUseHTMLString: true });
       this.getList();
     },
     // 提交上传文件

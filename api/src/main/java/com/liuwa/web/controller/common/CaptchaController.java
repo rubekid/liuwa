@@ -1,25 +1,26 @@
 package com.liuwa.web.controller.common;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-import javax.annotation.Resource;
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletResponse;
-
+import com.google.code.kaptcha.Producer;
+import com.liuwa.common.constant.Constants;
+import com.liuwa.common.core.redis.RedisCache;
+import com.liuwa.common.exception.ServiceException;
+import com.liuwa.common.utils.sign.Base64;
+import com.liuwa.common.utils.uuid.IdUtils;
+import com.liuwa.system.service.SysConfigService;
+import com.liuwa.web.vo.CaptchaVo;
 import com.wf.captcha.ArithmeticCaptcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.FastByteArrayOutputStream;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.google.code.kaptcha.Producer;
-import com.liuwa.common.constant.Constants;
-import com.liuwa.common.core.domain.AjaxResult;
-import com.liuwa.common.core.redis.RedisCache;
-import com.liuwa.common.utils.sign.Base64;
-import com.liuwa.common.utils.uuid.IdUtils;
-import com.liuwa.system.service.SysConfigService;
+
+import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 验证码操作处理
@@ -48,14 +49,16 @@ public class CaptchaController
      * 生成验证码
      */
     @GetMapping("/captcha/image")
-    public AjaxResult getCode(HttpServletResponse response) throws IOException
+    public CaptchaVo getCode(HttpServletResponse response) throws IOException
     {
-        AjaxResult ajax = AjaxResult.success();
+
+        CaptchaVo captchaVo = new CaptchaVo();
+
         boolean captchaOnOff = configService.selectCaptchaOnOff();
-        ajax.put("captchaOnOff", captchaOnOff);
+        captchaVo.setCaptchaOnOff(captchaOnOff);
         if (!captchaOnOff)
         {
-            return ajax;
+            return captchaVo;
         }
 
         // 保存验证码信息
@@ -100,15 +103,15 @@ public class CaptchaController
             }
             catch (IOException e)
             {
-                return AjaxResult.error(e.getMessage());
+                throw new ServiceException(e.getMessage());
             }
 
             base64 = Base64.encode(os.toByteArray());
         }
 
 
-        ajax.put("uuid", uuid);
-        ajax.put("img", base64);
-        return ajax;
+        captchaVo.setUuid(uuid);
+        captchaVo.setImg(base64);
+        return captchaVo;
     }
 }

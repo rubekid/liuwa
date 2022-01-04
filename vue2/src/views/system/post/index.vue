@@ -214,17 +214,17 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_on_off").then(response => {
-      this.statusOptions = response.data;
+    this.getDicts("sys_on_off").then(res => {
+      this.statusOptions = res.items;
     });
   },
   methods: {
     /** 查询岗位列表 */
     getList() {
       this.loading = true;
-      listPost(this.queryParams).then(response => {
-        this.postList = response.rows;
-        this.total = response.total;
+      listPost(this.queryParams).then(res => {
+        this.postList = res.items;
+        this.total = res.total;
         this.loading = false;
       });
     },
@@ -271,8 +271,8 @@ export default {
     handleUpdate(row) {
       this.reset();
       const postId = row.postId || this.ids
-      getPost(postId).then(response => {
-        this.form = response.data;
+      getPost(postId).then(res => {
+        this.form = res;
         this.open = true;
         this.title = "修改岗位";
       });
@@ -282,13 +282,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.postId != undefined) {
-            updatePost(this.form).then(response => {
+            updatePost(this.form).then(() => {
               this.$modal.success("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addPost(this.form).then(response => {
+            addPost(this.form).then(() => {
               this.$modal.success("新增成功");
               this.open = false;
               this.getList();
@@ -313,8 +313,8 @@ export default {
       this.$modal.confirm('是否确认导出所有岗位数据项?').then(() => {
           this.exportLoading = true;
           return exportPost(queryParams);
-        }).then(response => {
-										this.$downloader.download(response.data);
+        }).then(res => {
+										this.$downloader.download(res);
           this.exportLoading = false;
         }).catch(() => {});
     }

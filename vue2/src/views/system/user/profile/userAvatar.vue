@@ -124,9 +124,9 @@ export default {
       this.$refs.cropper.getCropBlob(data => {
         let formData = new FormData();
         formData.append("avatarfile", data);
-        uploadAvatar(formData).then(response => {
+        uploadAvatar(formData).then(res => {
           this.open = false;
-          this.options.img = process.env.VUE_APP_BASE_API + response.imgUrl;
+          this.options.img = process.env.VUE_APP_BASE_API + res.url;
           store.commit('SET_AVATAR', this.options.img);
           this.$modal.success("修改成功");
           this.visible = false;

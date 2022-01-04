@@ -299,7 +299,7 @@ public class TokenService implements Observer {
      * @param token
      * @return
      */
-    public Object wrapper(String token){
+    public OauthAccessToken wrapper(String token){
         if(RequestUtils.isMiniProgram()){
             Claims claims = parseToken(token);
             String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
@@ -316,7 +316,10 @@ public class TokenService implements Observer {
             return accessToken;
 
         }
-        return token;
+
+        OauthAccessToken accessToken = new OauthAccessToken();
+        accessToken.setAccessToken(token);
+        return accessToken;
     }
 
     /**

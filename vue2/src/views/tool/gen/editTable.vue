@@ -195,11 +195,11 @@ export default {
     if (tableId) {
       // 获取表详细信息
       getGenTable(tableId).then(res => {
-        this.columns = res.data.rows;
-        if(!res.data.info.menuIcon){
-         res.data.info.menuIcon = ''
+        this.columns = res.columns;
+        if(!res.table.menuIcon){
+         res.table.menuIcon = ''
         }
-							 let info = res.data.info;
+							 let info = res.table;
 
 								if(info.supportExport === undefined){
 										info.supportExport = true;
@@ -211,11 +211,11 @@ export default {
 							 this.info = info;
 
 
-        this.tables = res.data.tables;
+        this.tables = res.tables;
       });
       /** 查询字典下拉列表 */
-      getDictOptionselect().then(response => {
-        this.dictOptions = response.data;
+      getDictOptionselect().then(res => {
+        this.dictOptions = res.items;
         let typeMap = {};
         this.dictOptions.forEach(item => {
           typeMap[item.dictType] =  item.dataType;
@@ -223,8 +223,8 @@ export default {
         this.dictTypes = typeMap;
       });
       /** 查询菜单下拉列表 */
-      getMenuTreeselect().then(response => {
-        this.menus = this.handleTree(response.data, "menuId");
+      getMenuTreeselect().then(res => {
+        this.menus = this.handleTree(res.items, "menuId");
       });
     }
   },

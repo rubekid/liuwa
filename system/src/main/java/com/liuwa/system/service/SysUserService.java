@@ -2,6 +2,7 @@ package com.liuwa.system.service;
 
 import java.util.List;
 import com.liuwa.common.core.domain.entity.SysUser;
+import com.liuwa.common.utils.poi.ImportResult;
 
 /**
  * 用户 业务层
@@ -217,5 +218,5 @@ public interface SysUserService
      * @param isUpdateSupport 是否更新支持，如果已存在，则进行更新数据
      * @return 结果
      */
-    public String importUser(List<SysUser> userList, Boolean isUpdateSupport);
+    public ImportResult importUser(List<SysUser> userList, Boolean isUpdateSupport);
 }
