@@ -68,9 +68,9 @@ create table sys_user (
 -- ----------------------------
 -- 初始化-用户信息表数据
 -- ----------------------------
-insert into sys_user values(-1, 0, 'developer', '系统开发员', '00', 'developer@liuwa.com', '88888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', 1, 0, '127.0.0.1', sysdate(), 1, sysdate(), 1, null, '系统开发员');
-insert into sys_user values(1,  0, 'admin', '遛娃', '00', 'liuwa@163.com', '18888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', 1, 0, '127.0.0.1', sysdate(), 1, sysdate(), 1, null, '管理员');
-insert into sys_user values(2,  105, 'liuwa', '遛娃测试', '00', 'liuwa@qq.com',  '15666666666', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', 1, 0, '127.0.0.1', sysdate(), 1, sysdate(), 1, null, '测试员');
+insert into sys_user values(-1, 0, 'developer', '系统开发员', '00', 'developer@liuwa.com', '88888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', 1, '', null, 1, 0, '127.0.0.1', sysdate(), 1, sysdate(), 1, null, '系统开发员');
+insert into sys_user values(1,  0, 'admin', '遛娃', '00', 'liuwa@163.com', '18888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', 1, '', null, 1, 0, '127.0.0.1', sysdate(), 1, sysdate(), 1, null, '管理员');
+insert into sys_user values(2,  105, 'liuwa', '遛娃测试', '00', 'liuwa@qq.com',  '15666666666', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', 1, '', null, 1, 0, '127.0.0.1', sysdate(), 1, sysdate(), 1, null, '测试员');
 
 
 -- ----------------------------
@@ -97,10 +97,10 @@ create table sys_post
 -- ----------------------------
 -- 初始化-岗位信息表数据
 -- ----------------------------
-insert into sys_post values(1, 'ceo',  '董事长',    1, 1, 1, sysdate(), 1, null, '');
-insert into sys_post values(2, 'se',   '项目经理',  2, 1, 1, sysdate(), 1, null, '');
-insert into sys_post values(3, 'hr',   '人力资源',  3, 1, 1, sysdate(), 1, null, '');
-insert into sys_post values(4, 'user', '普通员工',  4, 1, 1, sysdate(), 1, null, '');
+insert into sys_post values(1, 'ceo',  '董事长',    1, '', null, 1, 1, sysdate(), 1, null, '');
+insert into sys_post values(2, 'se',   '项目经理',  2, '', null, 1, 1, sysdate(), 1, null, '');
+insert into sys_post values(3, 'hr',   '人力资源',  3, '', null, 1, 1, sysdate(), 1, null, '');
+insert into sys_post values(4, 'user', '普通员工',  4, '', null, 1, 1, sysdate(), 1, null, '');
 
 
 -- ----------------------------
@@ -131,8 +131,8 @@ create table sys_role (
 -- ----------------------------
 -- 初始化-角色信息表数据
 -- ----------------------------
-insert into sys_role values(1, '超级管理员', 'admin',  1, 1, 1, 1, 1, 1, 0, 1, sysdate(), 1, null, '超级管理员');
-insert into sys_role values(2, '普通角色', 'common', 2, 2, 1, 1, 1, 0, 0, 1, sysdate(), 1, null, '普通角色');
+insert into sys_role values(1, '超级管理员', 'admin',  1, 1, 1, 1, 1, '', null, 1, 0, 1, sysdate(), 1, null, '超级管理员');
+insert into sys_role values(2, '普通角色', 'common', 2, 2, 1, 1, 0, '', null,  1, 0, 1, sysdate(), 1, null, '普通角色');
 
 
 -- ----------------------------
