@@ -86,10 +86,8 @@ export default {
     // 查询表数据
     getList() {
       listDbTable(this.queryParams).then(res => {
-        if (res.code === 200) {
-          this.dbTableList = res.items;
-          this.total = res.total;
-        }
+									this.dbTableList = res.items;
+									this.total = res.total;
       });
     },
     /** 搜索按钮操作 */
@@ -105,11 +103,10 @@ export default {
     /** 导入按钮操作 */
     handleImportTable() {
       importTable({ tables: this.tables.join(",") }).then(res => {
-        this.$modal.success(res.msg);
-        if (res.code === 200) {
-          this.visible = false;
-          this.$emit("ok");
-        }
+        this.$modal.success('导入成功');
+								this.visible = false;
+								this.$emit("ok");
+
       });
     }
   }

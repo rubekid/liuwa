@@ -288,10 +288,8 @@ export default {
 
 
           updateGenTable(genTable).then(res => {
-            this.$modal.success(res.msg);
-            if (res.code === 200) {
-              this.close();
-            }
+            this.$modal.success('操作成功');
+            this.close();
           });
         } else {
           this.msgError("表单校验未通过，请重新检查提交内容");
