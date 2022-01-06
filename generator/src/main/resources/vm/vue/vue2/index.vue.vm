@@ -240,6 +240,7 @@
             v-hasPermi="['${moduleName}:${businessName}:edit']"
           >修改</el-button>
           <el-button
+            class="text-danger"
             size="mini"
             type="text"
             icon="el-icon-delete"
