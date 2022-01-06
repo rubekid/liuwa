@@ -38,6 +38,8 @@ import SingleImageUpload from "@/components/SingleImageUpload"
 import MultiImageUpload from "@/components/MultiImageUpload"
 // 图片展示
 import ImageView from "@/components/ImageView"
+// 多图片展示
+import ImagesView from "@/components/ImagesView"
 // 字典标签组件
 import DictTag from '@/components/DictTag'
 // 头部标签组件
@@ -72,6 +74,7 @@ Vue.component('FileUpload', FileUpload)
 Vue.component('SingleImageUpload', SingleImageUpload)
 Vue.component('MultiImageUpload', MultiImageUpload)
 Vue.component('ImageView', ImageView)
+Vue.component('ImagesView', ImagesView)
 
 Vue.use(directive)
 Vue.use(plugins)

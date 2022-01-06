@@ -6,7 +6,7 @@
       :src="fullSrc"
       :fit="fit"
       :lazy="lazy"
-      :preview-src-list="srcList"
+      :preview-src-list="previewSrcList"
     ></el-image>
 
 
@@ -18,6 +18,12 @@ export default {
     src: {
       type:String
     },
+			 srcList:{
+						type: Array,
+						default: ()=>{
+							return []
+						}
+				},
     // 是否显示提示
     preview: {
       type: Boolean,
@@ -51,23 +57,41 @@ export default {
   computed: {
     // 是否显示提示
     style() {
-      return {
-        width: this.width + 'px',
-        height: this.height + 'px'
+						let width = this.width > 0 ? (this.width + 'px') : 'auto';
+      let height = this.height > 0 ? (this.height + 'px') : 'auto';
+						return {
+        width: width,
+        height: height
       }
     },
     fullSrc(){
-      return this.baseUrl + this.src
+      return this.buildFullSrc(this.src)
     },
-    srcList(){
+				previewSrcList(){
       if(this.preview){
+							 if(this.srcList && this.srcList.length > 0){
+										return this.srcList.map(item=>{
+												return this.buildFullSrc(item);
+										})
+								}
         return [this.fullSrc];
       }
       return [];
     }
   },
   methods: {
-
+			/**
+				* 组建完整路径
+				* @param src
+				* @returns {string|*}
+				*/
+				buildFullSrc(src){
+					console.log(src);
+					if(src.indexOf("http://") == 0 ||src.indexOf("https://") == 0){
+						return src;
+					}
+					return this.baseUrl + src
+				}
   }
 };
 </script>
