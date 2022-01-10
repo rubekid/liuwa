@@ -199,15 +199,7 @@ public class RedisManager {
      * @param seconds
      */
     public static void set(String key, Object data, int seconds){
-        String value = null;
-        if(data instanceof String){
-            value = String.valueOf(data);
-        }
-        else{
-            value = toJSONString(data);
-        }
-
-        redisCache.setCacheObject(key, value, seconds, TimeUnit.SECONDS);
+        redisCache.setCacheObject(key, data, seconds, TimeUnit.SECONDS);
     }
 
 
