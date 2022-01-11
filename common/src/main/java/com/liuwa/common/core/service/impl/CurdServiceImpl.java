@@ -121,6 +121,17 @@ public abstract class CurdServiceImpl<Pk, D extends CurdDao<Pk, T>, T extends Ba
 
         for(T entity : list){
             try{
+
+                // 状态过滤
+                Field statusField = ClassUtils.getField(entity, "status");
+                if(statusField != null && statusField.getType().equals(Boolean.class)){
+                    statusField.setAccessible(true);
+                    Object status = statusField.get(entity);
+                    if(!Boolean.TRUE.equals(status)){
+                        continue;
+                    }
+                }
+
                 String label = String.valueOf(method.invoke(entity));
 
                 SysDictDataOption<Pk> option = new SysDictDataOption<Pk>();
