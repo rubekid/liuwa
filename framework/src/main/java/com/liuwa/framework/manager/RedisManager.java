@@ -36,6 +36,12 @@ public class RedisManager {
         return redisCache.expire(key, seconds);
     }
 
+    /**
+     * 设置过期
+     * @param key
+     * @param timestamp
+     * @return
+     */
     public static boolean expireAt(String key, long timestamp) {
         long now = System.currentTimeMillis();
         int diff = (int)(timestamp - now);
@@ -281,16 +287,7 @@ public class RedisManager {
     public static Set<String> keys(String pattern){
         Collection<String> collection = redisCache.keys(pattern);
         Set<String> keys = new HashSet<String>();
-        Iterator<String> it = collection.iterator();
-        while(it.hasNext()){
-            keys.add(it.next());
-            if(keys.size() > 0 && keys.size() % 100 == 0){
-                redisCache.deleteObject(keys);
-                keys.clear();
-            }
-
-        }
-        return keys;
+        return new HashSet<String>(collection);
     }
 
     /**
