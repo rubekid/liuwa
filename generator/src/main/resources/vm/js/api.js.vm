@@ -15,7 +15,7 @@ export function list${BusinessName}(query) {
 
 /**
  * 查询${functionName}详细
- * @param
+ * @param ${pkColumn.javaField}
  * @returns {*}
  */
 export function get${BusinessName}(${pkColumn.javaField}) {
@@ -56,8 +56,8 @@ export function update${BusinessName}(data) {
 #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
 /**
  * ${functionName}${column.columnComment}修改
-  * @param
- * @param
+ * @param ${pkColumn.javaField}
+ * @param ${column.javaField}
  * @returns {*}
  */
 export function change${AttrName}(${pkColumn.javaField}, ${column.javaField}) {
@@ -74,8 +74,8 @@ export function change${AttrName}(${pkColumn.javaField}, ${column.javaField}) {
 
 /**
  * 批量更新${functionName}${column.columnComment}
- * @param ids
- * @param status
+ * @param ${pkColumn.javaField}s
+ * @param ${column.javaField}
  * @returns {AxiosPromise}
  */
 export function batchChange${AttrName}(${pkColumn.javaField}s, ${column.javaField}) {
@@ -92,7 +92,7 @@ export function batchChange${AttrName}(${pkColumn.javaField}s, ${column.javaFiel
 
 /**
  * 删除${functionName}
-  * @param
+ * @param ${pkColumn.javaField}
  * @returns {*}
  */
 export function del${BusinessName}(${pkColumn.javaField}) {
