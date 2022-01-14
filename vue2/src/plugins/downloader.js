@@ -13,7 +13,7 @@ export default {
 		*/
   download(fileData, isDelete = true) {
     let name = fileData.fileName;
-				let url = baseURL + "/common/download?fileName=" + encodeURI(name) + "&delete=" + isDelete
+				let url = baseURL + "/common/download?fileName=" + encodeURIComponent(name) + "&delete=" + isDelete
     axios({
       method: 'get',
       url: url,
@@ -34,7 +34,7 @@ export default {
 		* @param resource
 		*/
   resource(resource) {
-    let url = baseURL + "/common/download/resource?resource=" + encodeURI(resource);
+    let url = baseURL + "/common/download/resource?resource=" + encodeURIComponent(resource);
     axios({
       method: 'get',
       url: url,
