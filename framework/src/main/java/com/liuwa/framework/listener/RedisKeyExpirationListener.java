@@ -4,6 +4,7 @@ import com.liuwa.framework.observable.RedisKeyDeletionObservable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.listener.KeyExpirationEventMessageListener;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
@@ -18,6 +19,12 @@ import java.util.Observer;
 public class RedisKeyExpirationListener extends KeyExpirationEventMessageListener {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
+
+    /**
+     * 键名前缀
+     */
+    @Value("${spring.redis.prefix:}")
+    private String keyPrefix;
 
     /**
      * 观察者
@@ -53,8 +60,11 @@ public class RedisKeyExpirationListener extends KeyExpirationEventMessageListene
     public void onMessage(Message message, byte[] pattern) {
         super.onMessage(message, pattern);
         String key = message.toString(); // 获取key
-        logger.debug("redis key过期：{}", key);
-        observable.notifyObservers(key);
+        if(key.startsWith(keyPrefix)){
+            logger.info("redis key过期：{}", key);
+            observable.notifyObservers(key);
+        }
+
     }
- 
+
 }

@@ -4,6 +4,7 @@ import com.liuwa.framework.observable.RedisKeyDeletionObservable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.listener.KeyDeletionEventMessageListener;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
@@ -18,6 +19,12 @@ import java.util.Observer;
 public class RedisKeyDeletionListener extends KeyDeletionEventMessageListener {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
+
+    /**
+     * 键名前缀
+     */
+    @Value("${spring.redis.prefix:}")
+    private String keyPrefix;
 
     /**
      * 观察者
@@ -53,8 +60,10 @@ public class RedisKeyDeletionListener extends KeyDeletionEventMessageListener {
     public void onMessage(Message message, byte[] pattern) {
         super.onMessage(message, pattern);
         String key = message.toString(); // 获取key
-        logger.info("redis key 删除：{}", key);
-        observable.notifyObservers(key);
+        if(key.startsWith(keyPrefix)){
+            logger.info("redis key 删除：{}", key);
+            observable.notifyObservers(key);
+        }
     }
- 
+
 }

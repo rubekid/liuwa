@@ -139,7 +139,7 @@ public class TokenService implements Observer {
      */
     @EventListener
     public void handleKeyDeleted(RedisKeyDeletedEvent event){
-        logger.info("{}", new String(event.getId()));
+        //logger.info("{}", new String(event.getId()));
     }
 
     /**
@@ -149,7 +149,7 @@ public class TokenService implements Observer {
      */
     @EventListener
     public void handleKeyExpired(RedisKeyExpiredEvent event){
-        logger.info("{}", new String(event.getId()));
+        //logger.info("{}", new String(event.getId()));
     }
 
     /**
