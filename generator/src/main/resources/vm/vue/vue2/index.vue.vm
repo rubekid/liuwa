@@ -220,7 +220,7 @@
 #end
 #if($column.pk)
       <el-table-column label="${comment}" align="center" prop="${javaField}" />
-#elseif($column.list && $column.htmlType == "datetime")
+#elseif($column.list && ($column.htmlType == "datetime" || $column.htmlType == "date"))
       <el-table-column label="${comment}" align="center" prop="${javaField}" width="180" #if($column.sort)sortable="custom" :sort-orders="['descending', 'ascending']"#end>
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.${javaField}, '{y}-{m}-{d}') }}</span>
@@ -343,7 +343,7 @@ export default {
 #else
 #set($comment=$column.columnComment)
 #end
-#if($column.htmlType == "datetime" && $column.queryType == "BETWEEN")
+#if(($column.htmlType == "datetime" || $column.htmlType == "date") && $column.queryType == "BETWEEN")
 #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
       // $comment时间范围
       dateRange${AttrName}: [],
@@ -373,13 +373,13 @@ export default {
     getList() {
       this.loading = true;
 #foreach ($column in $columns)
-#if($column.htmlType == "datetime" && $column.queryType == "BETWEEN")
+#if(($column.htmlType == "datetime" || $column.htmlType == "date") && $column.queryType == "BETWEEN")
       this.queryParams.params = {};
 #break
 #end
 #end
 #foreach ($column in $columns)
-#if($column.htmlType == "datetime" && $column.queryType == "BETWEEN")
+#if(($column.htmlType == "datetime" || $column.htmlType == "date") && $column.queryType == "BETWEEN")
 #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
       if (null != this.dateRange${AttrName} && '' != this.dateRange${AttrName}) {
         this.queryParams.params["begin${AttrName}"] = this.dateRange${AttrName}[0];
@@ -402,7 +402,7 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
 #foreach ($column in $columns)
-#if($column.htmlType == "datetime" && $column.queryType == "BETWEEN")
+#if(($column.htmlType == "datetime" || $column.htmlType == "date") && $column.queryType == "BETWEEN")
 #set($AttrName=$column.javaField.substring(0,1).toUpperCase() + ${column.javaField.substring(1)})
       this.dateRange${AttrName} = [];
 #end
