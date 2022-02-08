@@ -158,6 +158,18 @@ public class DictUtils
      *
      * @param dictType 字典类型
      * @param dictValue 字典值
+     * @return 字典标签
+     */
+    public static String getDictLabel(String dictType, Number dictValue)
+    {
+        return getDictLabel(dictType, String.valueOf(dictValue));
+    }
+
+    /**
+     * 根据字典类型和字典值获取字典标签
+     *
+     * @param dictType 字典类型
+     * @param dictValue 字典值
      * @param separator 分隔符
      * @return 字典标签
      */
