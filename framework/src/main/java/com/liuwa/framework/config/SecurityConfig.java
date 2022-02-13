@@ -2,6 +2,7 @@ package com.liuwa.framework.config;
 
 import com.liuwa.common.utils.spring.SpringUtils;
 import com.liuwa.framework.security.annotation.AnonymousAccess;
+import com.liuwa.framework.security.annotation.PemitAll;
 import com.liuwa.framework.security.filter.JwtAuthenticationTokenFilter;
 import com.liuwa.framework.security.handle.AuthenticationEntryPointImpl;
 import com.liuwa.framework.security.handle.LogoutSuccessHandlerImpl;
@@ -108,16 +109,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         Map<RequestMappingInfo, HandlerMethod> handlerMethods =
                 SpringUtils.getBean(RequestMappingHandlerMapping.class).getHandlerMethods();
         Set<String> anonymousUrls = new HashSet<>();
+        Set<String> pemitAllUrls = new HashSet<>();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> infoEntry : handlerMethods.entrySet()) {
             HandlerMethod handlerMethod = infoEntry.getValue();
             AnonymousAccess anonymousAccess = handlerMethod.getMethodAnnotation(AnonymousAccess.class);
             if (anonymousAccess != null) {
                 anonymousUrls.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
             }
-        }
-        anonymousUrls.forEach(s -> logger.info("可以匿名访问的url：{}", s));
 
-        String[] antPatterns = anonymousUrls.toArray(new String[0]);
+            PemitAll pemitAll = handlerMethod.getMethodAnnotation(PemitAll.class);
+            if (pemitAll != null) {
+                pemitAllUrls.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
+            }
+        }
+        anonymousUrls.forEach(s -> logger.info("匿名访问的url：{}", s));
+        pemitAllUrls.forEach(s -> logger.info("不限制访问url：{}", s));
+
+        String[] anonymousPatterns = anonymousUrls.toArray(new String[0]);
+        String[] pemitAllPatterns = pemitAllUrls.toArray(new String[0]);
 
 
 
@@ -149,7 +158,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/webjars/**").anonymous()
                 .antMatchers("/*/api-docs").anonymous()
                 .antMatchers("/druid/**").anonymous()
-                .antMatchers(antPatterns).anonymous()
+                .antMatchers(anonymousPatterns).anonymous()
+                .antMatchers(pemitAllPatterns).permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
                 .and()

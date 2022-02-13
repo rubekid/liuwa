@@ -152,7 +152,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 AND a.$columnName &gt;= #{params.begin$AttrName}
             </if>
             <if test="params.end$AttrName != null  #if($javaType == 'String' )  and params.end$AttrName != ''#end">
-                AND a.$columnName &lt; #{params.end$AttrName}
+                AND a.$columnName &lt;= #{params.end$AttrName}
             </if>
 #end
 #end
