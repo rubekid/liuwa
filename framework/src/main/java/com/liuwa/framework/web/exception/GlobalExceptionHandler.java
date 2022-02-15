@@ -6,6 +6,7 @@ import com.liuwa.common.exception.code.ErrorCode;
 import com.liuwa.common.exception.message.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
 
 /**
  * 全局异常处理器
@@ -104,6 +106,17 @@ public class GlobalExceptionHandler
     {
         log.error(e.getMessage(), e);
         String message = e.getAllErrors().get(0).getDefaultMessage();
+        return new ErrorMessage(ErrorCode.BAD_REQUEST, message);
+    }
+
+    /**
+     * 数据库异常
+     */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public Object handleSQLException(DataIntegrityViolationException e)
+    {
+        log.error(e.getMessage(), e);
+        String message = "数据库操作失败";
         return new ErrorMessage(ErrorCode.BAD_REQUEST, message);
     }
 
