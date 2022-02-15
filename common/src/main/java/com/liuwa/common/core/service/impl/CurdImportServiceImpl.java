@@ -4,6 +4,7 @@ import com.liuwa.common.core.dao.CurdDao;
 import com.liuwa.common.core.domain.BaseEntity;
 import com.liuwa.common.core.service.CurdImportService;
 import com.liuwa.common.exception.ServiceException;
+import com.liuwa.common.utils.poi.ImportResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -16,7 +17,7 @@ public abstract class CurdImportServiceImpl<Pk, D extends CurdDao<Pk, T>, T exte
 
     @Override
     @Transactional
-    public String importData(List<T> list, boolean overwrite) {
+    public ImportResult importData(List<T> list, boolean overwrite) {
         if (list == null || list.size() == 0)
         {
             throw new ServiceException("导入数据不能为空！");
@@ -68,6 +69,9 @@ public abstract class CurdImportServiceImpl<Pk, D extends CurdDao<Pk, T>, T exte
         {
             successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
         }
-        return successMsg.toString();
+        String message =  successMsg.toString();
+        ImportResult importResult = new ImportResult();
+        importResult.setMessage(message);
+        return importResult;
     }
 }
