@@ -2,6 +2,7 @@ package com.liuwa.framework.web.exception;
 
 import com.liuwa.common.exception.ServiceException;
 import com.liuwa.common.exception.base.BaseException;
+import com.liuwa.common.exception.base.CustomBaseException;
 import com.liuwa.common.exception.code.ErrorCode;
 import com.liuwa.common.exception.message.ErrorMessage;
 import org.slf4j.Logger;
@@ -75,6 +76,10 @@ public class GlobalExceptionHandler
         String requestURI = request.getRequestURI();
         String message = "发生未知异常";
         if(e instanceof BaseException){
+            message = e.getMessage();
+            log.error("请求地址'{}',发生未知异常.", requestURI, message);
+        }
+        else if(e instanceof CustomBaseException){
             message = e.getMessage();
             log.error("请求地址'{}',发生未知异常.", requestURI, message);
         }

@@ -1,11 +1,13 @@
 package com.liuwa.common.exception;
 
+import com.liuwa.common.exception.base.CustomBaseException;
+
 /**
  * 业务异常
  * 
  * @author liuwa
  */
-public final class ExistException extends RuntimeException
+public final class ExistException extends CustomBaseException
 {
     private static final long serialVersionUID = 1L;
 
