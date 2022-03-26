@@ -45,6 +45,47 @@ public class AmapUtils {
 	 * 通过定位获取地理位置
 	 */
 	private static final String COORDS_URL = "https://restapi.amap.com/v3/geocode/regeo?key="+ APP_KEY +"&location=";
+
+
+	public static Location getLocationByAddress(String address){
+		return getLocationByAddress(null, address);
+	}
+
+	public static Location getLocationByAddress(String city, String address){
+		Location location = null;
+		try{
+			String url = GEO_CODER_URL + URLEncoder.encode(address, "utf-8");
+			if(city != null && !"".equals(city)) {
+				url += "&region=" + city;
+			}
+
+			JSONObject response = JSONObject.parseObject(HttpUtils.sendGet(url));
+			LOGGER.info("\n请求地址：{}\n响应内容：{}", url, response);
+			if(response.containsKey("status") && response.getInteger("status") ==1){
+				JSONArray geocodes = response.getJSONArray("geocodes");
+				if(geocodes.size() == 0) {
+					return location;
+				}
+				JSONObject result = geocodes.getJSONObject(0);
+				String[] arr = result.getString("location").split(",");
+				Coords coords = new Coords();
+				coords.setLongitude(new BigDecimal(arr[0]));
+				coords.setLatitude(new BigDecimal(arr[1]));
+
+				location = new Location();
+				location.setCoords(coords);
+				location.setProvince(result.getString("province"));
+				location.setCity(result.getString("city"));
+				location.setDistrict(result.getString("district"));
+				location.setStreet(result.getString("street"));
+				location.setAddress(result.getString("formatted_address"));
+			}
+		}
+		catch(Exception ex){
+			LOGGER.error(ex.getMessage(), ex);
+		}
+		return location;
+	}
 	
 	
 	/**
@@ -98,7 +139,7 @@ public class AmapUtils {
 	 * @throws IOException 
 	 */
 	public static Location getLocation(HttpServletRequest request) {
-		return getLocation(IpUtils.getIpAddr(request));
+		return getLocationByIp(IpUtils.getIpAddr(request));
 	}
 	
 	/**
@@ -106,7 +147,7 @@ public class AmapUtils {
 	 * @param ip
 	 * @return
 	 */
-	public static Location getLocation(String ip) {
+	public static Location getLocationByIp(String ip) {
 		try{
 			String url = String.format(IP_URL, ip);
 			JSONObject response = JSONObject.parseObject(HttpUtils.sendGet(url));
