@@ -225,4 +225,17 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
         calendar.set(Calendar.MILLISECOND, 999);
         return calendar.getTime();
     }
+
+    /**
+     * 获取今天开始时间
+     * @return
+     */
+    public static Date getToday() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
+    }
 }

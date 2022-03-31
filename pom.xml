@@ -243,6 +243,13 @@
                 <version>${liuwa.version}</version>
             </dependency>
 
+            <!-- Http -->
+            <dependency>
+                <groupId>com.liuwa</groupId>
+                <artifactId>http</artifactId>
+                <version>${liuwa.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -255,6 +262,7 @@
         <module>common</module>
         <module>curd</module>
         <module>qiniu</module>
+        <module>http</module>
     </modules>
     <packaging>pom</packaging>
 
