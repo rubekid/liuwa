@@ -84,6 +84,10 @@ public class CommonController
             String realFileName = new String(Base64.decodeBase64(base64String), StandardCharsets.UTF_8) + "_" + DateUtils.dateTimeNow() + ext;
             String filePath = SysConfig.getDownloadPath() + fileName;
 
+            response.reset();
+            response.addHeader("Access-Control-Allow-Methods", "GET, POST");
+            response.addHeader("Access-Control-Allow-Headers", "Content-Type");
+
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
             FileUtils.setAttachmentResponseHeader(response, realFileName);
             FileUtils.writeBytes(filePath, response.getOutputStream());
