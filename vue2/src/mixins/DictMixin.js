@@ -25,6 +25,14 @@ export default {
 						this.$set(this.sysDictMap, item, res.items);
 					});
 				})
+
+				this.$root.eventHub.$on('refresh', () => {
+					this.$options.dicts.forEach(item => {
+						this.getDicts(item).then(res => {
+							this.$set(this.sysDictMap, item, res.data);
+						});
+					})
+				})
 			},
 			computed:{
 				// 字典数据

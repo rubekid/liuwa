@@ -56,6 +56,8 @@ Vue.prototype.selectDictLabels = selectDictLabels
 Vue.prototype.handleTree = handleTree
 
 
+// 全局事件
+Vue.prototype.$eventHub = Vue.prototype.$eventHub || new Vue()
 
 
 Vue.prototype.msgError = function(msg) {
