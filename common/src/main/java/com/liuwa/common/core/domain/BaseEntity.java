@@ -210,6 +210,10 @@ public class BaseEntity<Pk> implements Serializable
                     this.setUpdateBy(user.getUserId());
                 }
             }
+            else{
+                this.setCreateBy(0L);
+                this.setUpdateBy(0L);
+            }
         }
 
         if(this.getRemark() == null){
