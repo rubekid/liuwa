@@ -2,6 +2,7 @@ package com.liuwa.common.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.*;
 import java.lang.reflect.Array;
@@ -141,5 +142,29 @@ public class PropertiesLoader {
 				logger.error(ex.getMessage(), ex);
 			}
 		}
+	}
+
+	/**
+	 * 加载资源文件
+	 * @param resourcePath 资源文件路径
+	 * @return
+	 */
+	public static File loadFile(String resourcePath){
+		String userDir = System.getProperty("user.dir");
+		File configFile = new File(userDir + File.separator + "config" + File.separator + resourcePath);
+		if(!configFile.exists()){
+			configFile = new File(userDir + File.separator + resourcePath);
+		}
+		if(!configFile.exists()){
+			ClassPathResource classPathResource = new ClassPathResource(resourcePath);
+			try{
+				configFile = classPathResource.getFile();
+			}
+			catch (IOException ex){
+				logger.error(ex.getMessage(), ex);
+			}
+		}
+
+		return configFile;
 	}
 }
