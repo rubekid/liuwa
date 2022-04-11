@@ -125,6 +125,7 @@ public class SysRoleController extends BaseController
                 loginUser.setUser(userService.selectUserByUserName(loginUser.getUser().getUserName()));
                 tokenService.setLoginUser(loginUser);
             }
+            return ;
 
         }
         throw new ServiceException("修改角色'" + role.getRoleName() + "'失败，请联系管理员");
