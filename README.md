@@ -1,6 +1,7 @@
 ## 平台简介
 感谢若依系统
 遛娃是一套基于若依的全部开源的快速开发平台，毫无保留给个人及企业免费使用。
+来自 https://gitee.com/rubekid/liuwa
 
 * 前端采用Vue、Element UI。
 * 后端采用Spring Boot、Spring Security、Redis & Jwt。
